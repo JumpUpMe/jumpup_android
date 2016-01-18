@@ -3,7 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
-      <module fileurl="file://$PROJECT_DIR$/de.htw.fb4.imi.jumpup.iml" filepath="$PROJECT_DIR$/de.htw.fb4.imi.jumpup.iml" />
+      <module fileurl="file://$PROJECT_DIR$/jumpup_android.iml" filepath="$PROJECT_DIR$/jumpup_android.iml" />
     </modules>
   </component>
 </project>
