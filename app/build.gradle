@@ -19,6 +19,7 @@ android {
             it.buildConfigField 'String', 'JUMPUP_REST_BASE_URL', '"http://groupelite.de:8080/jumpup/rest"'
         }
         release {
+            it.buildConfigField 'String', 'JUMPUP_REST_BASE_URL', '"http://groupelite.de:8080/jumpup/rest"'
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
