@@ -1,4 +1,4 @@
-package jumpup.imi.fb4.htw.de.jumpupandroid.util.webservice;
+package jumpup.imi.fb4.htw.de.jumpupandroid.util.webservice.request;
 
 import android.util.Base64;
 import android.util.Log;
@@ -10,8 +10,12 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 
 import jumpup.imi.fb4.htw.de.jumpupandroid.BuildConfig;
+import jumpup.imi.fb4.htw.de.jumpupandroid.R;
 import jumpup.imi.fb4.htw.de.jumpupandroid.entity.AbstractEntity;
 import jumpup.imi.fb4.htw.de.jumpupandroid.entity.mapper.JsonMapper;
+import jumpup.imi.fb4.htw.de.jumpupandroid.util.webservice.exception.TechnicalErrorException;
+import jumpup.imi.fb4.htw.de.jumpupandroid.util.webservice.response.ResponseReader;
+import jumpup.imi.fb4.htw.de.jumpupandroid.util.webservice.response.ResponseReaderImpl;
 
 /**
  * Project: jumpup_android
@@ -24,9 +28,16 @@ import jumpup.imi.fb4.htw.de.jumpupandroid.entity.mapper.JsonMapper;
 public abstract class JumpUpRequest {
     private static final String BASE_URL = BuildConfig.JUMPUP_REST_BASE_URL;
     private static final String TAG = JumpUpRequest.class.getName();
+
+    public static final int MESSAGE_ID_REQUEST_ERROR_IO = R.string.jumpup_request_error_io;
+    public static final int MESSAGE_ID_REQUEST_ERROR_JSON = R.string.jumpup_request_error_json;
+    public static final int MESSAGE_ID_REQUEST_ERROR_URL = R.string.jumpup_request_error_malformed_url;
+
     private String builtUrl;
     private String username;
     private String password;
+
+    protected ResponseReader responseReader = newResponseReader();
 
     @SuppressWarnings("WeakerAccess")
     public void setUsername(String username) {
@@ -134,5 +145,13 @@ public abstract class JumpUpRequest {
         }
 
         return this.getResponseMapper().mapResponse(rawResponse);
+    }
+
+    protected TechnicalErrorException newTechnicalErrorException(Exception t, int messageIdRequestErrorNumber){
+        return new TechnicalErrorException(t.getMessage(), messageIdRequestErrorNumber);
+    }
+
+    private ResponseReaderImpl newResponseReader() {
+        return new ResponseReaderImpl();
     }
 }

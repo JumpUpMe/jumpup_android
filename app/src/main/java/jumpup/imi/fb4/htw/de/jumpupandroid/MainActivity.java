@@ -2,6 +2,7 @@ package jumpup.imi.fb4.htw.de.jumpupandroid;
 
 import android.content.Intent;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.PersistableBundle;
 import android.support.v7.app.ActionBarActivity;
@@ -11,12 +12,19 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
-import jumpup.imi.fb4.htw.de.jumpupandroid.login.LoginActivity;
+import java.util.Observable;
+import java.util.Observer;
+
+import jumpup.imi.fb4.htw.de.jumpupandroid.login.LoginFactory;
+import jumpup.imi.fb4.htw.de.jumpupandroid.login.LoginTask;
 
 @SuppressWarnings("WeakerAccess")
-public class MainActivity extends ActionBarActivity {
+public class MainActivity extends ActionBarActivity implements Observer {
     private static final String TAG = MainActivity.class.getName();
+
+    private LoginTask loginTask = LoginFactory.newLoginTask(this);
     private EditText inputEmail;
     private EditText inputPassword;
 
@@ -50,19 +58,17 @@ public class MainActivity extends ActionBarActivity {
                 new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        startLoginActivity();
+                        if (loginTask.getStatus().equals(AsyncTask.Status.PENDING)) {
+                            // task has not been executed yet
+                            doLoginInBackground(getEmailFromInput(), getPasswordFromInput());
+                        }
                     }
                 }
         );
     }
 
-    private void startLoginActivity() {
-        Intent loginIntent = new Intent(this, LoginActivity.class);
-
-        loginIntent.putExtra(LoginActivity.EXTRA_USERNAME, getEmailFromInput());
-        loginIntent.putExtra(LoginActivity.EXTRA_PASSWORD, getPasswordFromInput());
-
-        startActivity(loginIntent);
+    private void doLoginInBackground(String eMail, String password) {
+        loginTask.execute(eMail, password);
     }
 
     private String getEmailFromInput() {
@@ -109,5 +115,37 @@ public class MainActivity extends ActionBarActivity {
         } else {
             Log.e(TAG, "startMapIntent(): No map intent could be resolved.");
         }
+    }
+
+    @Override
+    public void update(Observable observable, Object o) {
+        Log.v(TAG, "update(): MainActivity is notified by observable " + observable);
+
+        if (o instanceof LoginTask) {
+            this.handleLoginResult();
+        }
+    }
+
+    private void handleLoginResult() {
+        if (this.loginTask.isHasError()) {
+            this.showErrorNotification(this.getResources().getString(this.loginTask.getToastMessageId()));
+            this.resetLoginTask();
+        } else {
+            this.showSuccessNotification(this.getResources().getString(R.string.fragment_main_login_success));
+        }
+    }
+
+    private void resetLoginTask() {
+        loginTask = LoginFactory.newLoginTask(this);
+    }
+
+    private void showSuccessNotification(String string) {
+        Toast toast = Toast.makeText(getApplicationContext(), string, Toast.LENGTH_SHORT);
+        toast.show();
+    }
+
+    private void showErrorNotification(String string) {
+        Toast toast = Toast.makeText(getApplicationContext(), string, Toast.LENGTH_LONG);
+        toast.show();
     }
 }

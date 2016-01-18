@@ -1,9 +1,12 @@
 package jumpup.imi.fb4.htw.de.jumpupandroid.login;
 
-import android.os.AsyncTask;
 import android.util.Log;
 
 import jumpup.imi.fb4.htw.de.jumpupandroid.entity.User;
+import jumpup.imi.fb4.htw.de.jumpupandroid.login.request.LoginRequest;
+import jumpup.imi.fb4.htw.de.jumpupandroid.util.webservice.exception.ErrorResponseException;
+import jumpup.imi.fb4.htw.de.jumpupandroid.util.webservice.exception.TechnicalErrorException;
+import jumpup.imi.fb4.htw.de.jumpupandroid.util.task.ObservableAsyncTask;
 
 /**
  * Project: jumpup_android
@@ -15,13 +18,16 @@ import jumpup.imi.fb4.htw.de.jumpupandroid.entity.User;
  * @since 13.01.2016
  */
 
-class LoginTask extends AsyncTask<String, Void, Void> {
+public class LoginTask extends ObservableAsyncTask<String, Void, Void> {
     private static final String TAG = LoginTask.class.getName();
 
-    private final LoginRequest loginRequest = new LoginRequest();
-    private boolean hasError = false;
+    private final LoginRequest loginRequest = LoginFactory.newLoginRequest();
+
     private String username;
     private String password;
+    private boolean hasError = false;
+    private int toastMessageId;
+    private User user;
 
     @Override
     /**
@@ -38,6 +44,16 @@ class LoginTask extends AsyncTask<String, Void, Void> {
         return null;
     }
 
+    @Override
+    protected void onPostExecute(Void aVoid) {
+        super.onPostExecute(aVoid);
+
+        // notify observers about the completion of the task
+        Log.v(TAG, "onPostExecute(): notifying " + this.getObservable().countObservers() + " observers...");
+
+        this.triggerChangedAndNotifyObservers(this);
+    }
+
     private boolean validate(String[] strings) {
         if (strings.length != 2) {
             return false;
@@ -50,8 +66,26 @@ class LoginTask extends AsyncTask<String, Void, Void> {
     }
 
     private void triggerLoginByHttpRequest() {
-        User user = loginRequest.triggerLogin(this.username, this.password);
+        try {
+            this.user = loginRequest.triggerLogin(this.username, this.password);
 
-        Log.v(TAG, "triggerLoginByHttpRequest(): successfully received user: " + user);
+            Log.v(TAG, "triggerLoginByHttpRequest(): successfully received user: " + user);
+
+            this.user.setPassword(this.password);
+        } catch (TechnicalErrorException e) {
+            this.hasError = true;
+            this.toastMessageId = e.getUserMessageId();
+        } catch (ErrorResponseException e) {
+            this.hasError = true;
+            this.toastMessageId = e.getUserMessageId();
+        }
+    }
+
+    public boolean isHasError() {
+        return hasError;
+    }
+
+    public int getToastMessageId() {
+        return toastMessageId;
     }
 }

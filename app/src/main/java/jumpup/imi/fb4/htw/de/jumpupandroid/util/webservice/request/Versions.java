@@ -1,4 +1,4 @@
-package jumpup.imi.fb4.htw.de.jumpupandroid.util.webservice;
+package jumpup.imi.fb4.htw.de.jumpupandroid.util.webservice.request;
 
 /**
  * Project: jumpup_android
