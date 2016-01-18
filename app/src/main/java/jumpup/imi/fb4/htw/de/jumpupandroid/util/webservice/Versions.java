@@ -17,8 +17,8 @@ public enum Versions {
     };
 
     /**
-     * Get the version URL part of the curren version (e.g. only "v1.0.0" in http://groupelite.de:8080/jumpup/rest/v1.0.0/public/user/1.
-     * @return
+     * Get the version URL part of the current version (e.g. only "v1.0.0" in http://groupelite.de:8080/jumpup/rest/v1.0.0/public/user/1.
+     * @return  URL part of the curren version (e.g. only "v1.0.0")
      */
     public String getUrlPart() {
         return "";

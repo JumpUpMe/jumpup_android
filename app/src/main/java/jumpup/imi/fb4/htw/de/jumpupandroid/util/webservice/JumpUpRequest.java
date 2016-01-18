@@ -28,44 +28,48 @@ public abstract class JumpUpRequest {
     private String username;
     private String password;
 
+    @SuppressWarnings("WeakerAccess")
     public void setUsername(String username) {
         this.username = username;
     }
 
+    @SuppressWarnings("WeakerAccess")
     public void setPassword(String password) {
         this.password = password;
     }
 
     /**
      * Get the targeted version URL part. E.g. "v1.0.0".
-     * @return
+     * @return the target version URL part, e.g. "v1.0.0"
      */
     protected abstract String getTargetVersion();
 
     /**
      * Get the endpoint URL part of the targeted service. E.g. "user".
-     * @return
+     * @return the endpoint URL part, e.g. "user"
      */
     protected abstract String getEndpointUrl();
 
     /**
      * Check whether this action is public (does not need an authentication).
      * This means, the service will be available under a "public" URL part. E.G. http://groupelite.de:8080/jumpup/rest/v1.0.0/public/user/1.
-     * @return
+     * @return true if this action is public / doesn't require for an authentication
      */
+    @SuppressWarnings("SameReturnValue")
     protected abstract boolean isPublicAction();
 
     /**
      * Get the mapper object which is responsible for creating an AbstractEntity by a given raw String response.
-     * @return
+     * @return the JsonMapper instance that handles this request's responses
      */
     protected abstract JsonMapper getResponseMapper();
 
     /**
      * Get the base URL to the JumpUp REST service.
      * This does not include the version. Use getTargetVersion().
-     * @return
+     * @return the base URL to the JumpUp REST endpoint. This should be defined in Gradle's build config so that different environments can be targeted (e.g. localdev, testing,...)
      */
+    @SuppressWarnings("WeakerAccess")
     public String getBaseUrl()
     {
         return BASE_URL;
@@ -73,8 +77,9 @@ public abstract class JumpUpRequest {
 
     /**
      * Get the complete URL to address the JumpUp REST service.
-     * @return
+     * @return the complete URL to call this request's JumpUp REST service endpoint. It will be built by concatenatting all URL parts.
      */
+    @SuppressWarnings("WeakerAccess")
     public String getUrl()
     {
         if (null == builtUrl) {
@@ -96,7 +101,7 @@ public abstract class JumpUpRequest {
         return "";
     }
 
-    protected HttpURLConnection buildConnection(URL url, String requestMethod) throws IOException {
+    protected HttpURLConnection buildConnection(URL url, @SuppressWarnings("SameParameterValue") String requestMethod) throws IOException {
         Log.v(TAG, "buildConnection(): will connect to URL " + url );
 
         HttpURLConnection urlConnection;
@@ -125,7 +130,7 @@ public abstract class JumpUpRequest {
 
     protected AbstractEntity mapResponse(String rawResponse) throws JSONException {
         if (null == this.getResponseMapper()) {
-            throw new NullPointerException("mapResponse(): getResponseMapper() returns null. Please implement the method and make sure to return a JsonMapepr instance.");
+            throw new NullPointerException("mapResponse(): getResponseMapper() returns null. Please implement the method and make sure to return a JsonMapper instance.");
         }
 
         return this.getResponseMapper().mapResponse(rawResponse);

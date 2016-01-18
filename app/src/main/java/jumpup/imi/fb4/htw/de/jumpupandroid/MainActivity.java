@@ -12,13 +12,12 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
-import java.util.logging.Logger;
-
 import jumpup.imi.fb4.htw.de.jumpupandroid.login.LoginActivity;
 
+@SuppressWarnings("WeakerAccess")
 public class MainActivity extends ActionBarActivity {
     private static final String TAG = MainActivity.class.getName();
-    private EditText inputeMail;
+    private EditText inputEmail;
     private EditText inputPassword;
 
     @Override
@@ -36,7 +35,7 @@ public class MainActivity extends ActionBarActivity {
     }
 
     private void bindInputs() {
-        this.inputeMail = (EditText) findViewById(R.id.edEMail);
+        this.inputEmail = (EditText) findViewById(R.id.edEMail);
         this.inputPassword = (EditText) findViewById(R.id.edPassword);
     }
 
@@ -67,13 +66,14 @@ public class MainActivity extends ActionBarActivity {
     }
 
     private String getEmailFromInput() {
-        return this.inputeMail.getText().toString();
+        return this.inputEmail.getText().toString();
     }
 
     public String getPasswordFromInput() {
         return this.inputPassword.getText().toString();
     }
 
+    @SuppressWarnings("SameReturnValue")
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.

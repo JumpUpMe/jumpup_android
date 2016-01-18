@@ -31,6 +31,7 @@ import jumpup.imi.fb4.htw.de.jumpupandroid.util.webservice.Versions;
 public class LoginRequest extends JumpUpRequest {
     private final String TAG = LoginRequest.class.getName();
     private final String TARGET_VERSION = Versions.V1_0_0.getUrlPart();
+    @SuppressWarnings("FieldCanBeLocal")
     private final String ENDPOINT = Endpoints.USER;
 
     @Override

@@ -11,7 +11,7 @@ public class LoginActivity extends ActionBarActivity {
     public static final String EXTRA_USERNAME = "username";
     public static final String EXTRA_PASSWORD = "password";
 
-    private LoginTask loginTask = new LoginTask();
+    private final LoginTask loginTask = new LoginTask();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

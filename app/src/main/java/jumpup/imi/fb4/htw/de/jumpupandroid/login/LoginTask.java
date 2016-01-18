@@ -15,10 +15,10 @@ import jumpup.imi.fb4.htw.de.jumpupandroid.entity.User;
  * @since 13.01.2016
  */
 
-public class LoginTask extends AsyncTask<String, Void, Void> {
+class LoginTask extends AsyncTask<String, Void, Void> {
     private static final String TAG = LoginTask.class.getName();
 
-    private LoginRequest loginRequest = new LoginRequest();
+    private final LoginRequest loginRequest = new LoginRequest();
     private boolean hasError = false;
     private String username;
     private String password;

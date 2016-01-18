@@ -48,7 +48,7 @@ public class UserEntityMapperTest extends BaseTest {
         return user;
     }
 
-    protected UserMapper userMapper;
+    private UserMapper userMapper;
 
     @Before
     public void setUp() {

@@ -13,15 +13,16 @@ public class AbstractEntity {
     public static final String FIELD_NAME_CREATION_TIMESTAMP = "creationTimestamp";
     public static final String FIELD_NAME_UPDATE_TIMESTAMP = "updateTimestamp";
 
-    protected Long identity;
-    protected Long creationTimestamp;
-    protected Long updateTimestamp;
+    private Long identity;
+    private Long creationTimestamp;
+    private Long updateTimestamp;
 
     public void setIdentity(Long identity)
     {
         this.identity = identity;
     }
 
+    @SuppressWarnings("WeakerAccess")
     public Long getIdentity()
     {
         return identity;
@@ -32,6 +33,7 @@ public class AbstractEntity {
         this.creationTimestamp = creationTimestamp;
     }
 
+    @SuppressWarnings("WeakerAccess")
     public Long getCreationTimestamp()
     {
         return creationTimestamp;
@@ -42,11 +44,13 @@ public class AbstractEntity {
         this.updateTimestamp = updateTimestamp;
     }
 
+    @SuppressWarnings("WeakerAccess")
     public Long getUpdateTimestamp()
     {
         return updateTimestamp;
     }
 
+    @SuppressWarnings("SimplifiableIfStatement")
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -70,6 +74,7 @@ public class AbstractEntity {
         return result;
     }
 
+    @SuppressWarnings("StringBufferReplaceableByString")
     @Override
     public String toString() {
         final StringBuilder sb = new StringBuilder("AbstractEntity{");

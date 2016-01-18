@@ -18,6 +18,7 @@ import java.net.URLConnection;
  */
 public class ResponseReader {
 
+    @SuppressWarnings({"CaughtExceptionImmediatelyRethrown", "StringBufferMayBeStringBuilder"})
     @Nullable
     public static String read(URLConnection urlConnection) throws IOException {
         // Read the input stream into a String
@@ -36,7 +37,7 @@ public class ResponseReader {
                 // Since it's JSON, adding a newline isn't necessary (it won't affect parsing)
                 // But it does make debugging a *lot* easier if you print out the completed
                 // buffer for debugging.
-                buffer.append(line + "\n");
+                buffer.append(line).append("\n");
             }
 
             if (buffer.length() == 0) {

@@ -1,7 +1,5 @@
 package jumpup.imi.fb4.htw.de.jumpupandroid.entity.mapper;
 
-import jumpup.imi.fb4.htw.de.jumpupandroid.entity.User;
-
 /**
  * Project: jumpup_android
  * <p/>

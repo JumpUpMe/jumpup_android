@@ -8,6 +8,7 @@ package jumpup.imi.fb4.htw.de.jumpupandroid.entity;
  * @author Sascha Feldmann <a href="mailto:sascha.feldmann@gmx.de">sascha.feldmann@gmx.de</a>
  * @since ${date}
  */
+@SuppressWarnings("WeakerAccess")
 public class User extends AbstractEntity {
     public static final String FIELD_NAME_USERNAME = "username";
     public static final String FIELD_EMAIL = "eMail";
@@ -23,19 +24,19 @@ public class User extends AbstractEntity {
     public static final String FIELD_IS_CONFIRMED = "isConfirmed";
     public static final String FIELD_GENDER = "gender";
 
-    protected String username;
-    protected String eMail;
-    protected String prename;
-    protected String lastname;
-    protected String town;
-    protected String country;
-    protected String locale;
-    protected Boolean isConfirmed;
-    protected Long dateOfBirth;
-    protected String placeOfBirth;
-    protected String gender;
-    protected String mobileNumber;
-    protected String skype;
+    private String username;
+    private String eMail;
+    private String prename;
+    private String lastname;
+    private String town;
+    private String country;
+    private String locale;
+    private Boolean isConfirmed;
+    private Long dateOfBirth;
+    private String placeOfBirth;
+    private String gender;
+    private String mobileNumber;
+    private String skype;
 
     public void setUsername(String username)
     {
@@ -167,6 +168,7 @@ public class User extends AbstractEntity {
         return skype;
     }
 
+    @SuppressWarnings({"ConstantConditions", "SimplifiableIfStatement"})
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -222,6 +224,7 @@ public class User extends AbstractEntity {
         return result;
     }
 
+    @SuppressWarnings("StringBufferReplaceableByString")
     @Override
     public String toString() {
         final StringBuilder sb = new StringBuilder("User{");

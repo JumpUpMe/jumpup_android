@@ -1,7 +1,5 @@
 package jumpup.imi.fb4.htw.de.jumpupandroid.entity.mapper;
 
-import android.util.Log;
-
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -15,7 +13,9 @@ import jumpup.imi.fb4.htw.de.jumpupandroid.entity.User;
  * @author Sascha Feldmann <a href="mailto:sascha.feldmann@gmx.de">sascha.feldmann@gmx.de</a>
  * @since 18.01.2016
  */
+@SuppressWarnings("RedundantThrows")
 public class UserMapper extends JsonMapper<User> {
+    @SuppressWarnings("unused")
     private static final String TAG = UserMapper.class.getName();
 
     @Override
@@ -40,7 +40,7 @@ public class UserMapper extends JsonMapper<User> {
         user.setTown(parseTown(jsonResponse));
         user.setCountry(parseCountry(jsonResponse));
         user.setLocale(parseLocale(jsonResponse));
-        user.setIsConfirmed(parseIsConfrimed(jsonResponse));
+        user.setIsConfirmed(parseIsConfirmed(jsonResponse));
         user.setDateOfBirth(parseDateOfBirth(jsonResponse));
         user.setPlaceOfBirth(parsePlaceOfBirth(jsonResponse));
         user.setGender(parseGender(jsonResponse));
@@ -76,7 +76,7 @@ public class UserMapper extends JsonMapper<User> {
         return jsonResponse.optString(User.FIELD_LOCALE);
     }
 
-    private Boolean parseIsConfrimed(JSONObject jsonResponse) throws JSONException {
+    private Boolean parseIsConfirmed(JSONObject jsonResponse) throws JSONException {
         return jsonResponse.optBoolean(User.FIELD_IS_CONFIRMED);
     }
 
