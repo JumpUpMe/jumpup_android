@@ -5,6 +5,7 @@
     <string name="fragment_main_introduction_text">Enter your trips\nFind trips of other users,
         combine and book them</string>
     <string name="fragment_main_email">eMail</string>
+    <string name="fragment_main_password">Password</string>
     <string name="fragment_main_login">Login</string>
     <string name="fragment_main_login_success">Login successful</string>
     <string name="fragment_main_register">Register</string>
@@ -14,5 +15,12 @@
     <string name="jumpup_request_error_json">A technical error occured during the communication with our servers.</string>
     <string name="jumpup_request_error_malformed_url">A technical error occured during the communication with our servers.</string>
     <string name="jumpup_request_error_invalid_credentials">The credentials you provided were wrong. Please try again!</string>
+    <string name="title_activity_registration">RegistrationActivity</string>
+    <string name="activity_registration_username_default">Username</string>
+    <string name="activity_registration_email_default">E-Mail</string>
+    <string name="activity_registration_password_default">Password</string>
+    <string name="activity_registration_confirm_password_default">Confirm Password</string>
+    <string name="activity_registration_prename_default">Prename</string>
+    <string name="activity_registration_lastname_default">Lastname</string>
 
 </resources>

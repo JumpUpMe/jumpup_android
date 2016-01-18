@@ -19,6 +19,7 @@ import java.util.Observer;
 
 import jumpup.imi.fb4.htw.de.jumpupandroid.login.LoginFactory;
 import jumpup.imi.fb4.htw.de.jumpupandroid.login.LoginTask;
+import jumpup.imi.fb4.htw.de.jumpupandroid.registration.RegistrationActivity;
 
 @SuppressWarnings("WeakerAccess")
 public class MainActivity extends ActionBarActivity implements Observer {
@@ -49,6 +50,7 @@ public class MainActivity extends ActionBarActivity implements Observer {
 
     private void registerButtons() {
         this.registerLoginButton();
+        this.registerRegistrationButton();
     }
 
     private void registerLoginButton() {
@@ -65,6 +67,25 @@ public class MainActivity extends ActionBarActivity implements Observer {
                     }
                 }
         );
+    }
+
+    private void registerRegistrationButton() {
+        final Button registrationButton = (Button) findViewById(R.id.btnRegister);
+
+        registrationButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                navigateToRegistration(RegistrationActivity.class, getEmailFromInput(), getPasswordFromInput());
+            }
+        });
+    }
+
+    private void navigateToRegistration(Class<RegistrationActivity> registrationActivityClass, String emailFromInput, String passwordFromInput) {
+        Intent intent = new Intent(this, RegistrationActivity.class);
+
+        intent.putExtra(RegistrationActivity.EXTRA_USERNAME, emailFromInput);
+
+        startActivity(intent);
     }
 
     private void doLoginInBackground(String eMail, String password) {
