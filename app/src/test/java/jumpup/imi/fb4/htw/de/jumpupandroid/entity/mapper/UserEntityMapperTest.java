@@ -41,7 +41,7 @@ public class UserEntityMapperTest extends BaseTest {
         user.setIsConfirmed(true);
         user.setDateOfBirth(648691200000L);
         user.setPlaceOfBirth("Linz am Rhein");
-        user.setGender("MAN");
+        user.setGender("FEMALE");
         user.setMobileNumber("+49 124124 124");
         user.setSkype("cof1990");
 
