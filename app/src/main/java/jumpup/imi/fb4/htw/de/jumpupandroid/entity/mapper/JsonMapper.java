@@ -14,7 +14,7 @@ import jumpup.imi.fb4.htw.de.jumpupandroid.entity.AbstractEntity;
  * @since 18.01.2016
  */
 @SuppressWarnings({"RedundantThrows", "WeakerAccess"})
-public abstract class JsonMapper<EntityType extends AbstractEntity> {
+public abstract class JsonMapper<EntityType> {
 
     /**
      * Map the given response which should be directly given by a WebService.
@@ -24,6 +24,13 @@ public abstract class JsonMapper<EntityType extends AbstractEntity> {
      * @throws JSONException if the raw response couldn't be parsed.
      */
     abstract public EntityType mapResponse(String response) throws JSONException;
+
+    /**
+     * Marshal the given entity into a JSON string that is sent during a WebService request.
+     * @param entity the entity of interest
+     * @return String the built JSON
+     */
+    abstract public String marshalEntity(EntityType entity) throws JSONException;
 
     protected Long parseIdentity(JSONObject jsonResponse) throws JSONException {
         return jsonResponse.getLong(AbstractEntity.FIELD_NAME_IDENTITY);

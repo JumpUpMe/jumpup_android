@@ -27,6 +27,27 @@ public class UserMapper extends JsonMapper<User> {
         return user;
     }
 
+    @Override
+    public String marshalEntity(User entity) throws JSONException {
+        JSONObject marshalledUser = new JSONObject();
+
+        marshalledUser.put(User.FIELD_NAME_USERNAME, entity.getUsername());
+        marshalledUser.put(User.FIELD_EMAIL, entity.geteMail());
+        marshalledUser.put(User.FIELD_PRENAME, entity.getPrename());
+        marshalledUser.put(User.FIELD_LASTNAME, entity.getLastname());
+        marshalledUser.put(User.FIELD_TOWN, entity.getTown());
+        marshalledUser.put(User.FIELD_COUNTRY, entity.getCountry());
+        marshalledUser.put(User.FIELD_LOCALE, entity.getLocale());
+        marshalledUser.put(User.FIELD_IS_CONFIRMED, entity.getIsConfirmed());
+        marshalledUser.put(User.FIELD_DATE_OF_BIRTH, entity.getDateOfBirth());
+        marshalledUser.put(User.FIELD_PLACE_OF_BIRTH, entity.getPlaceOfBirth());
+        marshalledUser.put(User.FIELD_GENDER, entity.getGender());
+        marshalledUser.put(User.FIELD_MOBILE_NUMBER, entity.getMobileNumber());
+        marshalledUser.put(User.FIELD_SKYPE, entity.getSkype());
+
+        return marshalledUser.toString();
+    }
+
     private void parseResponseAndFillUser(User user, String response) throws JSONException {
         JSONObject jsonResponse = new JSONObject(response);
 

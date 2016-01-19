@@ -1,5 +1,7 @@
 package jumpup.imi.fb4.htw.de.jumpupandroid.entity.mapper;
 
+import jumpup.imi.fb4.htw.de.jumpupandroid.registration.entity.mapper.RegistrationMapper;
+
 /**
  * Project: jumpup_android
  * <p/>
@@ -13,5 +15,9 @@ public class MapperFactory {
     public static JsonMapper newUserMapper()
     {
         return new UserMapper();
+    }
+
+    public static JsonMapper newRegistrationMapper() {
+        return new RegistrationMapper();
     }
 }

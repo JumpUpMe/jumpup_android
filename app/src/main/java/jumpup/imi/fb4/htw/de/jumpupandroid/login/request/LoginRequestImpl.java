@@ -35,7 +35,6 @@ public class LoginRequestImpl extends JumpUpRequest implements LoginRequest {
     private final String TARGET_VERSION = Versions.V1_0_0.getUrlPart();
     @SuppressWarnings("FieldCanBeLocal")
     private final String ENDPOINT = Endpoints.USER;
-    private String errorMessage = "";
 
     @Override
     protected boolean isPublicAction() {

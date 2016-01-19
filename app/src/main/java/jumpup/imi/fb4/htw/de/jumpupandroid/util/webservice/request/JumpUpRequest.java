@@ -139,7 +139,7 @@ public abstract class JumpUpRequest {
         urlConnection.setRequestProperty("Authorization", authorizationHeader);
     }
 
-    protected AbstractEntity mapResponse(String rawResponse) throws JSONException {
+    protected Object mapResponse(String rawResponse) throws JSONException {
         if (null == this.getResponseMapper()) {
             throw new NullPointerException("mapResponse(): getResponseMapper() returns null. Please implement the method and make sure to return a JsonMapper instance.");
         }

@@ -10,4 +10,5 @@ package jumpup.imi.fb4.htw.de.jumpupandroid.util.webservice.request;
  */
 public class Endpoints {
     public static final String USER = "user";
+    public static final String REGISTRATION = "public/user";
 }
