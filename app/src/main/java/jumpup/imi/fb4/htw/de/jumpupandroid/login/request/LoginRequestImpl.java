@@ -11,15 +11,14 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 
+import jumpup.imi.fb4.htw.de.jumpupandroid.R;
 import jumpup.imi.fb4.htw.de.jumpupandroid.entity.User;
-import jumpup.imi.fb4.htw.de.jumpupandroid.entity.mapper.JsonMapper;
-import jumpup.imi.fb4.htw.de.jumpupandroid.entity.mapper.MapperFactory;
+import jumpup.imi.fb4.htw.de.jumpupandroid.util.webservice.mapper.JsonMapper;
+import jumpup.imi.fb4.htw.de.jumpupandroid.util.webservice.mapper.MapperFactory;
 import jumpup.imi.fb4.htw.de.jumpupandroid.util.webservice.exception.ErrorResponseException;
 import jumpup.imi.fb4.htw.de.jumpupandroid.util.webservice.exception.TechnicalErrorException;
 import jumpup.imi.fb4.htw.de.jumpupandroid.util.webservice.request.Endpoints;
 import jumpup.imi.fb4.htw.de.jumpupandroid.util.webservice.request.JumpUpRequest;
-import jumpup.imi.fb4.htw.de.jumpupandroid.util.webservice.response.ResponseReader;
-import jumpup.imi.fb4.htw.de.jumpupandroid.util.webservice.response.ResponseReaderImpl;
 import jumpup.imi.fb4.htw.de.jumpupandroid.util.webservice.request.Versions;
 
 /**
@@ -54,6 +53,11 @@ public class LoginRequestImpl extends JumpUpRequest implements LoginRequest {
     @Override
     protected JsonMapper getResponseMapper() {
         return MapperFactory.newUserMapper();
+    }
+
+    @Override
+    protected int getDefaultErrorMessageId() {
+        return R.string.jumpup_request_error_invalid_credentials;
     }
 
     /**

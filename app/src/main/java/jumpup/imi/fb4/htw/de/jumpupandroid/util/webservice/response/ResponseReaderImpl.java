@@ -1,6 +1,9 @@
 package jumpup.imi.fb4.htw.de.jumpupandroid.util.webservice.response;
 
 import android.support.annotation.Nullable;
+import android.util.Log;
+
+import org.json.JSONException;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -10,6 +13,9 @@ import java.net.HttpURLConnection;
 
 import jumpup.imi.fb4.htw.de.jumpupandroid.R;
 import jumpup.imi.fb4.htw.de.jumpupandroid.util.webservice.exception.ErrorResponseException;
+import jumpup.imi.fb4.htw.de.jumpupandroid.util.webservice.mapper.ErrorResponseMapper;
+import jumpup.imi.fb4.htw.de.jumpupandroid.util.webservice.mapper.JsonMapper;
+import jumpup.imi.fb4.htw.de.jumpupandroid.util.webservice.mapper.MapperFactory;
 
 /**
  * Project: jumpup_android
@@ -20,6 +26,13 @@ import jumpup.imi.fb4.htw.de.jumpupandroid.util.webservice.exception.ErrorRespon
  * @since ${date}
  */
 public class ResponseReaderImpl implements ResponseReader {
+    private static final JsonMapper<ErrorResponse> ERROR_RESPONSE_MAPPER = MapperFactory.newErrorResponseMapper();
+    private static final String TAG = ResponseReaderImpl.class.getName();
+    private int defaultErrorMessageId;
+
+    public void setDefaultErrorMessageId(int defaultErrorMessageId) {
+        this.defaultErrorMessageId = defaultErrorMessageId;
+    }
 
     @SuppressWarnings({"CaughtExceptionImmediatelyRethrown", "StringBufferMayBeStringBuilder"})
     @Nullable
@@ -72,13 +85,26 @@ public class ResponseReaderImpl implements ResponseReader {
     private ErrorResponseException throwErrorResponseException(HttpURLConnection urlConnection) throws IOException {
         InputStream errorInputStream = urlConnection.getErrorStream();
 
-        String errorResponse = this.buildStringFromInputStream(errorInputStream);
+        String errorResponseString = this.buildStringFromInputStream(errorInputStream);
         int responseStatusCode = urlConnection.getResponseCode();
 
-        return this.buildErrorResponseException(responseStatusCode, errorResponse);
+        // buildErrorResponse object
+        try {
+            ErrorResponse errorResponseObject = ERROR_RESPONSE_MAPPER.mapResponse(errorResponseString);
+
+            return this.buildErrorResponseException(responseStatusCode, errorResponseString, errorResponseObject);
+        } catch (JSONException e) {
+            Log.e(TAG, "throwErrorResponseException(): couldn't build an error response object from raw response: " + errorResponseString);
+            // we can't build an errorResponseObject
+            return this.buildErrorResponseException(responseStatusCode, errorResponseString);
+        }
+    }
+
+    private ErrorResponseException buildErrorResponseException(int responseStatusCode, String errorResponseString, ErrorResponse errorResponseObject) {
+        return new ErrorResponseException(responseStatusCode, errorResponseString, errorResponseObject, defaultErrorMessageId);
     }
 
     private ErrorResponseException buildErrorResponseException(int responseStatusCode, String errorResponse) {
-        return new ErrorResponseException(responseStatusCode, errorResponse, R.string.jumpup_request_error_invalid_credentials);
+        return new ErrorResponseException(responseStatusCode, errorResponse, new ErrorResponse(), defaultErrorMessageId);
     }
 }

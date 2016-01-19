@@ -1,12 +1,11 @@
 package jumpup.imi.fb4.htw.de.jumpupandroid.entity.mapper;
 
-import org.json.JSONException;
-import org.junit.Assert;
 import org.junit.Before;
-import org.junit.Test;
 
-import jumpup.imi.fb4.htw.de.jumpupandroid.BaseTest;
 import jumpup.imi.fb4.htw.de.jumpupandroid.entity.User;
+import jumpup.imi.fb4.htw.de.jumpupandroid.lib.EntityMapperTest;
+import jumpup.imi.fb4.htw.de.jumpupandroid.util.webservice.mapper.JsonMapper;
+import jumpup.imi.fb4.htw.de.jumpupandroid.util.webservice.mapper.MapperFactory;
 
 /**
  * Project: jumpup_android

@@ -22,5 +22,7 @@
     <string name="activity_registration_confirm_password_default">Confirm Password</string>
     <string name="activity_registration_prename_default">Prename</string>
     <string name="activity_registration_lastname_default">Lastname</string>
+    <string name="activity_registration_registration_success">The registration was successful! Please check your eMail inbox, a confirmation might be necessary.</string>
+    <string name="jumpup_request_error_registration">The registration failed. Please try again.</string>
 
 </resources>

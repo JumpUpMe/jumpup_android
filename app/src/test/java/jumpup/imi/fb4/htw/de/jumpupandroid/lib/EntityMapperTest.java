@@ -1,4 +1,4 @@
-package jumpup.imi.fb4.htw.de.jumpupandroid.entity.mapper;
+package jumpup.imi.fb4.htw.de.jumpupandroid.lib;
 
 import org.json.JSONException;
 import org.junit.Assert;
@@ -8,6 +8,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import jumpup.imi.fb4.htw.de.jumpupandroid.BaseTest;
+import jumpup.imi.fb4.htw.de.jumpupandroid.util.webservice.mapper.JsonMapper;
 
 /**
  * Project: jumpup_android
@@ -87,6 +88,21 @@ public abstract class EntityMapperTest<EntityType> extends BaseTest {
             Assert.fail("No UnsupportedOperationWasThrown.");
         } catch (UnsupportedOperationException e) {
             // then
+            Assert.assertTrue("Expected UnsupportedOperation was thrown.", true);
+        }
+    }
+
+    protected void assertUnsupportedOperationExceptionOnMarshalEntity() throws JSONException {
+        // given
+        EntityType entity = givenTheExpectedEntity();
+
+        // when
+        try {
+            String marshalledJSON = getMapper().marshalEntity(entity);
+
+            Assert.fail("No UnsupportedOperationWasThrown.");
+        } catch (UnsupportedOperationException e) {
+            //then
             Assert.assertTrue("Expected UnsupportedOperation was thrown.", true);
         }
     }

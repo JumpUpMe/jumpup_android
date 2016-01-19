@@ -1,7 +1,12 @@
-package jumpup.imi.fb4.htw.de.jumpupandroid.entity.mapper;
+package jumpup.imi.fb4.htw.de.jumpupandroid.util.webservice.mapper;
 
+import android.support.annotation.NonNull;
+
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.util.ArrayList;
 
 import jumpup.imi.fb4.htw.de.jumpupandroid.entity.AbstractEntity;
 
@@ -44,6 +49,25 @@ public abstract class JsonMapper<EntityType> {
     @SuppressWarnings("WeakerAccess")
     protected Long parseUpdateTimestamp(JSONObject jsonResponse) throws JSONException {
         return jsonResponse.optLong(AbstractEntity.FIELD_NAME_UPDATE_TIMESTAMP);
+    }
+
+    @NonNull
+    /**
+     * Get a String array out of a flat JSON array (e.g. an array of simple string messages).
+     */
+    protected String[] buildStringArray(JSONArray errorMessagesJSONArray) {
+        ArrayList<String> errorMessages = new ArrayList<>();
+        if (null != errorMessagesJSONArray) {
+            for (int i=0; i < errorMessagesJSONArray.length(); i++) {
+                String errorMessage = errorMessagesJSONArray.optString(i);
+
+                if (errorMessage != null && errorMessage.trim().length() != 0) {
+                    errorMessages.add(errorMessage);
+                }
+            }
+        }
+
+        return errorMessages.toArray(new String[errorMessages.size()]);
     }
 
 }

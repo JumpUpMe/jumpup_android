@@ -4,6 +4,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import jumpup.imi.fb4.htw.de.jumpupandroid.entity.User;
+import jumpup.imi.fb4.htw.de.jumpupandroid.util.webservice.mapper.JsonMapper;
 
 /**
  * Project: jumpup_android

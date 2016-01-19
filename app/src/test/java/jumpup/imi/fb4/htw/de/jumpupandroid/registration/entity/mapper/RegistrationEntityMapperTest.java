@@ -4,9 +4,9 @@ import org.json.JSONException;
 import org.junit.Before;
 import org.junit.Test;
 
-import jumpup.imi.fb4.htw.de.jumpupandroid.entity.mapper.EntityMapperTest;
-import jumpup.imi.fb4.htw.de.jumpupandroid.entity.mapper.JsonMapper;
-import jumpup.imi.fb4.htw.de.jumpupandroid.entity.mapper.MapperFactory;
+import jumpup.imi.fb4.htw.de.jumpupandroid.lib.EntityMapperTest;
+import jumpup.imi.fb4.htw.de.jumpupandroid.util.webservice.mapper.JsonMapper;
+import jumpup.imi.fb4.htw.de.jumpupandroid.util.webservice.mapper.MapperFactory;
 import jumpup.imi.fb4.htw.de.jumpupandroid.registration.entity.Registration;
 
 /**

@@ -11,8 +11,7 @@ import java.net.URL;
 
 import jumpup.imi.fb4.htw.de.jumpupandroid.BuildConfig;
 import jumpup.imi.fb4.htw.de.jumpupandroid.R;
-import jumpup.imi.fb4.htw.de.jumpupandroid.entity.AbstractEntity;
-import jumpup.imi.fb4.htw.de.jumpupandroid.entity.mapper.JsonMapper;
+import jumpup.imi.fb4.htw.de.jumpupandroid.util.webservice.mapper.JsonMapper;
 import jumpup.imi.fb4.htw.de.jumpupandroid.util.webservice.exception.TechnicalErrorException;
 import jumpup.imi.fb4.htw.de.jumpupandroid.util.webservice.response.ResponseReader;
 import jumpup.imi.fb4.htw.de.jumpupandroid.util.webservice.response.ResponseReaderImpl;
@@ -87,6 +86,12 @@ public abstract class JumpUpRequest {
     }
 
     /**
+     * Get the default error message ID to be shown if the request fails due to an ErrorResponse from the web service.
+     * @return
+     */
+    protected abstract int getDefaultErrorMessageId();
+
+    /**
      * Get the complete URL to address the JumpUp REST service.
      * @return the complete URL to call this request's JumpUp REST service endpoint. It will be built by concatenatting all URL parts.
      */
@@ -126,6 +131,14 @@ public abstract class JumpUpRequest {
         return urlConnection;
     }
 
+    protected HttpURLConnection buildPostConnection(URL url, String jsonRequestBody) throws IOException {
+        HttpURLConnection urlConn = buildConnection(url, "POST");
+        urlConn.setRequestProperty("Content-Type", "application/json");
+
+        // TODO set JSON
+        return urlConn;
+    }
+
     private void addAuthorizationHeader(HttpURLConnection urlConnection) {
         if (null == this.username || null == this.password) {
             throw new IllegalArgumentException("addAuthorizationHeader(): no public action, but you didn't set any username and/or password.");
@@ -152,6 +165,8 @@ public abstract class JumpUpRequest {
     }
 
     private ResponseReaderImpl newResponseReader() {
-        return new ResponseReaderImpl();
+        ResponseReaderImpl responseReader = new ResponseReaderImpl();
+        responseReader.setDefaultErrorMessageId(this.getDefaultErrorMessageId());
+        return responseReader;
     }
 }

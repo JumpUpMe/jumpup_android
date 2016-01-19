@@ -6,29 +6,110 @@ import android.text.method.PasswordTransformationMethod;
 import android.util.Log;
 import android.util.Patterns;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import jumpup.imi.fb4.htw.de.jumpupandroid.R;
+import java.util.Observable;
+import java.util.Observer;
 
-public class RegistrationActivity extends ActionBarActivity {
+import jumpup.imi.fb4.htw.de.jumpupandroid.R;
+import jumpup.imi.fb4.htw.de.jumpupandroid.login.LoginTask;
+import jumpup.imi.fb4.htw.de.jumpupandroid.registration.entity.Registration;
+import jumpup.imi.fb4.htw.de.jumpupandroid.util.AppUtility;
+import jumpup.imi.fb4.htw.de.jumpupandroid.util.activity.JumpUpActivity;
+
+/**
+ * Project: jumpup_android
+ * <p/>
+ * RegistrationActivity presenter class
+ *
+ * @author Sascha Feldmann <a href="mailto:sascha.feldmann@gmx.de">sascha.feldmann@gmx.de</a>
+ * @since 18.01.2016
+ */
+public class RegistrationActivity extends JumpUpActivity implements Observer {
     private static final String TAG = RegistrationActivity.class.getName();
     public static final String EXTRA_USERNAME = "extra_username";
+    private RegistrationTask registrationTask = RegistrationFactory.newRegistrationTask(this);
+
+    private EditText edUsername;
+    private EditText edMail;
+    private EditText edPassword;
+    private EditText edConfirmPassword;
+    private EditText edPrename;
+    private EditText edLastname;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_registration);
 
+        this.bindInputs();
+        this.registerButtons();
         this.prepareView();
     }
 
-    private void prepareView() {
-        fillUsernameIfNotDefault();
-        fillEmailIfNotDefault();
+    private void bindInputs() {
+        edUsername = getEditText(R.id.edUsername);
+        edMail = getEditText(R.id.edEMail);
+        edPassword = getEditText(R.id.edPassword);
+        edPrename = getEditText(R.id.edPrename);
+        edLastname = getEditText(R.id.edLastName);
+        edConfirmPassword = getEditText(R.id.edConfirmPassword);
+    }
 
-        revealPassword();
-        revealConfirmPassword();
+    private void registerButtons() {
+        this.registerRegistrationButton();
+    }
+
+    private void registerRegistrationButton() {
+        final Button registrationButton = (Button) findViewById(R.id.btnRegister);
+
+        registrationButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startRegistrationTask();
+            }
+        });
+    }
+
+    private void startRegistrationTask() {
+        Registration registrationEntity = buildRegistrationEntity();
+
+        registrationTask.execute(registrationEntity);
+    }
+
+    private Registration buildRegistrationEntity() {
+        Registration registrationEntity = new Registration();
+
+        registrationEntity.setUsername(this.edUsername.getText().toString());
+        registrationEntity.seteMail(this.edMail.getText().toString());
+        registrationEntity.setPrename(this.edPrename.getText().toString());
+        registrationEntity.setLastname(this.edLastname.getText().toString());
+        registrationEntity.setPassword(this.edPassword.getText().toString());
+
+        return registrationEntity;
+    }
+
+    private void prepareView() {
+        if (AppUtility.isDevelopmentMode()) {
+            fillDevelopmentTestData();
+        } else {
+            fillUsernameIfNotDefault();
+            fillEmailIfNotDefault();
+
+            revealPassword();
+            revealConfirmPassword();
+        }
+    }
+
+    private void fillDevelopmentTestData() {
+        edPrename.setText("Android");
+        edLastname.setText("Developer");
+        edMail.setText("info@groupelite.de");
+        edPassword.setText("$test1234");
+        edConfirmPassword.setText("$test1234");
+        edUsername.setText("androiddeveloper");
     }
 
     private void fillUsernameIfNotDefault() {
@@ -97,5 +178,28 @@ public class RegistrationActivity extends ActionBarActivity {
 
     private EditText getEditText(int edId) {
         return (EditText) this.findViewById(edId);
+    }
+
+    @Override
+    public void update(Observable observable, Object o) {
+        Log.v(TAG, "update(): RegistrationActivity is notified by observable " + observable);
+
+        if (o instanceof RegistrationTask) {
+            this.handleRegistrationResult();
+        }
+    }
+
+    private void handleRegistrationResult() {
+        if (this.registrationTask.isHasValidationError()) {
+            showValidationFailure();
+        } else if (this.registrationTask.isHasError()) {
+            this.showErrorNotification(this.getResources().getString(this.registrationTask.getToastMessageId()));
+        } else {
+            this.showSuccessNotification(this.getResources().getString(R.string.activity_registration_registration_success));
+        }
+    }
+
+    private void showValidationFailure() {
+        this.showValidationFailureNotification(this.registrationTask.getValidationFailureField(), this.registrationTask.getValidationFailureErrorMessages());
     }
 }

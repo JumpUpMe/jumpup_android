@@ -30,6 +30,11 @@ public class LoginTask extends ObservableAsyncTask<String, Void, Void> {
     private User user;
 
     @Override
+    protected String getTag() {
+        return TAG;
+    }
+
+    @Override
     /**
      * Start the login task by handing in two parameters in the following order:
      * @param strings 1. the username or eMail 2. the password
@@ -42,16 +47,6 @@ public class LoginTask extends ObservableAsyncTask<String, Void, Void> {
         }
 
         return null;
-    }
-
-    @Override
-    protected void onPostExecute(Void aVoid) {
-        super.onPostExecute(aVoid);
-
-        // notify observers about the completion of the task
-        Log.v(TAG, "onPostExecute(): notifying " + this.getObservable().countObservers() + " observers...");
-
-        this.triggerChangedAndNotifyObservers(this);
     }
 
     private boolean validate(String[] strings) {
@@ -88,4 +83,5 @@ public class LoginTask extends ObservableAsyncTask<String, Void, Void> {
     public int getToastMessageId() {
         return toastMessageId;
     }
+
 }

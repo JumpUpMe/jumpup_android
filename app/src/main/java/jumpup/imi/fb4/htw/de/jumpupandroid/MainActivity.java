@@ -20,9 +20,10 @@ import java.util.Observer;
 import jumpup.imi.fb4.htw.de.jumpupandroid.login.LoginFactory;
 import jumpup.imi.fb4.htw.de.jumpupandroid.login.LoginTask;
 import jumpup.imi.fb4.htw.de.jumpupandroid.registration.RegistrationActivity;
+import jumpup.imi.fb4.htw.de.jumpupandroid.util.activity.JumpUpActivity;
 
 @SuppressWarnings("WeakerAccess")
-public class MainActivity extends ActionBarActivity implements Observer {
+public class MainActivity extends JumpUpActivity implements Observer {
     private static final String TAG = MainActivity.class.getName();
 
     private LoginTask loginTask = LoginFactory.newLoginTask(this);
@@ -158,15 +159,5 @@ public class MainActivity extends ActionBarActivity implements Observer {
 
     private void resetLoginTask() {
         loginTask = LoginFactory.newLoginTask(this);
-    }
-
-    private void showSuccessNotification(String string) {
-        Toast toast = Toast.makeText(getApplicationContext(), string, Toast.LENGTH_SHORT);
-        toast.show();
-    }
-
-    private void showErrorNotification(String string) {
-        Toast toast = Toast.makeText(getApplicationContext(), string, Toast.LENGTH_LONG);
-        toast.show();
     }
 }

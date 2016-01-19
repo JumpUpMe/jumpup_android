@@ -3,7 +3,7 @@ package jumpup.imi.fb4.htw.de.jumpupandroid.registration.entity.mapper;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import jumpup.imi.fb4.htw.de.jumpupandroid.entity.mapper.JsonMapper;
+import jumpup.imi.fb4.htw.de.jumpupandroid.util.webservice.mapper.JsonMapper;
 import jumpup.imi.fb4.htw.de.jumpupandroid.registration.entity.Registration;
 
 /**

@@ -1,7 +1,18 @@
 package jumpup.imi.fb4.htw.de.jumpupandroid.registration.request;
 
-import jumpup.imi.fb4.htw.de.jumpupandroid.entity.mapper.JsonMapper;
-import jumpup.imi.fb4.htw.de.jumpupandroid.entity.mapper.MapperFactory;
+import android.util.Log;
+
+import org.apache.commons.lang3.exception.ExceptionUtils;
+import org.json.JSONException;
+
+import java.io.IOException;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
+
+import jumpup.imi.fb4.htw.de.jumpupandroid.R;
+import jumpup.imi.fb4.htw.de.jumpupandroid.util.webservice.mapper.JsonMapper;
+import jumpup.imi.fb4.htw.de.jumpupandroid.util.webservice.mapper.MapperFactory;
 import jumpup.imi.fb4.htw.de.jumpupandroid.registration.entity.Registration;
 import jumpup.imi.fb4.htw.de.jumpupandroid.util.webservice.exception.ErrorResponseException;
 import jumpup.imi.fb4.htw.de.jumpupandroid.util.webservice.exception.TechnicalErrorException;
@@ -24,7 +35,7 @@ public class RegistrationRequestImpl extends JumpUpRequest implements Registrati
 
     @Override
     protected boolean isPublicAction() {
-        return false;
+        return true;
     }
 
     @Override
@@ -43,7 +54,46 @@ public class RegistrationRequestImpl extends JumpUpRequest implements Registrati
     }
 
     @Override
+    protected int getDefaultErrorMessageId() {
+        return R.string.jumpup_request_error_registration;
+    }
+
+    @Override
     public boolean registerUser(Registration registrationEntity) throws TechnicalErrorException, ErrorResponseException {
-        return false;
+        HttpURLConnection urlConnection = null;
+
+        try {
+            URL registrationUrl = new URL(this.getUrl());
+
+            try {
+                urlConnection = buildPostConnection(registrationUrl, getResponseMapper().marshalEntity(registrationEntity));
+                urlConnection.connect();
+
+                String response = responseReader.read(urlConnection);
+
+                Log.d(TAG, "registerUser(): got response: " + response);
+
+                return true;
+            } catch (IOException ioException) {
+                Log.e(TAG, "registerUser(): could not register user. Exception during response buffering: " + ioException.getMessage()
+                        + "\nStack trace:\n" + ExceptionUtils.getStackTrace(ioException));
+
+                throw this.newTechnicalErrorException(ioException, MESSAGE_ID_REQUEST_ERROR_IO);
+            } catch (ErrorResponseException e) {
+                Log.e(TAG, "registerUser(): registration failed: " + e.getMessage());
+
+                throw e;
+            } catch (JSONException e) {
+                Log.e(TAG, "registerUser(): could not create JSON:" + e.getMessage()
+                        + "\nStack trace:\n" + ExceptionUtils.getStackTrace(e));
+
+                throw this.newTechnicalErrorException(e, MESSAGE_ID_REQUEST_ERROR_JSON);
+            }
+        } catch (MalformedURLException e) {
+            Log.e(TAG, "registerUser(): could not register user. MalformedUrlException: "
+                    + e.getMessage() + "\nStack trace:\n" + ExceptionUtils.getStackTrace(e));
+
+            throw this.newTechnicalErrorException(e, MESSAGE_ID_REQUEST_ERROR_URL);
+        }
     }
 }

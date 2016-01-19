@@ -1,5 +1,7 @@
 package jumpup.imi.fb4.htw.de.jumpupandroid.util.webservice.exception;
 
+import jumpup.imi.fb4.htw.de.jumpupandroid.util.webservice.response.ErrorResponse;
+
 /**
  * Project: jumpup_android
  * <p/>
@@ -11,26 +13,29 @@ package jumpup.imi.fb4.htw.de.jumpupandroid.util.webservice.exception;
 public class ErrorResponseException extends Exception {
 
     private final int responseStatusCode;
-    private final String errorResponse;
-    private int userMessageId;
+    private final String errorResponseString;
+    private final ErrorResponse errorResponse;
+    private final int userMessageId;
 
     /**
      *
      * @param responseStatusCode the HTTP status code of the response
-     * @param errorResponse the raw error response as returned by the WebService
+     * @param errorResponseString the raw error response as returned by the WebService
+     * @param errorResponse the built ErrorResponse object
      * @param defaultUserMessageId the ID of the default user message to be shown (e.g. if the webservice error response shouldn't be presented to the user)
      */
-    public ErrorResponseException(int responseStatusCode, String errorResponse, int defaultUserMessageId) {
+    public ErrorResponseException(int responseStatusCode, String errorResponseString, ErrorResponse errorResponse, int defaultUserMessageId) {
         super();
 
         this.responseStatusCode = responseStatusCode;
-        this.errorResponse = errorResponse;
+        this.errorResponseString = errorResponseString;
         this.userMessageId = defaultUserMessageId;
+        this.errorResponse = errorResponse;
     }
 
     @Override
     public String getMessage() {
-        return "Got response: Status code " + responseStatusCode + ". Response: " + errorResponse;
+        return "Got response: Status code " + responseStatusCode + ". Response: " + errorResponseString;
     }
 
     @Override
@@ -42,7 +47,11 @@ public class ErrorResponseException extends Exception {
         return responseStatusCode;
     }
 
-    public String getErrorResponse() {
+    public String getErrorResponseString() {
+        return errorResponseString;
+    }
+
+    public ErrorResponse getErrorResponseObject() {
         return errorResponse;
     }
 
@@ -50,7 +59,7 @@ public class ErrorResponseException extends Exception {
     public String toString() {
         final StringBuilder sb = new StringBuilder("ErrorResponseException{");
         sb.append("responseStatusCode=").append(responseStatusCode);
-        sb.append(", errorResponse='").append(errorResponse).append('\'');
+        sb.append(", errorResponseString='").append(errorResponseString).append('\'');
         sb.append('}');
         return sb.toString();
     }

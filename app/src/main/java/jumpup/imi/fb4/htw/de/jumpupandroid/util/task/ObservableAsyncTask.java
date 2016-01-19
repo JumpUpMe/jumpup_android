@@ -1,6 +1,7 @@
 package jumpup.imi.fb4.htw.de.jumpupandroid.util.task;
 
 import android.os.AsyncTask;
+import android.util.Log;
 
 import java.util.Observable;
 
@@ -31,5 +32,19 @@ public abstract class ObservableAsyncTask<Params, Progress, Result> extends Asyn
     public Observable getObservable() {
         return this.observable;
     }
-}
 
+    protected abstract String getTag();
+
+    @Override
+    /**
+     * Default implementation of onPostExecvute: will notify each observer.
+     */
+    protected void onPostExecute(Result result) {
+        super.onPostExecute(result);
+
+        // notify observers about the completion of the task
+        Log.v(getTag(), "onPostExecute(): notifying " + this.getObservable().countObservers() + " observers...");
+
+        this.triggerChangedAndNotifyObservers(this);
+    }
+}
