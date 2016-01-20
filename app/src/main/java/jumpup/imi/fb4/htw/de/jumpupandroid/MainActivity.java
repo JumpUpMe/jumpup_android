@@ -5,14 +5,13 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.PersistableBundle;
-import android.support.v7.app.ActionBarActivity;
+import android.text.method.PasswordTransformationMethod;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Toast;
 
 import java.util.Observable;
 import java.util.Observer;
@@ -20,7 +19,9 @@ import java.util.Observer;
 import jumpup.imi.fb4.htw.de.jumpupandroid.login.LoginFactory;
 import jumpup.imi.fb4.htw.de.jumpupandroid.login.LoginTask;
 import jumpup.imi.fb4.htw.de.jumpupandroid.registration.RegistrationActivity;
+import jumpup.imi.fb4.htw.de.jumpupandroid.util.AppUtility;
 import jumpup.imi.fb4.htw.de.jumpupandroid.util.activity.JumpUpActivity;
+import jumpup.imi.fb4.htw.de.jumpupandroid.util.development.TestData;
 
 @SuppressWarnings("WeakerAccess")
 public class MainActivity extends JumpUpActivity implements Observer {
@@ -42,6 +43,50 @@ public class MainActivity extends JumpUpActivity implements Observer {
 
         this.bindInputs();
         this.registerButtons();
+
+        if (AppUtility.prefillTestData()) {
+            fillDevelopmentTestData();
+        } else {
+            this.revealPassword();
+            this.addClickListenersToEmptyInputFieldsOnClick();
+        }
+    }
+
+    private void fillDevelopmentTestData() {
+        Log.d(TAG, "fillDevelopmentTestData(): prefilling input fields with test data");
+        inputEmail.setText(TestData.EMAIL);
+        inputPassword.setText(TestData.PASSWORD);
+    }
+
+    private void addClickListenersToEmptyInputFieldsOnClick() {
+        addClickListenerToEmptyInputFieldsOnClick(inputEmail);
+    }
+
+    private void revealPassword() {
+        inputPassword.setTransformationMethod(null);
+
+        inputPassword.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View view, boolean hasFocus) {
+                if (hasFocus) {
+                    Log.v(TAG, "revealPassword(): edPassword on focus listener...");
+
+                    inputPassword.setText("");
+                    inputPassword.setTransformationMethod(new PasswordTransformationMethod());
+                    inputPassword.setOnClickListener(null);
+                }
+            }
+        });
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+
+        if (!loginTask.getStatus().equals(AsyncTask.Status.FINISHED)) {
+            Log.v(TAG, "onDestroy(): cancelling LoginTask...");
+            loginTask.cancel(true);
+        }
     }
 
     private void bindInputs() {
@@ -151,13 +196,13 @@ public class MainActivity extends JumpUpActivity implements Observer {
     private void handleLoginResult() {
         if (this.loginTask.isHasError()) {
             this.showErrorNotification(this.getResources().getString(this.loginTask.getToastMessageId()));
-            this.resetLoginTask();
+            this.resetTask();
         } else {
             this.showSuccessNotification(this.getResources().getString(R.string.fragment_main_login_success));
         }
     }
 
-    private void resetLoginTask() {
+    private void resetTask() {
         loginTask = LoginFactory.newLoginTask(this);
     }
 }

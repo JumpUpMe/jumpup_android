@@ -1,23 +1,23 @@
 package jumpup.imi.fb4.htw.de.jumpupandroid.registration;
 
+import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.v7.app.ActionBarActivity;
 import android.text.method.PasswordTransformationMethod;
 import android.util.Log;
 import android.util.Patterns;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
 
 import java.util.Observable;
 import java.util.Observer;
 
+import jumpup.imi.fb4.htw.de.jumpupandroid.MainActivity;
 import jumpup.imi.fb4.htw.de.jumpupandroid.R;
-import jumpup.imi.fb4.htw.de.jumpupandroid.login.LoginTask;
 import jumpup.imi.fb4.htw.de.jumpupandroid.registration.entity.Registration;
 import jumpup.imi.fb4.htw.de.jumpupandroid.util.AppUtility;
 import jumpup.imi.fb4.htw.de.jumpupandroid.util.activity.JumpUpActivity;
+import jumpup.imi.fb4.htw.de.jumpupandroid.util.development.TestData;
 
 /**
  * Project: jumpup_android
@@ -28,8 +28,8 @@ import jumpup.imi.fb4.htw.de.jumpupandroid.util.activity.JumpUpActivity;
  * @since 18.01.2016
  */
 public class RegistrationActivity extends JumpUpActivity implements Observer {
-    private static final String TAG = RegistrationActivity.class.getName();
     public static final String EXTRA_USERNAME = "extra_username";
+    private static final String TAG = RegistrationActivity.class.getName();
     private RegistrationTask registrationTask = RegistrationFactory.newRegistrationTask(this);
 
     private EditText edUsername;
@@ -47,6 +47,16 @@ public class RegistrationActivity extends JumpUpActivity implements Observer {
         this.bindInputs();
         this.registerButtons();
         this.prepareView();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+
+        if (!registrationTask.getStatus().equals(AsyncTask.Status.FINISHED)) {
+            Log.v(TAG, "onDestroy(): cancelling RegistrationTask...");
+            registrationTask.cancel(true);
+        }
     }
 
     private void bindInputs() {
@@ -92,7 +102,7 @@ public class RegistrationActivity extends JumpUpActivity implements Observer {
     }
 
     private void prepareView() {
-        if (AppUtility.isDevelopmentMode()) {
+        if (AppUtility.prefillTestData()) {
             fillDevelopmentTestData();
         } else {
             fillUsernameIfNotDefault();
@@ -100,16 +110,19 @@ public class RegistrationActivity extends JumpUpActivity implements Observer {
 
             revealPassword();
             revealConfirmPassword();
+            addClickListenersToEmptyInputFieldsOnClick();
         }
     }
 
     private void fillDevelopmentTestData() {
-        edPrename.setText("Android");
-        edLastname.setText("Developer");
-        edMail.setText("info@groupelite.de");
-        edPassword.setText("$test1234");
-        edConfirmPassword.setText("$test1234");
-        edUsername.setText("androiddeveloper");
+        Log.d(TAG, "fillDevelopmentTestData(): prefilling input fields with test data");
+
+        edPrename.setText(TestData.PRENAME);
+        edLastname.setText(TestData.LASTNAME);
+        edMail.setText(TestData.EMAIL);
+        edPassword.setText(TestData.PASSWORD);
+        edConfirmPassword.setText(TestData.PASSWORD);
+        edUsername.setText(TestData.USERNAME);
     }
 
     private void fillUsernameIfNotDefault() {
@@ -176,6 +189,13 @@ public class RegistrationActivity extends JumpUpActivity implements Observer {
         });
     }
 
+    private void addClickListenersToEmptyInputFieldsOnClick() {
+        addClickListenerToEmptyInputFieldsOnClick(edUsername);
+        addClickListenerToEmptyInputFieldsOnClick(edMail);
+        addClickListenerToEmptyInputFieldsOnClick(edPrename);
+        addClickListenerToEmptyInputFieldsOnClick(edLastname);
+    }
+
     private EditText getEditText(int edId) {
         return (EditText) this.findViewById(edId);
     }
@@ -192,14 +212,21 @@ public class RegistrationActivity extends JumpUpActivity implements Observer {
     private void handleRegistrationResult() {
         if (this.registrationTask.isHasValidationError()) {
             showValidationFailure();
+            resetTask();
         } else if (this.registrationTask.isHasError()) {
             this.showErrorNotification(this.getResources().getString(this.registrationTask.getToastMessageId()));
+            resetTask();
         } else {
             this.showSuccessNotification(this.getResources().getString(R.string.activity_registration_registration_success));
+            navigateTo(MainActivity.class);
         }
     }
 
     private void showValidationFailure() {
         this.showValidationFailureNotification(this.registrationTask.getValidationFailureField(), this.registrationTask.getValidationFailureErrorMessages());
+    }
+
+    private void resetTask() {
+        registrationTask = RegistrationFactory.newRegistrationTask(this);
     }
 }

@@ -1,10 +1,12 @@
 package jumpup.imi.fb4.htw.de.jumpupandroid.registration.entity.mapper;
 
+import android.util.Log;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import jumpup.imi.fb4.htw.de.jumpupandroid.util.webservice.mapper.JsonMapper;
 import jumpup.imi.fb4.htw.de.jumpupandroid.registration.entity.Registration;
+import jumpup.imi.fb4.htw.de.jumpupandroid.util.webservice.mapper.JsonMapper;
 
 /**
  * Project: jumpup_android
@@ -15,6 +17,8 @@ import jumpup.imi.fb4.htw.de.jumpupandroid.registration.entity.Registration;
  * @since 19.01.2016
  */
 public class RegistrationMapper extends JsonMapper<Registration> {
+    private static final String TAG = RegistrationMapper.class.getName();
+
     @Override
     public Registration mapResponse(String response) throws JSONException {
         throw new UnsupportedOperationException("mapResponse() should not be called during registration since the response is not an entity.");
@@ -24,6 +28,7 @@ public class RegistrationMapper extends JsonMapper<Registration> {
     public String marshalEntity(Registration entity) throws JSONException {
         JSONObject registrationJson = new JSONObject();
 
+        Log.d(TAG, "marshalEntity(): " + entity);
         registrationJson.put(Registration.FIELD_NAME_USERNAME, entity.getUsername());
         registrationJson.put(Registration.FIELD_NAME_EMAIL, entity.geteMail());
         registrationJson.put(Registration.FIELD_NAME_PRENAME, entity.getPrename());

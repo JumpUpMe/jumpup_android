@@ -11,8 +11,8 @@ import java.net.URL;
 
 import jumpup.imi.fb4.htw.de.jumpupandroid.BuildConfig;
 import jumpup.imi.fb4.htw.de.jumpupandroid.R;
-import jumpup.imi.fb4.htw.de.jumpupandroid.util.webservice.mapper.JsonMapper;
 import jumpup.imi.fb4.htw.de.jumpupandroid.util.webservice.exception.TechnicalErrorException;
+import jumpup.imi.fb4.htw.de.jumpupandroid.util.webservice.mapper.JsonMapper;
 import jumpup.imi.fb4.htw.de.jumpupandroid.util.webservice.response.ResponseReader;
 import jumpup.imi.fb4.htw.de.jumpupandroid.util.webservice.response.ResponseReaderImpl;
 
@@ -25,18 +25,15 @@ import jumpup.imi.fb4.htw.de.jumpupandroid.util.webservice.response.ResponseRead
  * @since ${date}
  */
 public abstract class JumpUpRequest {
-    private static final String BASE_URL = BuildConfig.JUMPUP_REST_BASE_URL;
-    private static final String TAG = JumpUpRequest.class.getName();
-
     public static final int MESSAGE_ID_REQUEST_ERROR_IO = R.string.jumpup_request_error_io;
     public static final int MESSAGE_ID_REQUEST_ERROR_JSON = R.string.jumpup_request_error_json;
     public static final int MESSAGE_ID_REQUEST_ERROR_URL = R.string.jumpup_request_error_malformed_url;
-
+    private static final String BASE_URL = BuildConfig.JUMPUP_REST_BASE_URL;
+    private static final String TAG = JumpUpRequest.class.getName();
+    protected ResponseReader responseReader = newResponseReader();
     private String builtUrl;
     private String username;
     private String password;
-
-    protected ResponseReader responseReader = newResponseReader();
 
     @SuppressWarnings("WeakerAccess")
     public void setUsername(String username) {
@@ -87,7 +84,7 @@ public abstract class JumpUpRequest {
 
     /**
      * Get the default error message ID to be shown if the request fails due to an ErrorResponse from the web service.
-     * @return
+     * @return ID the message ID
      */
     protected abstract int getDefaultErrorMessageId();
 
@@ -135,7 +132,9 @@ public abstract class JumpUpRequest {
         HttpURLConnection urlConn = buildConnection(url, "POST");
         urlConn.setRequestProperty("Content-Type", "application/json");
 
-        // TODO set JSON
+        urlConn.getOutputStream().write(jsonRequestBody.getBytes());
+        urlConn.getOutputStream().close();
+
         return urlConn;
     }
 

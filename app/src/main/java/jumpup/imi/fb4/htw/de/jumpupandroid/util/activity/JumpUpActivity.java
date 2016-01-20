@@ -1,7 +1,11 @@
 package jumpup.imi.fb4.htw.de.jumpupandroid.util.activity;
 
+import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
+import android.widget.EditText;
 import android.widget.Toast;
+
+import jumpup.imi.fb4.htw.de.jumpupandroid.util.ViewHelper;
 
 /**
  * Project: jumpup_android
@@ -13,7 +17,7 @@ import android.widget.Toast;
  */
 public class JumpUpActivity extends ActionBarActivity {
     protected void showSuccessNotification(String string) {
-        Toast toast = Toast.makeText(getApplicationContext(), string, Toast.LENGTH_SHORT);
+        Toast toast = Toast.makeText(getApplicationContext(), string, Toast.LENGTH_LONG);
         toast.show();
     }
 
@@ -28,5 +32,13 @@ public class JumpUpActivity extends ActionBarActivity {
             toast.show();
         }
     }
-}
 
+    protected void navigateTo(Class expliciteClass) {
+        Intent intent = new Intent(this, expliciteClass);
+        startActivity(intent);
+    }
+
+    protected void addClickListenerToEmptyInputFieldsOnClick(final EditText edInput) {
+        ViewHelper.addClickListenerToEmptyInputFieldsOnClick(edInput);
+    }
+}

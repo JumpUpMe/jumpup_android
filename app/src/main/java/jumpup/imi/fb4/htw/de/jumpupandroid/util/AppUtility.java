@@ -16,4 +16,13 @@ public class AppUtility {
     {
         return BuildConfig.BUILD_TYPE.equals("debug") && BuildConfig.DEBUG;
     }
+
+    /**
+     * Whether to provide prefilled input fields to simplify app testing.
+     *
+     * @return true | false
+     */
+    public static boolean prefillTestData() {
+        return BuildConfig.DEBUG && BuildConfig.PREFILL_TEST_DATA;
+    }
 }

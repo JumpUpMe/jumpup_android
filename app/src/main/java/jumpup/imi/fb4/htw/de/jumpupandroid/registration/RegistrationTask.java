@@ -50,7 +50,7 @@ public class RegistrationTask extends ObservableAsyncTask<Registration, Void, Vo
             return false;
         }
 
-        // TODO validate registration model
+        this.registrationEntity = registrationModels[0];
         return true;
     }
 
