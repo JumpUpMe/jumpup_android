@@ -26,11 +26,18 @@
     <string name="jumpup_request_error_registration">The registration failed. Please try again.</string>
     <string name="title_activity_welcome">WelcomeActivity</string>
     <string name="portal_activities_title">JumpUp.Me - Member area</string>
-    <string name="portal_activity_welcome_text">Hello %s\nThis is the member area.\nUse the menu to navigate to the things you can do.
+    <string name="portal_activity_welcome_text">Hello %s!\nThis is the member area.\nUse the menu to navigate to the things you can do.
         \n\n- Update your profile
         \n- Offer a trip
         \n- Look for trips
         \n- List your trips
         \n- List your bookings</string>
+    <string name="portal_menu_profile">Profile</string>
+    <string name="portal_menu_offer_trip">Offer trip</string>
+    <string name="portal_menu_show_my_trips">Show my trips</string>
+    <string name="portal_menu_look_for_trips">Look for trips</string>
+    <string name="portal_menu_show_my_bookings">Show my bookings</string>
+    <string name="portal_menu_logout">Logout</string>
+    <string name="portal_activities_logout_success">You were successfully logged out.</string>
 
 </resources>

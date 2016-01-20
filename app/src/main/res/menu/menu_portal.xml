@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/portal_menu_profile"
+        android:orderInCategory="100"
+        android:title="@string/portal_menu_profile"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/portal_menu_offer_trip"
+        android:orderInCategory="100"
+        android:title="@string/portal_menu_offer_trip"
+        app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/portal_menu_show_my_trips"
+        android:orderInCategory="100"
+        android:title="@string/portal_menu_show_my_trips"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/portal_menu_look_for_trips"
+        android:orderInCategory="100"
+        android:title="@string/portal_menu_look_for_trips"
+        app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/portal_menu_show_my_bookings"
+        android:orderInCategory="100"
+        android:title="@string/portal_menu_show_my_bookings"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/portal_menu_logout"
+        android:orderInCategory="100"
+        android:title="@string/portal_menu_logout"
+        app:showAsAction="never" />
+
+</menu>

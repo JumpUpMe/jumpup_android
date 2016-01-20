@@ -4,9 +4,9 @@ import android.util.Log;
 
 import jumpup.imi.fb4.htw.de.jumpupandroid.entity.User;
 import jumpup.imi.fb4.htw.de.jumpupandroid.login.request.LoginRequest;
+import jumpup.imi.fb4.htw.de.jumpupandroid.util.task.ObservableAsyncTask;
 import jumpup.imi.fb4.htw.de.jumpupandroid.util.webservice.exception.ErrorResponseException;
 import jumpup.imi.fb4.htw.de.jumpupandroid.util.webservice.exception.TechnicalErrorException;
-import jumpup.imi.fb4.htw.de.jumpupandroid.util.task.ObservableAsyncTask;
 
 /**
  * Project: jumpup_android
@@ -84,4 +84,7 @@ public class LoginTask extends ObservableAsyncTask<String, Void, Void> {
         return toastMessageId;
     }
 
+    public User getUser() {
+        return user;
+    }
 }

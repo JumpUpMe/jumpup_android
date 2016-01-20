@@ -15,7 +15,7 @@ android {
     buildTypes {
         debug {
             it.buildConfigField 'String', 'JUMPUP_REST_BASE_URL', '"http://10.0.2.2:8080/jumpup/rest"'
-            it.buildConfigField 'Boolean', 'PREFILL_TEST_DATA', 'false'
+            it.buildConfigField 'Boolean', 'PREFILL_TEST_DATA', 'true'
         }
         staging {
             it.buildConfigField 'String', 'JUMPUP_REST_BASE_URL', '"http://groupelite.de:8080/jumpup/rest"'

@@ -18,6 +18,7 @@ import java.util.Observer;
 
 import jumpup.imi.fb4.htw.de.jumpupandroid.login.LoginFactory;
 import jumpup.imi.fb4.htw.de.jumpupandroid.login.LoginTask;
+import jumpup.imi.fb4.htw.de.jumpupandroid.portal.welcome.WelcomeActivity;
 import jumpup.imi.fb4.htw.de.jumpupandroid.registration.RegistrationActivity;
 import jumpup.imi.fb4.htw.de.jumpupandroid.util.AppUtility;
 import jumpup.imi.fb4.htw.de.jumpupandroid.util.activity.JumpUpActivity;
@@ -199,10 +200,16 @@ public class MainActivity extends JumpUpActivity implements Observer {
             this.resetTask();
         } else {
             this.showSuccessNotification(this.getResources().getString(R.string.fragment_main_login_success));
+            this.navigateToWithParcelAndClearActivityStack(WelcomeActivity.class, this.loginTask.getUser());
         }
     }
 
     private void resetTask() {
         loginTask = LoginFactory.newLoginTask(this);
+    }
+
+    @Override
+    protected String getTag() {
+        return TAG;
     }
 }

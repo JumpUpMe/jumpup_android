@@ -229,4 +229,9 @@ public class RegistrationActivity extends JumpUpActivity implements Observer {
     private void resetTask() {
         registrationTask = RegistrationFactory.newRegistrationTask(this);
     }
+
+    @Override
+    protected String getTag() {
+        return TAG;
+    }
 }
