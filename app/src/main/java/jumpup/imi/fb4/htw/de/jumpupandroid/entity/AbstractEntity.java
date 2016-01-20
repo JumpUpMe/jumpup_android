@@ -1,5 +1,8 @@
 package jumpup.imi.fb4.htw.de.jumpupandroid.entity;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 /**
  * Project: jumpup_android
  * <p/>
@@ -8,7 +11,7 @@ package jumpup.imi.fb4.htw.de.jumpupandroid.entity;
  * @author Sascha Feldmann <a href="mailto:sascha.feldmann@gmx.de">sascha.feldmann@gmx.de</a>
  * @since 18.01.2016
  */
-public class AbstractEntity {
+public abstract class AbstractEntity implements Parcelable {
     public static final String FIELD_NAME_IDENTITY = "identity";
     public static final String FIELD_NAME_CREATION_TIMESTAMP = "creationTimestamp";
     public static final String FIELD_NAME_UPDATE_TIMESTAMP = "updateTimestamp";
@@ -83,5 +86,18 @@ public class AbstractEntity {
         sb.append(", updateTimestamp=").append(updateTimestamp);
         sb.append('}');
         return sb.toString();
+    }
+
+    @Override
+    public void writeToParcel(Parcel parcel, int i) {
+        parcel.writeLong(this.identity);
+        parcel.writeLong(this.creationTimestamp);
+        parcel.writeLong(this.updateTimestamp);
+    }
+
+    public void initializeFromParcel(Parcel in) {
+        this.identity = in.readLong();
+        this.creationTimestamp = in.readLong();
+        this.updateTimestamp = in.readLong();
     }
 }

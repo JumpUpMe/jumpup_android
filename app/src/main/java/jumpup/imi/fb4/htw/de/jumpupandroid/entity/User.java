@@ -1,5 +1,8 @@
 package jumpup.imi.fb4.htw.de.jumpupandroid.entity;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 /**
  * Project: jumpup_android
  * <p/>
@@ -24,6 +27,17 @@ public class User extends AbstractEntity {
     public static final String FIELD_IS_CONFIRMED = "isConfirmed";
     public static final String FIELD_GENDER = "gender";
 
+    // this is used to regenerate your object. All Parcelables must have a CREATOR that implements these two methods
+    public static final Parcelable.Creator<User> CREATOR = new Parcelable.Creator<User>() {
+        public User createFromParcel(Parcel in) {
+            return new User(in);
+        }
+
+        public User[] newArray(int size) {
+            return new User[size];
+        }
+    };
+
     private String username;
     private String password;
     private String eMail;
@@ -38,6 +52,56 @@ public class User extends AbstractEntity {
     private String gender;
     private String mobileNumber;
     private String skype;
+
+    public User() {
+        super();
+    }
+
+    public User(Parcel in) {
+        super();
+
+        this.initializeFromParcel(in);
+    }
+
+    @Override
+    public void writeToParcel(Parcel parcel, int i) {
+        super.writeToParcel(parcel, i);
+
+        parcel.writeString(username);
+        parcel.writeString(password);
+        parcel.writeString(eMail);
+        parcel.writeString(prename);
+        parcel.writeString(lastname);
+        parcel.writeString(town);
+        parcel.writeString(country);
+        parcel.writeString(locale);
+        parcel.writeInt(isConfirmed ? 1 : 0);
+        parcel.writeLong(dateOfBirth);
+        parcel.writeString(placeOfBirth);
+        parcel.writeString(gender);
+        parcel.writeString(mobileNumber);
+        parcel.writeString(skype);
+    }
+
+    @Override
+    public void initializeFromParcel(Parcel in) {
+        super.initializeFromParcel(in);
+
+        this.username = in.readString();
+        this.password = in.readString();
+        this.eMail = in.readString();
+        this.prename = in.readString();
+        this.lastname = in.readString();
+        this.town = in.readString();
+        this.country = in.readString();
+        this.locale = in.readString();
+        this.isConfirmed = in.readInt() == 1;
+        this.dateOfBirth = in.readLong();
+        this.placeOfBirth = in.readString();
+        this.gender = in.readString();
+        this.mobileNumber = in.readString();
+        this.skype = in.readString();
+    }
 
     public void setUsername(String username)
     {
@@ -254,5 +318,10 @@ public class User extends AbstractEntity {
         sb.append(super.toString());
 
         return sb.toString();
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
     }
 }

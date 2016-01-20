@@ -117,7 +117,7 @@ public class RegistrationActivity extends JumpUpActivity implements Observer {
     private void fillDevelopmentTestData() {
         Log.d(TAG, "fillDevelopmentTestData(): prefilling input fields with test data");
 
-        edPrename.setText(TestData.PRENAME);
+//        edPrename.setText(TestData.PRENAME);
         edLastname.setText(TestData.LASTNAME);
         edMail.setText(TestData.EMAIL);
         edPassword.setText(TestData.PASSWORD);

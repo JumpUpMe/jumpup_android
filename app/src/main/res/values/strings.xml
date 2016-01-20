@@ -24,5 +24,13 @@
     <string name="activity_registration_lastname_default">Lastname</string>
     <string name="activity_registration_registration_success">The registration was successful! Please check your eMail inbox, a confirmation might be necessary.</string>
     <string name="jumpup_request_error_registration">The registration failed. Please try again.</string>
+    <string name="title_activity_welcome">WelcomeActivity</string>
+    <string name="portal_activities_title">JumpUp.Me - Member area</string>
+    <string name="portal_activity_welcome_text">Hello %s\nThis is the member area.\nUse the menu to navigate to the things you can do.
+        \n\n- Update your profile
+        \n- Offer a trip
+        \n- Look for trips
+        \n- List your trips
+        \n- List your bookings</string>
 
 </resources>
