@@ -21,6 +21,7 @@ import jumpup.imi.fb4.htw.de.jumpupandroid.login.LoginTask;
 import jumpup.imi.fb4.htw.de.jumpupandroid.portal.welcome.WelcomeActivity;
 import jumpup.imi.fb4.htw.de.jumpupandroid.registration.RegistrationActivity;
 import jumpup.imi.fb4.htw.de.jumpupandroid.util.AppUtility;
+import jumpup.imi.fb4.htw.de.jumpupandroid.util.ViewHelper;
 import jumpup.imi.fb4.htw.de.jumpupandroid.util.activity.JumpUpActivity;
 import jumpup.imi.fb4.htw.de.jumpupandroid.util.development.TestData;
 
@@ -63,21 +64,8 @@ public class MainActivity extends JumpUpActivity implements Observer {
         addClickListenerToEmptyInputFieldsOnClick(inputEmail);
     }
 
-    private void revealPassword() {
-        inputPassword.setTransformationMethod(null);
-
-        inputPassword.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View view, boolean hasFocus) {
-                if (hasFocus) {
-                    Log.v(TAG, "revealPassword(): edPassword on focus listener...");
-
-                    inputPassword.setText("");
-                    inputPassword.setTransformationMethod(new PasswordTransformationMethod());
-                    inputPassword.setOnClickListener(null);
-                }
-            }
-        });
+    private void revealPassword() {;
+        ViewHelper.addRevealPasswordUntilFirstClick(inputPassword);
     }
 
     @Override

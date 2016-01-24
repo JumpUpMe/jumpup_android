@@ -16,6 +16,7 @@ import jumpup.imi.fb4.htw.de.jumpupandroid.MainActivity;
 import jumpup.imi.fb4.htw.de.jumpupandroid.R;
 import jumpup.imi.fb4.htw.de.jumpupandroid.registration.entity.Registration;
 import jumpup.imi.fb4.htw.de.jumpupandroid.util.AppUtility;
+import jumpup.imi.fb4.htw.de.jumpupandroid.util.ViewHelper;
 import jumpup.imi.fb4.htw.de.jumpupandroid.util.activity.JumpUpActivity;
 import jumpup.imi.fb4.htw.de.jumpupandroid.util.development.TestData;
 
@@ -155,20 +156,7 @@ public class RegistrationActivity extends JumpUpActivity implements Observer {
 
     private void revealPassword() {
         final EditText edPassword = getEditText(R.id.edPassword);
-        edPassword.setTransformationMethod(null);
-
-        edPassword.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View view, boolean hasFocus) {
-                if (hasFocus) {
-                    Log.v(TAG, "revealPassword(): edPassword on focus listener...");
-
-                    edPassword.setText("");
-                    edPassword.setTransformationMethod(new PasswordTransformationMethod());
-                    edPassword.setOnClickListener(null);
-                }
-            }
-        });
+        ViewHelper.addRevealPasswordUntilFirstClick(edPassword);
     }
 
     private void revealConfirmPassword() {
