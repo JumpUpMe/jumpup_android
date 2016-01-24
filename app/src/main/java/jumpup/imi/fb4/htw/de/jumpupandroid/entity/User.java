@@ -26,7 +26,6 @@ public class User extends AbstractEntity {
     public static final String FIELD_LOCALE = "locale";
     public static final String FIELD_IS_CONFIRMED = "isConfirmed";
     public static final String FIELD_GENDER = "gender";
-
     // this is used to regenerate your object. All Parcelables must have a CREATOR that implements these two methods
     public static final Parcelable.Creator<User> CREATOR = new Parcelable.Creator<User>() {
         public User createFromParcel(Parcel in) {
@@ -37,7 +36,6 @@ public class User extends AbstractEntity {
             return new User[size];
         }
     };
-
     private String username;
     private String password;
     private String eMail;
@@ -52,7 +50,6 @@ public class User extends AbstractEntity {
     private String gender;
     private String mobileNumber;
     private String skype;
-
     public User() {
         super();
     }
@@ -103,14 +100,13 @@ public class User extends AbstractEntity {
         this.skype = in.readString();
     }
 
+    public String getUsername() {
+        return username;
+    }
+
     public void setUsername(String username)
     {
         this.username = username;
-    }
-
-    public String getUsername()
-    {
-        return username;
     }
 
     public String getPassword() {
@@ -121,19 +117,13 @@ public class User extends AbstractEntity {
         this.password = password;
     }
 
-    public void seteMail(String eMail)
-    {
-        this.eMail = eMail;
-    }
-
-    public String geteMail()
-    {
+    public String geteMail() {
         return eMail;
     }
 
-    public void setPrename(String prename)
+    public void seteMail(String eMail)
     {
-        this.prename = prename;
+        this.eMail = eMail;
     }
 
     public String getPrename()
@@ -141,9 +131,9 @@ public class User extends AbstractEntity {
         return prename;
     }
 
-    public void setLastname(String lastname)
+    public void setPrename(String prename)
     {
-        this.lastname = lastname;
+        this.prename = prename;
     }
 
     public String getLastname()
@@ -151,9 +141,9 @@ public class User extends AbstractEntity {
         return lastname;
     }
 
-    public void setTown(String town)
+    public void setLastname(String lastname)
     {
-        this.town = town;
+        this.lastname = lastname;
     }
 
     public String getTown()
@@ -161,9 +151,9 @@ public class User extends AbstractEntity {
         return town;
     }
 
-    public void setCountry(String country)
+    public void setTown(String town)
     {
-        this.country = country;
+        this.town = town;
     }
 
     public String getCountry()
@@ -171,9 +161,9 @@ public class User extends AbstractEntity {
         return country;
     }
 
-    public void setLocale(String locale)
+    public void setCountry(String country)
     {
-        this.locale = locale;
+        this.country = country;
     }
 
     public String getLocale()
@@ -181,9 +171,9 @@ public class User extends AbstractEntity {
         return locale;
     }
 
-    public void setIsConfirmed(Boolean isConfirmed)
+    public void setLocale(String locale)
     {
-        this.isConfirmed = isConfirmed;
+        this.locale = locale;
     }
 
     public Boolean getIsConfirmed()
@@ -191,9 +181,9 @@ public class User extends AbstractEntity {
         return isConfirmed;
     }
 
-    public void setDateOfBirth(Long dateOfBirth)
+    public void setIsConfirmed(Boolean isConfirmed)
     {
-        this.dateOfBirth = dateOfBirth;
+        this.isConfirmed = isConfirmed;
     }
 
     public Long getDateOfBirth()
@@ -201,9 +191,9 @@ public class User extends AbstractEntity {
         return dateOfBirth;
     }
 
-    public void setPlaceOfBirth(String placeOfBirth)
+    public void setDateOfBirth(Long dateOfBirth)
     {
-        this.placeOfBirth = placeOfBirth;
+        this.dateOfBirth = dateOfBirth;
     }
 
     public String getPlaceOfBirth()
@@ -211,9 +201,9 @@ public class User extends AbstractEntity {
         return placeOfBirth;
     }
 
-    public void setGender(String gender)
+    public void setPlaceOfBirth(String placeOfBirth)
     {
-        this.gender = gender;
+        this.placeOfBirth = placeOfBirth;
     }
 
     public String getGender()
@@ -221,9 +211,9 @@ public class User extends AbstractEntity {
         return gender;
     }
 
-    public void setMobileNumber(String mobileNumber)
+    public void setGender(String gender)
     {
-        this.mobileNumber = mobileNumber;
+        this.gender = gender;
     }
 
     public String getMobileNumber()
@@ -231,14 +221,19 @@ public class User extends AbstractEntity {
         return mobileNumber;
     }
 
-    public void setSkype(String skype)
+    public void setMobileNumber(String mobileNumber)
     {
-        this.skype = skype;
+        this.mobileNumber = mobileNumber;
     }
 
     public String getSkype()
     {
         return skype;
+    }
+
+    public void setSkype(String skype)
+    {
+        this.skype = skype;
     }
 
     @SuppressWarnings({"ConstantConditions", "SimplifiableIfStatement"})
@@ -323,5 +318,10 @@ public class User extends AbstractEntity {
     @Override
     public int describeContents() {
         return 0;
+    }
+
+    public enum Gender {
+        MAN,
+        WOMAN
     }
 }

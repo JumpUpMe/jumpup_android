@@ -39,7 +39,7 @@ public class ProfileRequestImpl extends JumpUpRequest implements ProfileRequest 
 
     @Override
     protected String getEndpointUrl() {
-        return ENDPOINT_URL;
+        return ENDPOINT_URL + "/" + this.user.getIdentity();
     }
 
     @Override
@@ -59,6 +59,8 @@ public class ProfileRequestImpl extends JumpUpRequest implements ProfileRequest 
 
     @Override
     public boolean storeProfile(User userEntity) throws TechnicalErrorException, ErrorResponseException {
+        this.setCredentialsFromUser(userEntity);
+
         HttpURLConnection urlConnection = null;
 
         try {

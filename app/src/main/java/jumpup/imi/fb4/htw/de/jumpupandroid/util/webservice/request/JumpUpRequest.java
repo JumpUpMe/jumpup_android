@@ -11,6 +11,8 @@ import java.net.URL;
 
 import jumpup.imi.fb4.htw.de.jumpupandroid.BuildConfig;
 import jumpup.imi.fb4.htw.de.jumpupandroid.R;
+import jumpup.imi.fb4.htw.de.jumpupandroid.entity.AbstractEntity;
+import jumpup.imi.fb4.htw.de.jumpupandroid.entity.User;
 import jumpup.imi.fb4.htw.de.jumpupandroid.util.webservice.exception.TechnicalErrorException;
 import jumpup.imi.fb4.htw.de.jumpupandroid.util.webservice.mapper.JsonMapper;
 import jumpup.imi.fb4.htw.de.jumpupandroid.util.webservice.response.ResponseReader;
@@ -30,6 +32,7 @@ public abstract class JumpUpRequest {
     public static final int MESSAGE_ID_REQUEST_ERROR_URL = R.string.jumpup_request_error_malformed_url;
     private static final String BASE_URL = BuildConfig.JUMPUP_REST_BASE_URL;
     private static final String TAG = JumpUpRequest.class.getName();
+    public AbstractEntity user;
     protected ResponseReader responseReader = newResponseReader();
     private String builtUrl;
     private String username;
@@ -146,6 +149,7 @@ public abstract class JumpUpRequest {
         HttpURLConnection urlConn = buildConnection(url, "PUT");
         sendJSONRequest(jsonRequestBody, urlConn);
 
+        Log.d(TAG, "buildPutConnection(): will send request body " + jsonRequestBody);
         return urlConn;
     }
 
@@ -178,5 +182,12 @@ public abstract class JumpUpRequest {
         ResponseReaderImpl responseReader = new ResponseReaderImpl();
         responseReader.setDefaultErrorMessageId(this.getDefaultErrorMessageId());
         return responseReader;
+    }
+
+    public void setCredentialsFromUser(User userEntity) {
+        this.setUsername(userEntity.geteMail());
+        this.setPassword(userEntity.getPassword());
+
+        this.user = userEntity;
     }
 }

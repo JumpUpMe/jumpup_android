@@ -21,9 +21,9 @@ public class ProfileTask extends ObservableAsyncTask<User, Void, Void> {
     private static final String TAG = ProfileTask.class.getName();
     private User user;
     private ProfileRequest profileRequest = ProfileFactory.newProfileRequest();
-    private boolean hasError;
+    private boolean hasError = false;
     private int toastMessageId;
-    private boolean hasValidationError;
+    private boolean hasValidationError = false;
     private String validationFailureField;
     private String[] validationFailureErrorMessages;
 
