@@ -6,10 +6,14 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RadioButton;
 
+import java.util.Observable;
+import java.util.Observer;
+
 import jumpup.imi.fb4.htw.de.jumpupandroid.R;
 import jumpup.imi.fb4.htw.de.jumpupandroid.portal.PortalActivity;
+import jumpup.imi.fb4.htw.de.jumpupandroid.portal.welcome.WelcomeActivity;
 
-public class ProfileActivity extends PortalActivity {
+public class ProfileActivity extends PortalActivity implements Observer {
 
     private static final String TAG = ProfileActivity.class.getName();
     private RadioButton inputGenderMale;
@@ -21,6 +25,8 @@ public class ProfileActivity extends PortalActivity {
     private EditText inputCountry;
     private EditText inputSkype;
     private EditText inputMobileNumber;
+
+    private ProfileTask profileTask = ProfileFactory.newProfileTask(this);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,5 +74,33 @@ public class ProfileActivity extends PortalActivity {
     @Override
     protected String getTag() {
         return TAG;
+    }
+
+    @Override
+    public void update(Observable observable, Object o) {
+        if (o instanceof ProfileTask) {
+            this.handleProfileResult();
+        }
+    }
+
+    private void handleProfileResult() {
+        if (this.profileTask.isHasValidationError()) {
+            showValidationFailure();
+            resetTask();
+        } else if (this.profileTask.isHasError()) {
+            this.showErrorNotification(this.getResources().getString(this.profileTask.getToastMessageId()));
+            resetTask();
+        } else {
+            this.showSuccessNotification(this.getResources().getString(R.string.activity_profile_success));
+            navigateToWithParcel(WelcomeActivity.class, this.user);
+        }
+    }
+
+    private void resetTask() {
+        this.profileTask = ProfileFactory.newProfileTask(this);
+    }
+
+    private void showValidationFailure() {
+        this.showValidationFailureNotification(this.profileTask.getValidationFailureField(), this.profileTask.getValidationFailureErrorMessages());
     }
 }

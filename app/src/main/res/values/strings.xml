@@ -52,4 +52,5 @@
     <string name="activity_profile_mobile">Mobile</string>
     <string name="activity_profile_skype">Skype</string>
     <string name="jumpup_request_error_update_profile_failed">The profile update failed.</string>
+    <string name="activity_profile_success">Your profile was updated successfully.</string>
 </resources>

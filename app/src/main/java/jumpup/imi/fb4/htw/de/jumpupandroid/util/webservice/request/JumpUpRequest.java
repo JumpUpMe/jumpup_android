@@ -130,10 +130,21 @@ public abstract class JumpUpRequest {
 
     protected HttpURLConnection buildPostConnection(URL url, String jsonRequestBody) throws IOException {
         HttpURLConnection urlConn = buildConnection(url, "POST");
+        sendJSONRequest(jsonRequestBody, urlConn);
+
+        return urlConn;
+    }
+
+    private void sendJSONRequest(String jsonRequestBody, HttpURLConnection urlConn) throws IOException {
         urlConn.setRequestProperty("Content-Type", "application/json");
 
         urlConn.getOutputStream().write(jsonRequestBody.getBytes());
         urlConn.getOutputStream().close();
+    }
+
+    protected HttpURLConnection buildPutConnection(URL url, String jsonRequestBody) throws IOException {
+        HttpURLConnection urlConn = buildConnection(url, "PUT");
+        sendJSONRequest(jsonRequestBody, urlConn);
 
         return urlConn;
     }

@@ -11,11 +11,11 @@ import java.net.MalformedURLException;
 import java.net.URL;
 
 import jumpup.imi.fb4.htw.de.jumpupandroid.R;
-import jumpup.imi.fb4.htw.de.jumpupandroid.util.webservice.mapper.JsonMapper;
-import jumpup.imi.fb4.htw.de.jumpupandroid.util.webservice.mapper.MapperFactory;
 import jumpup.imi.fb4.htw.de.jumpupandroid.registration.entity.Registration;
 import jumpup.imi.fb4.htw.de.jumpupandroid.util.webservice.exception.ErrorResponseException;
 import jumpup.imi.fb4.htw.de.jumpupandroid.util.webservice.exception.TechnicalErrorException;
+import jumpup.imi.fb4.htw.de.jumpupandroid.util.webservice.mapper.JsonMapper;
+import jumpup.imi.fb4.htw.de.jumpupandroid.util.webservice.mapper.MapperFactory;
 import jumpup.imi.fb4.htw.de.jumpupandroid.util.webservice.request.Endpoints;
 import jumpup.imi.fb4.htw.de.jumpupandroid.util.webservice.request.JumpUpRequest;
 import jumpup.imi.fb4.htw.de.jumpupandroid.util.webservice.request.Versions;
@@ -94,6 +94,13 @@ public class RegistrationRequestImpl extends JumpUpRequest implements Registrati
                     + e.getMessage() + "\nStack trace:\n" + ExceptionUtils.getStackTrace(e));
 
             throw this.newTechnicalErrorException(e, MESSAGE_ID_REQUEST_ERROR_URL);
+        } finally {
+            if (null != urlConnection) {
+                try {
+                    urlConnection.disconnect();
+                } catch (Exception e) { // ignore }
+                }
+            }
         }
     }
 }
