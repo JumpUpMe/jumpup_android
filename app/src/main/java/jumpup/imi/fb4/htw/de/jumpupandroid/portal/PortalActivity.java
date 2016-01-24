@@ -8,6 +8,7 @@ import android.view.MenuItem;
 import jumpup.imi.fb4.htw.de.jumpupandroid.MainActivity;
 import jumpup.imi.fb4.htw.de.jumpupandroid.R;
 import jumpup.imi.fb4.htw.de.jumpupandroid.entity.User;
+import jumpup.imi.fb4.htw.de.jumpupandroid.portal.profile.ProfileActivity;
 import jumpup.imi.fb4.htw.de.jumpupandroid.util.activity.JumpUpActivity;
 
 /**
@@ -93,6 +94,8 @@ public abstract class PortalActivity extends JumpUpActivity {
 
     private void navigateToProfile() {
         Log.d(getTag(), "navigateToProfile(): menu item pressed");
+
+        this.navigateToWithParcel(ProfileActivity.class, this.user);
     }
 
     private void logoutUser() {

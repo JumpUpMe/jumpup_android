@@ -33,6 +33,10 @@
             android:name=".portal.welcome.WelcomeActivity"
             android:label="@string/title_activity_welcome" >
         </activity>
+        <activity
+            android:name=".portal.profile.ProfileActivity"
+            android:label="@string/title_activity_profile"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
 </manifest>
