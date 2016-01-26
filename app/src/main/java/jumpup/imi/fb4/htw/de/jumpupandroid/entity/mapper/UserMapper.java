@@ -3,6 +3,7 @@ package jumpup.imi.fb4.htw.de.jumpupandroid.entity.mapper;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import jumpup.imi.fb4.htw.de.jumpupandroid.entity.AbstractEntity;
 import jumpup.imi.fb4.htw.de.jumpupandroid.entity.User;
 import jumpup.imi.fb4.htw.de.jumpupandroid.util.webservice.mapper.JsonMapper;
 
@@ -52,9 +53,8 @@ public class UserMapper extends JsonMapper<User> {
     private void parseResponseAndFillUser(User user, String response) throws JSONException {
         JSONObject jsonResponse = new JSONObject(response);
 
-        user.setIdentity(parseIdentity(jsonResponse));
-        user.setCreationTimestamp(parseCreationTimestamp(jsonResponse));
-        user.setUpdateTimestamp(parseUpdateTimestamp(jsonResponse));
+        fillAbstractEntity(user, jsonResponse);
+
         user.setUsername(parseUsername(jsonResponse));
         user.seteMail(parseEMail(jsonResponse));
         user.setPrename(parsePrename(jsonResponse));

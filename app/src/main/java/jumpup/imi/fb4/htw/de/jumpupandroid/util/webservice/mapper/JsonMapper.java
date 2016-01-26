@@ -9,6 +9,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 
 import jumpup.imi.fb4.htw.de.jumpupandroid.entity.AbstractEntity;
+import jumpup.imi.fb4.htw.de.jumpupandroid.entity.mapper.UserMapper;
 
 /**
  * Project: jumpup_android
@@ -70,4 +71,14 @@ public abstract class JsonMapper<EntityType> {
         return errorMessages.toArray(new String[errorMessages.size()]);
     }
 
+    protected void fillAbstractEntity(AbstractEntity abstractEntity, JSONObject jsonResponse) throws JSONException {
+        abstractEntity.setIdentity(parseIdentity(jsonResponse));
+        abstractEntity.setCreationTimestamp(parseCreationTimestamp(jsonResponse));
+        abstractEntity.setUpdateTimestamp(parseUpdateTimestamp(jsonResponse));
+    }
+
+
+    public UserMapper getUserMapper() {
+        return (UserMapper) MapperFactory.newUserMapper();
+    }
 }
