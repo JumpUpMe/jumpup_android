@@ -61,11 +61,20 @@ public class TripMapper extends JsonMapper<Trip> {
     }
 
     private Long parseCancelationDateTime(JSONObject jsonResponse) throws JSONException {
-        return jsonResponse.getLong(Trip.FIELD_NAME_CANCELATION_DATETIME);
+        if (!jsonResponse.isNull(Trip.FIELD_NAME_CANCELATION_DATETIME)) {
+            return jsonResponse.getLong(Trip.FIELD_NAME_CANCELATION_DATETIME);
+        }
+
+        return null;
     }
 
     private User parseDriver(JSONObject jsonResponse) throws JSONException {
-        return getUserMapper().mapResponse(jsonResponse.getString(Trip.FIELD_NAME_DRIVER));
+        if (!jsonResponse.isNull(Trip.FIELD_NAME_DRIVER)) {
+            // value exists and is not null
+            return getUserMapper().mapResponse(jsonResponse.getString(Trip.FIELD_NAME_DRIVER));
+        }
+
+        return null;
     }
 
     private Vehicle parseVehicle(JSONObject jsonResponse) {
@@ -123,6 +132,26 @@ public class TripMapper extends JsonMapper<Trip> {
 
     @Override
     public String marshalEntity(Trip entity) throws JSONException {
-        return null;
+        JSONObject marshalledTrip = new JSONObject();
+
+        marshalledTrip.put(Trip.FIELD_NAME_START_POINT, entity.getStartpoint());
+        marshalledTrip.put(Trip.FIELD_NAME_END_POINT, entity.getEndpoint());
+        marshalledTrip.put(Trip.FIELD_NAME_START_LAT, entity.getLatStartpoint());
+        marshalledTrip.put(Trip.FIELD_NAME_START_LNG, entity.getLongStartpoint());
+        marshalledTrip.put(Trip.FIELD_NAME_END_LAT, entity.getLatEndpoint());
+        marshalledTrip.put(Trip.FIELD_NAME_END_LNG, entity.getLongEndpoint());
+        marshalledTrip.put(Trip.FIELD_NAME_START_DATETIME, entity.getStartDateTime());
+        marshalledTrip.put(Trip.FIELD_NAME_END_DATETIME, entity.getEndDateTime());
+        marshalledTrip.put(Trip.FIELD_NAME_PRICE, entity.getPrice());
+        marshalledTrip.put(Trip.FIELD_NAME_OVERVIEW_PATH, entity.getOverViewPath());
+        marshalledTrip.put(Trip.FIELD_NAME_VIA_WAYPOINTS, entity.getViaWaypoints());
+        marshalledTrip.put(Trip.FIELD_NAME_NUMBER_OF_SEATS, entity.getNumberOfSeats());
+        // TODO put vehicle when present
+        marshalledTrip.put(Trip.FIELD_NAME_DRIVER, entity.getDriver());
+        marshalledTrip.put(Trip.FIELD_NAME_CANCELATION_DATETIME, entity.getCancelationDateTime());
+        marshalledTrip.put(Trip.FIELD_NAME_DISTANCE_METERS, entity.getDistanceMeters());
+        marshalledTrip.put(Trip.FIELD_NAME_DURATION_SECONDS, entity.getDurationSeconds());
+
+        return marshalledTrip.toString();
     }
 }
