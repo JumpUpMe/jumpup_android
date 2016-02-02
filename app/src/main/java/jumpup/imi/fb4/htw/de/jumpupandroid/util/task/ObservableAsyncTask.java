@@ -4,6 +4,7 @@ import android.os.AsyncTask;
 import android.util.Log;
 
 import java.util.Observable;
+import java.util.Observer;
 
 
 /**
@@ -22,6 +23,18 @@ public abstract class ObservableAsyncTask<Params, Progress, Result> extends Asyn
     }
 
     private ObserverImpl observable = new ObserverImpl();
+
+
+    public ObservableAsyncTask(Observer observer) {
+        super();
+
+        this.getObservable().addObserver(observer);
+    }
+
+    public ObservableAsyncTask()
+    {
+        super();
+    }
 
     protected void triggerChangedAndNotifyObservers(Object o) {
         observable.triggerChanged();

@@ -153,6 +153,10 @@ public abstract class JumpUpRequest {
         return urlConn;
     }
 
+    protected HttpURLConnection buildGetConnection(URL url) throws IOException {
+        return buildConnection(url, "GET");
+    }
+
     private void addAuthorizationHeader(HttpURLConnection urlConnection) {
         if (null == this.username || null == this.password) {
             throw new IllegalArgumentException("addAuthorizationHeader(): no public action, but you didn't set any username and/or password.");

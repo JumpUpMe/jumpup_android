@@ -9,6 +9,7 @@ import jumpup.imi.fb4.htw.de.jumpupandroid.MainActivity;
 import jumpup.imi.fb4.htw.de.jumpupandroid.R;
 import jumpup.imi.fb4.htw.de.jumpupandroid.entity.User;
 import jumpup.imi.fb4.htw.de.jumpupandroid.portal.profile.ProfileActivity;
+import jumpup.imi.fb4.htw.de.jumpupandroid.portal.trip.list.OfferedTripsActivity;
 import jumpup.imi.fb4.htw.de.jumpupandroid.util.activity.JumpUpActivity;
 
 /**
@@ -78,6 +79,8 @@ public abstract class PortalActivity extends JumpUpActivity {
 
     private void navigateToShowMyTrips() {
         Log.d(getTag(), "navigateToShowMyTrips(): menu item pressed");
+
+        this.navigateToWithParcel(OfferedTripsActivity.class, this.user);
     }
 
     private void navigateToShowMyBookings() {

@@ -36,7 +36,12 @@
         <activity
             android:name=".portal.profile.ProfileActivity"
             android:label="@string/title_activity_profile"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".portal.trip.list.OfferedTripsActivity"
+            android:label="@string/title_activity_offered_trips"
+            android:theme="@style/AppTheme.NoActionBar" >
+        </activity>
     </application>
 
 </manifest>
