@@ -28,7 +28,6 @@ public class RegistrationMapper extends JsonMapper<Registration> {
     public String marshalEntity(Registration entity) throws JSONException {
         JSONObject registrationJson = new JSONObject();
 
-        Log.d(TAG, "marshalEntity(): " + entity);
         registrationJson.put(Registration.FIELD_NAME_USERNAME, entity.getUsername());
         registrationJson.put(Registration.FIELD_NAME_EMAIL, entity.geteMail());
         registrationJson.put(Registration.FIELD_NAME_PRENAME, entity.getPrename());

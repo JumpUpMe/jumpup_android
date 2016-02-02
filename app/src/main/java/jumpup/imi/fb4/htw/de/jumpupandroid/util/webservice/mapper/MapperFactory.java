@@ -1,6 +1,7 @@
 package jumpup.imi.fb4.htw.de.jumpupandroid.util.webservice.mapper;
 
 import jumpup.imi.fb4.htw.de.jumpupandroid.entity.mapper.UserMapper;
+import jumpup.imi.fb4.htw.de.jumpupandroid.portal.trip.entity.mapper.TripListMapper;
 import jumpup.imi.fb4.htw.de.jumpupandroid.portal.trip.entity.mapper.TripMapper;
 import jumpup.imi.fb4.htw.de.jumpupandroid.registration.entity.mapper.RegistrationMapper;
 import jumpup.imi.fb4.htw.de.jumpupandroid.util.webservice.response.ErrorResponse;
@@ -30,5 +31,9 @@ public class MapperFactory {
 
     public static JsonMapper newTripMapper() {
         return new TripMapper();
+    }
+
+    public static JsonMapper newTripListMapper() {
+        return new TripListMapper();
     }
 }

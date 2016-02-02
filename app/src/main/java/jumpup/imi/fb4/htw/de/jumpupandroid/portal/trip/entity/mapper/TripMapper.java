@@ -147,8 +147,9 @@ public class TripMapper extends JsonMapper<Trip> {
         marshalledTrip.put(Trip.FIELD_NAME_VIA_WAYPOINTS, entity.getViaWaypoints());
         marshalledTrip.put(Trip.FIELD_NAME_NUMBER_OF_SEATS, entity.getNumberOfSeats());
         // TODO put vehicle when present
-        marshalledTrip.put(Trip.FIELD_NAME_DRIVER, entity.getDriver());
-        marshalledTrip.put(Trip.FIELD_NAME_CANCELATION_DATETIME, entity.getCancelationDateTime());
+        putAllowNull(Trip.FIELD_NAME_VEHICLE, entity.getVehicle(), marshalledTrip);
+        putAllowNull(Trip.FIELD_NAME_DRIVER, entity.getDriver(), marshalledTrip);
+        putAllowNull(Trip.FIELD_NAME_CANCELATION_DATETIME, entity.getCancelationDateTime(), marshalledTrip);
         marshalledTrip.put(Trip.FIELD_NAME_DISTANCE_METERS, entity.getDistanceMeters());
         marshalledTrip.put(Trip.FIELD_NAME_DURATION_SECONDS, entity.getDurationSeconds());
 

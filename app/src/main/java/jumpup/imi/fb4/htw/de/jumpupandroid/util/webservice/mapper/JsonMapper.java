@@ -81,4 +81,19 @@ public abstract class JsonMapper<EntityType> {
     public UserMapper getUserMapper() {
         return (UserMapper) MapperFactory.newUserMapper();
     }
+
+
+    /**
+     * Wrapper method to explicitly allow and set NULL values if a field is null.
+     * This extends the default behaviour of JSONObject. If you put a null value, JSONObject won't print the key - value pair in the resulting JSON string.
+     * But we want to explictly set NULL values and therefore set JSONObject.NULL.
+     *
+     * @param fieldKey JSON key
+     * @param fieldValue value object
+     * @param marshalledEntity the actual JSONObject
+     * @throws JSONException
+     */
+    protected void putAllowNull(String fieldKey, Object fieldValue, JSONObject marshalledEntity) throws JSONException {
+        marshalledEntity.putOpt(fieldKey, fieldValue == null ? JSONObject.NULL : fieldValue);
+    }
 }

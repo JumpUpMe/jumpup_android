@@ -19,7 +19,7 @@ import jumpup.imi.fb4.htw.de.jumpupandroid.util.webservice.mapper.JsonMapper;
  * @since 19.01.2016
  */
 public abstract class EntityMapperTest<EntityType> extends BaseTest {
-    private final Pattern PATTERN_JSON_KEY_VALUE = Pattern.compile("\"(.*?)\":\"?(.*?)\"?[,}]+");
+    private final Pattern PATTERN_JSON_KEY_VALUE = Pattern.compile("[,{]+\"(.*?)\":\"?(.*?)\"?[,}]+");
 
     protected abstract EntityType givenTheExpectedEntity();
 
@@ -71,7 +71,7 @@ public abstract class EntityMapperTest<EntityType> extends BaseTest {
             String jsonValue = mExpectedJSON.group(2);
 
             Assert.assertTrue("given marshalled JSON contains key " + jsonKey,
-                marshalledJSON.contains(jsonKey));
+                    marshalledJSON.contains(jsonKey));
             Assert.assertTrue("given marshalled JSON contains value " + jsonValue,
                 marshalledJSON.contains(jsonValue));
         }

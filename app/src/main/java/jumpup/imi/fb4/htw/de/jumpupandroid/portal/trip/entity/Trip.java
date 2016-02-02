@@ -29,6 +29,7 @@ public class Trip extends AbstractEntity {
     public static final String FIELD_NAME_CANCELATION_DATETIME = "cancelationDateTime";
     public static final String FIELD_NAME_DISTANCE_METERS = "distanceMeters";
     public static final String FIELD_NAME_DURATION_SECONDS = "durationSeconds";
+    public static final String FIELD_NAME_VEHICLE = "vehicle";
 
     protected String startpoint;
     protected String endpoint;
@@ -316,5 +317,93 @@ public class Trip extends AbstractEntity {
         return 0;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
 
+        Trip trip = (Trip) o;
+
+        if (Double.compare(trip.getLatStartpoint(), getLatStartpoint()) != 0) return false;
+        if (Double.compare(trip.getLongStartpoint(), getLongStartpoint()) != 0) return false;
+        if (Double.compare(trip.getLatEndpoint(), getLatEndpoint()) != 0) return false;
+        if (Double.compare(trip.getLongEndpoint(), getLongEndpoint()) != 0) return false;
+        if (Double.compare(trip.getPrice(), getPrice()) != 0) return false;
+        if (getDistanceMeters() != trip.getDistanceMeters()) return false;
+        if (getDurationSeconds() != trip.getDurationSeconds()) return false;
+        if (getStartpoint() != null ? !getStartpoint().equals(trip.getStartpoint()) : trip.getStartpoint() != null)
+            return false;
+        if (getEndpoint() != null ? !getEndpoint().equals(trip.getEndpoint()) : trip.getEndpoint() != null)
+            return false;
+        if (getStartDateTime() != null ? !getStartDateTime().equals(trip.getStartDateTime()) : trip.getStartDateTime() != null)
+            return false;
+        if (getEndDateTime() != null ? !getEndDateTime().equals(trip.getEndDateTime()) : trip.getEndDateTime() != null)
+            return false;
+        if (getOverViewPath() != null ? !getOverViewPath().equals(trip.getOverViewPath()) : trip.getOverViewPath() != null)
+            return false;
+        if (getViaWaypoints() != null ? !getViaWaypoints().equals(trip.getViaWaypoints()) : trip.getViaWaypoints() != null)
+            return false;
+        if (getNumberOfSeats() != null ? !getNumberOfSeats().equals(trip.getNumberOfSeats()) : trip.getNumberOfSeats() != null)
+            return false;
+        if (getVehicle() != null ? !getVehicle().equals(trip.getVehicle()) : trip.getVehicle() != null)
+            return false;
+        if (getDriver() != null ? !getDriver().equals(trip.getDriver()) : trip.getDriver() != null)
+            return false;
+        return !(getCancelationDateTime() != null ? !getCancelationDateTime().equals(trip.getCancelationDateTime()) : trip.getCancelationDateTime() != null);
+
+    }
+
+    @Override
+    public int hashCode() {
+        int result = super.hashCode();
+        long temp;
+        result = 31 * result + (getStartpoint() != null ? getStartpoint().hashCode() : 0);
+        result = 31 * result + (getEndpoint() != null ? getEndpoint().hashCode() : 0);
+        temp = Double.doubleToLongBits(getLatStartpoint());
+        result = 31 * result + (int) (temp ^ (temp >>> 32));
+        temp = Double.doubleToLongBits(getLongStartpoint());
+        result = 31 * result + (int) (temp ^ (temp >>> 32));
+        temp = Double.doubleToLongBits(getLatEndpoint());
+        result = 31 * result + (int) (temp ^ (temp >>> 32));
+        temp = Double.doubleToLongBits(getLongEndpoint());
+        result = 31 * result + (int) (temp ^ (temp >>> 32));
+        result = 31 * result + (getStartDateTime() != null ? getStartDateTime().hashCode() : 0);
+        result = 31 * result + (getEndDateTime() != null ? getEndDateTime().hashCode() : 0);
+        temp = Double.doubleToLongBits(getPrice());
+        result = 31 * result + (int) (temp ^ (temp >>> 32));
+        result = 31 * result + (getOverViewPath() != null ? getOverViewPath().hashCode() : 0);
+        result = 31 * result + (getViaWaypoints() != null ? getViaWaypoints().hashCode() : 0);
+        result = 31 * result + (getNumberOfSeats() != null ? getNumberOfSeats().hashCode() : 0);
+        result = 31 * result + (getVehicle() != null ? getVehicle().hashCode() : 0);
+        result = 31 * result + (getDriver() != null ? getDriver().hashCode() : 0);
+        result = 31 * result + (getCancelationDateTime() != null ? getCancelationDateTime().hashCode() : 0);
+        result = 31 * result + (int) (getDistanceMeters() ^ (getDistanceMeters() >>> 32));
+        result = 31 * result + (int) (getDurationSeconds() ^ (getDurationSeconds() >>> 32));
+        return result;
+    }
+
+    @Override
+    public String toString() {
+        final StringBuilder sb = new StringBuilder("Trip{");
+        sb.append("startpoint='").append(startpoint).append('\'');
+        sb.append(", endpoint='").append(endpoint).append('\'');
+        sb.append(", latStartpoint=").append(latStartpoint);
+        sb.append(", longStartpoint=").append(longStartpoint);
+        sb.append(", latEndpoint=").append(latEndpoint);
+        sb.append(", longEndpoint=").append(longEndpoint);
+        sb.append(", startDateTime=").append(startDateTime);
+        sb.append(", endDateTime=").append(endDateTime);
+        sb.append(", price=").append(price);
+        sb.append(", overViewPath='").append(overViewPath).append('\'');
+        sb.append(", viaWaypoints='").append(viaWaypoints).append('\'');
+        sb.append(", numberOfSeats=").append(numberOfSeats);
+        sb.append(", vehicle=").append(vehicle);
+        sb.append(", driver=").append(driver);
+        sb.append(", cancelationDateTime=").append(cancelationDateTime);
+        sb.append(", distanceMeters=").append(distanceMeters);
+        sb.append(", durationSeconds=").append(durationSeconds);
+        sb.append('}');
+        return sb.toString();
+    }
 }
