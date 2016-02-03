@@ -8,6 +8,7 @@ import android.util.Patterns;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 
 import java.util.Observable;
 import java.util.Observer;
@@ -39,6 +40,8 @@ public class RegistrationActivity extends JumpUpActivity implements Observer {
     private EditText edConfirmPassword;
     private EditText edPrename;
     private EditText edLastname;
+    private Button registrationButton;
+    private ProgressBar progressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,6 +60,8 @@ public class RegistrationActivity extends JumpUpActivity implements Observer {
         edPrename = getEditText(R.id.edPrename);
         edLastname = getEditText(R.id.edLastName);
         edConfirmPassword = getEditText(R.id.edConfirmPassword);
+
+        this.progressBar = (ProgressBar) this.findViewById(R.id.progressBar);
     }
 
     private void registerButtons() {
@@ -64,13 +69,14 @@ public class RegistrationActivity extends JumpUpActivity implements Observer {
     }
 
     private void registerRegistrationButton() {
-        final Button registrationButton = (Button) findViewById(R.id.btnRegister);
+        this.registrationButton = (Button) findViewById(R.id.btnRegister);
 
         registrationButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if (getTask() == null || getTask().getStatus().equals(AsyncTask.Status.FINISHED)) {
                     resetTask();
+                    startProgress();
                     startRegistrationTask();
                 }
             }
@@ -191,6 +197,8 @@ public class RegistrationActivity extends JumpUpActivity implements Observer {
     }
 
     private void handleRegistrationResult() {
+        stopProgress();
+
         if (this.registrationTask.isHasValidationError()) {
             showValidationFailure();
         } else if (this.registrationTask.isHasError()) {
@@ -199,6 +207,18 @@ public class RegistrationActivity extends JumpUpActivity implements Observer {
             this.showSuccessNotification(this.getResources().getString(R.string.activity_registration_registration_success));
             navigateTo(MainActivity.class);
         }
+    }
+
+    private void startProgress() {
+        registrationButton.setEnabled(false);
+        progressBar.setIndeterminate(true);
+        progressBar.setVisibility(View.VISIBLE);
+    }
+
+    private void stopProgress() {
+        registrationButton.setEnabled(true);
+        progressBar.setIndeterminate(false);
+        progressBar.setVisibility(View.INVISIBLE);
     }
 
     private void showValidationFailure() {

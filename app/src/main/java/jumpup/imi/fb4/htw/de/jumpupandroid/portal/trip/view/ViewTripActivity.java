@@ -9,14 +9,23 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
+
+import java.util.Observable;
+import java.util.Observer;
 
 import jumpup.imi.fb4.htw.de.jumpupandroid.R;
 import jumpup.imi.fb4.htw.de.jumpupandroid.portal.PortalActivity;
+import jumpup.imi.fb4.htw.de.jumpupandroid.portal.profile.ProfileTask;
+import jumpup.imi.fb4.htw.de.jumpupandroid.portal.trip.TripFactory;
+import jumpup.imi.fb4.htw.de.jumpupandroid.portal.trip.edit.EditTripTask;
 import jumpup.imi.fb4.htw.de.jumpupandroid.portal.trip.entity.Trip;
+import jumpup.imi.fb4.htw.de.jumpupandroid.portal.welcome.WelcomeActivity;
 import jumpup.imi.fb4.htw.de.jumpupandroid.util.AppUtility;
 
-public class ViewTripActivity extends PortalActivity {
+public class ViewTripActivity extends PortalActivity implements Observer {
 
     private static final String TAG = ViewTripActivity.class.getName();
     public static final String EXTRA_PARCELABLE_TRIP = "trip";
@@ -28,6 +37,9 @@ public class ViewTripActivity extends PortalActivity {
     private EditText inputArrivalDateTime;
     private EditText inputPrice;
     private EditText inputNumberSeats;
+    private EditTripTask editTripTask;
+    private Button btnEditTrip;
+    private ProgressBar progressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,6 +49,36 @@ public class ViewTripActivity extends PortalActivity {
         this.bindTrip(savedInstanceState);
         this.bindInputElements();
         this.fillInputFieldsByTrip();
+        this.registerButton();
+    }
+
+    private void registerButton() {
+
+        btnEditTrip.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                fillTripByUserInputFields();
+
+                if (getTask() == null || getTask().getStatus().equals(AsyncTask.Status.FINISHED)) {
+                    // no task is running in parallel, so start new one
+                    resetTask();
+                    startProgress();
+                    editTripTask.execute(trip);
+                }
+            }
+        });
+    }
+
+    private void startProgress() {
+        btnEditTrip.setEnabled(false);
+        progressBar.setIndeterminate(true);
+        progressBar.setVisibility(View.VISIBLE);
+    }
+
+    private void stopProgress() {
+        btnEditTrip.setEnabled(true);
+        progressBar.setIndeterminate(false);
+        progressBar.setVisibility(View.INVISIBLE);
     }
 
     private void bindInputElements() {
@@ -46,6 +88,10 @@ public class ViewTripActivity extends PortalActivity {
         this.inputArrivalDateTime = (EditText) this.findViewById(R.id.edArrivalDate);
         this.inputPrice = (EditText) this.findViewById(R.id.edPrice);
         this.inputNumberSeats = (EditText) this.findViewById(R.id.edNumberSeats);
+
+        this.btnEditTrip = (Button) this.findViewById(R.id.btnEditTrip);
+
+        this.progressBar = (ProgressBar) this.findViewById(R.id.progressBar);
     }
 
     private void fillInputFieldsByTrip() {
@@ -70,6 +116,14 @@ public class ViewTripActivity extends PortalActivity {
         if (AppUtility.isSet(this.trip.getNumberOfSeats())) {
             this.inputNumberSeats.setText(AppUtility.formatNumber(this.trip.getNumberOfSeats()));
         }
+    }
+
+    private void fillTripByUserInputFields() {
+        // do not change start and end location since they need to be set via GoogleMaps directions service
+        this.trip.setStartDateTime(AppUtility.getUTCTimestamp(this.inputDepartureDateTime.getText().toString()));
+        this.trip.setEndDateTime(AppUtility.getUTCTimestamp(this.inputArrivalDateTime.getText().toString()));
+        this.trip.setPrice(AppUtility.getPriceAsDouble(this.inputPrice.getText().toString()));
+        this.trip.setNumberOfSeats(AppUtility.getNumberAsInt(this.inputNumberSeats.getText().toString()));
     }
 
     private void bindTrip(Bundle savedInstanceState) {
@@ -97,8 +151,42 @@ public class ViewTripActivity extends PortalActivity {
         return TAG;
     }
 
+    private void resetTask() {
+        editTripTask = TripFactory.newEditTripTask(this);
+        editTripTask.setUser(user);
+    }
+
     @Override
     protected AsyncTask getTask() {
-        return null;
+        return editTripTask;
+    }
+
+    @Override
+    public void update(Observable observable, Object o) {
+        Log.d(TAG, "update(): getting notified...");
+
+        if (o instanceof EditTripTask) {
+            this.handleEditTripResult();
+        }
+    }
+
+    private void handleEditTripResult() {
+        stopProgress();
+
+        if (this.editTripTask.isHasValidationError()) {
+            Log.d(TAG, "handleEditTripResult(): validation error");
+            showValidationFailure();
+        } else if (this.editTripTask.isHasError()) {
+            Log.d(TAG, "handleEditTripResult(): error");
+            this.showErrorNotification(this.getResources().getString(this.editTripTask.getToastMessageId()));
+        } else {
+            Log.d(TAG, "handleEditTripResult(): success");
+            this.showSuccessNotification(this.getResources().getString(R.string.activity_view_trip_edit_success));
+            navigateToShowMyTrips();
+        }
+    }
+
+    private void showValidationFailure() {
+        this.showValidationFailureNotification(this.editTripTask.getValidationFailureField(), this.editTripTask.getValidationFailureErrorMessages());
     }
 }

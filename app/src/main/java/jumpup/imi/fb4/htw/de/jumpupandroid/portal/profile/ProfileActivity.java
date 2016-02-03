@@ -6,6 +6,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.RadioButton;
 
 import java.util.Observable;
@@ -39,6 +40,8 @@ public class ProfileActivity extends PortalActivity implements Observer {
     private EditText inputMobileNumber;
 
     private ProfileTask profileTask;
+    private ProgressBar progressBar;
+    private Button btnSave;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,7 +56,7 @@ public class ProfileActivity extends PortalActivity implements Observer {
 
 
     private void registerButton() {
-        Button btnSave = (Button) this.findViewById(R.id.btnUpdateProfile);
+        this.btnSave = (Button) this.findViewById(R.id.btnUpdateProfile);
         btnSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -62,10 +65,23 @@ public class ProfileActivity extends PortalActivity implements Observer {
                 if (getTask() == null || getTask().getStatus().equals(AsyncTask.Status.FINISHED)) {
                     // no task is running in parallel, so start new one
                     resetTask();
+                    startProgress();
                     profileTask.execute(user);
                 }
             }
         });
+    }
+
+    private void startProgress() {
+        btnSave.setEnabled(false);
+        progressBar.setIndeterminate(true);
+        progressBar.setVisibility(View.VISIBLE);
+    }
+
+    private void stopProgress() {
+        btnSave.setEnabled(true);
+        progressBar.setIndeterminate(false);
+        progressBar.setVisibility(View.INVISIBLE);
     }
 
     private void fillUserByInputFields() {
@@ -97,6 +113,8 @@ public class ProfileActivity extends PortalActivity implements Observer {
         this.inputCountry = (EditText) this.findViewById(R.id.edCountry);
         this.inputSkype = (EditText) this.findViewById(R.id.edSkype);
         this.inputMobileNumber = (EditText) this.findViewById(R.id.edPhone);
+
+        this.progressBar = (ProgressBar) this.findViewById(R.id.progressBar);
     }
 
     private void fillInputFieldsByUserIfNotEmpty() {
@@ -170,6 +188,8 @@ public class ProfileActivity extends PortalActivity implements Observer {
     }
 
     private void handleProfileResult() {
+        stopProgress();
+
         if (this.profileTask.isHasValidationError()) {
             Log.d(TAG, "handleProfileResult(): validation error");
             // TODO fix display of validation failures

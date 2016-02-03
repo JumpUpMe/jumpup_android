@@ -76,6 +76,13 @@ public class AppUtility {
         return dateFormat.format(new Date(date));
     }
 
+    /**
+     * Take a dateTime string such as dd.MM.yyyy and convert it to a UTC timestamp (Long).
+     *
+     * JumpUp Web services should always get UTC timestamps.
+     * @param dateTime string, e.g. dd.MM.yyyy
+     * @return long UTC timestamp
+     */
     public static Long getUTCTimestamp(String dateTime) {
         SimpleDateFormat dateFormat = new SimpleDateFormat(DATE_FORMAT, Locale.getDefault());
         dateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
@@ -121,5 +128,13 @@ public class AppUtility {
 
     public static String formatNumber(Integer numberOfSeats) {
         return String.format(NUMBER_FORMAT, numberOfSeats);
+    }
+
+    public static double getPriceAsDouble(String price) {
+        return Double.parseDouble(price);
+    }
+
+    public static Integer getNumberAsInt(String s) {
+        return Integer.parseInt(s);
     }
 }

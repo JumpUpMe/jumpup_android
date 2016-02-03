@@ -6,6 +6,8 @@ import android.util.Log;
 import java.util.Observable;
 import java.util.Observer;
 
+import jumpup.imi.fb4.htw.de.jumpupandroid.entity.User;
+
 
 /**
  * Project: jumpup_android
@@ -46,6 +48,10 @@ public abstract class ObservableAsyncTask<Params, Progress, Result> extends Asyn
         return this.observable;
     }
 
+    /**
+     * Get tag for logging.
+     * @return
+     */
     protected abstract String getTag();
 
     @Override
