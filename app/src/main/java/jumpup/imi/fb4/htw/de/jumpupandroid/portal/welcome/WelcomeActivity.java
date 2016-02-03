@@ -1,5 +1,6 @@
 package jumpup.imi.fb4.htw.de.jumpupandroid.portal.welcome;
 
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.widget.TextView;
 
@@ -35,5 +36,10 @@ public class WelcomeActivity extends PortalActivity {
     @Override
     protected String getTag() {
         return TAG;
+    }
+
+    @Override
+    protected AsyncTask getTask() {
+        return null;
     }
 }

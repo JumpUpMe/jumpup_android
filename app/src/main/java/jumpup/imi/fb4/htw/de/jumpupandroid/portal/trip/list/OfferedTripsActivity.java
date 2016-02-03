@@ -1,5 +1,6 @@
 package jumpup.imi.fb4.htw.de.jumpupandroid.portal.trip.list;
 
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Gravity;
@@ -25,7 +26,7 @@ import jumpup.imi.fb4.htw.de.jumpupandroid.portal.trip.TripFactory;
 public class OfferedTripsActivity  extends PortalActivity implements Observer {
 
     private static final String TAG = OfferedTripsActivity.class.getName();
-    private OfferedTripsTask task = TripFactory.newOfferedTripsTask(this);
+    private OfferedTripsTask task;
     private ListView tripsListView;
     private TripsListAdapter tripsListAdapter;
     private ProgressBar progressBar;
@@ -36,6 +37,11 @@ public class OfferedTripsActivity  extends PortalActivity implements Observer {
         setContentView(R.layout.activity_offered_trips);
 
         this.initializeListViewAdapter();
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
 
         this.displayProgressBar();
         this.startTask();
@@ -56,13 +62,20 @@ public class OfferedTripsActivity  extends PortalActivity implements Observer {
     }
 
     private void startTask() {
-        // TODO via content provider
-        this.task.execute(this.user);
+        if (getTask() == null || getTask().getStatus().equals(AsyncTask.Status.FINISHED)) {
+            resetTask();
+            this.task.execute(this.user);
+        }
     }
 
     @Override
     protected String getTag() {
         return TAG;
+    }
+
+    @Override
+    protected AsyncTask getTask() {
+        return task;
     }
 
     @Override
@@ -78,7 +91,6 @@ public class OfferedTripsActivity  extends PortalActivity implements Observer {
        if (this.task.isHasError()) {
             Log.d(TAG, "handleOfferedTripsResult(): error");
             this.showErrorNotification(this.getResources().getString(this.task.getToastMessageId()));
-            resetTask();
         } else {
             Log.d(TAG, "handleOfferedTripsResult(): success");
 
@@ -92,8 +104,6 @@ public class OfferedTripsActivity  extends PortalActivity implements Observer {
     }
 
     private void resetTask() {
-        this.task.cancel(true);
-
         this.task = TripFactory.newOfferedTripsTask(this);
     }
 }

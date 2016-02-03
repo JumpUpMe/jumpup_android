@@ -1,6 +1,7 @@
 package jumpup.imi.fb4.htw.de.jumpupandroid.util.activity;
 
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Parcelable;
 import android.support.annotation.NonNull;
 import android.support.v7.app.ActionBarActivity;
@@ -26,6 +27,30 @@ public abstract class JumpUpActivity extends ActionBarActivity {
      * @return the TAG used for logging
      */
     protected abstract String getTag();
+
+    /**
+     * Get the task that each activity should have a 1:1 relation to.
+     *
+     * If this activity doesn't have a task, return null.
+     *
+     * @return null or the task that this activity is related to
+     */
+    protected abstract AsyncTask getTask();
+
+
+    @Override
+    protected void onStop() {
+        this.stopTaskIfRelated();
+
+        super.onStop();
+    }
+
+    private void stopTaskIfRelated() {
+        if (null != this.getTask()) {
+            // force the task thread to be interrupted
+            this.getTask().cancel(true);
+        }
+    }
 
     protected void showSuccessNotification(String string) {
         Toast toast = Toast.makeText(getApplicationContext(), string, Toast.LENGTH_LONG);

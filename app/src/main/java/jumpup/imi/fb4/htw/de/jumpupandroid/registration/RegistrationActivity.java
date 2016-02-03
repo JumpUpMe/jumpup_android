@@ -31,7 +31,7 @@ import jumpup.imi.fb4.htw.de.jumpupandroid.util.development.TestData;
 public class RegistrationActivity extends JumpUpActivity implements Observer {
     public static final String EXTRA_USERNAME = "extra_username";
     private static final String TAG = RegistrationActivity.class.getName();
-    private RegistrationTask registrationTask = RegistrationFactory.newRegistrationTask(this);
+    private RegistrationTask registrationTask;
 
     private EditText edUsername;
     private EditText edMail;
@@ -48,16 +48,6 @@ public class RegistrationActivity extends JumpUpActivity implements Observer {
         this.bindInputs();
         this.registerButtons();
         this.prepareView();
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-
-        if (!registrationTask.getStatus().equals(AsyncTask.Status.FINISHED)) {
-            Log.v(TAG, "onDestroy(): cancelling RegistrationTask...");
-            registrationTask.cancel(true);
-        }
     }
 
     private void bindInputs() {
@@ -79,7 +69,10 @@ public class RegistrationActivity extends JumpUpActivity implements Observer {
         registrationButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startRegistrationTask();
+                if (getTask() == null || getTask().getStatus().equals(AsyncTask.Status.FINISHED)) {
+                    resetTask();
+                    startRegistrationTask();
+                }
             }
         });
     }
@@ -200,10 +193,8 @@ public class RegistrationActivity extends JumpUpActivity implements Observer {
     private void handleRegistrationResult() {
         if (this.registrationTask.isHasValidationError()) {
             showValidationFailure();
-            resetTask();
         } else if (this.registrationTask.isHasError()) {
             this.showErrorNotification(this.getResources().getString(this.registrationTask.getToastMessageId()));
-            resetTask();
         } else {
             this.showSuccessNotification(this.getResources().getString(R.string.activity_registration_registration_success));
             navigateTo(MainActivity.class);
@@ -221,5 +212,10 @@ public class RegistrationActivity extends JumpUpActivity implements Observer {
     @Override
     protected String getTag() {
         return TAG;
+    }
+
+    @Override
+    protected AsyncTask getTask() {
+        return registrationTask;
     }
 }

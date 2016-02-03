@@ -29,7 +29,7 @@ import jumpup.imi.fb4.htw.de.jumpupandroid.util.development.TestData;
 public class MainActivity extends JumpUpActivity implements Observer {
     private static final String TAG = MainActivity.class.getName();
 
-    private LoginTask loginTask = LoginFactory.newLoginTask(this);
+    private LoginTask loginTask;
     private EditText inputEmail;
     private EditText inputPassword;
 
@@ -68,16 +68,6 @@ public class MainActivity extends JumpUpActivity implements Observer {
         ViewHelper.addRevealPasswordUntilFirstClick(inputPassword);
     }
 
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-
-        if (!loginTask.getStatus().equals(AsyncTask.Status.FINISHED)) {
-            Log.v(TAG, "onDestroy(): cancelling LoginTask...");
-            loginTask.cancel(true);
-        }
-    }
-
     private void bindInputs() {
         this.inputEmail = (EditText) findViewById(R.id.edEMail);
         this.inputPassword = (EditText) findViewById(R.id.edPassword);
@@ -95,7 +85,8 @@ public class MainActivity extends JumpUpActivity implements Observer {
                 new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        if (loginTask.getStatus().equals(AsyncTask.Status.PENDING)) {
+                        if (getTask() == null || getTask().getStatus().equals(AsyncTask.Status.FINISHED)) {
+                            resetTask();
                             // task has not been executed yet
                             doLoginInBackground(getEmailFromInput(), getPasswordFromInput());
                         }
@@ -185,7 +176,6 @@ public class MainActivity extends JumpUpActivity implements Observer {
     private void handleLoginResult() {
         if (this.loginTask.isHasError()) {
             this.showErrorNotification(this.getResources().getString(this.loginTask.getToastMessageId()));
-            this.resetTask();
         } else {
             this.showSuccessNotification(this.getResources().getString(R.string.fragment_main_login_success));
             this.navigateToWithParcelAndClearActivityStack(WelcomeActivity.class, this.loginTask.getUser());
@@ -199,5 +189,10 @@ public class MainActivity extends JumpUpActivity implements Observer {
     @Override
     protected String getTag() {
         return TAG;
+    }
+
+    @Override
+    protected AsyncTask getTask() {
+        return loginTask;
     }
 }

@@ -1,5 +1,6 @@
 package jumpup.imi.fb4.htw.de.jumpupandroid.portal.profile;
 
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -38,7 +39,7 @@ public class ProfileActivity extends PortalActivity implements Observer {
     private EditText inputSkype;
     private EditText inputMobileNumber;
 
-    private ProfileTask profileTask = ProfileFactory.newProfileTask(this);
+    private ProfileTask profileTask;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,7 +59,12 @@ public class ProfileActivity extends PortalActivity implements Observer {
             @Override
             public void onClick(View view) {
                 fillUserByInputFields();
-                profileTask.execute(user);
+
+                if (getTask() == null || getTask().getStatus().equals(AsyncTask.Status.FINISHED)) {
+                    // no task is running in parallel, so start new one
+                    resetTask();
+                    profileTask.execute(user);
+                }
             }
         });
     }
@@ -151,6 +157,11 @@ public class ProfileActivity extends PortalActivity implements Observer {
     }
 
     @Override
+    protected AsyncTask getTask() {
+        return profileTask;
+    }
+
+    @Override
     public void update(Observable observable, Object o) {
         Log.d(TAG, "update(): getting notified...");
 
@@ -164,11 +175,9 @@ public class ProfileActivity extends PortalActivity implements Observer {
             Log.d(TAG, "handleProfileResult(): validation error");
             // TODO fix display of validation failures
             showValidationFailure();
-            resetTask();
         } else if (this.profileTask.isHasError()) {
             Log.d(TAG, "handleProfileResult(): error");
             this.showErrorNotification(this.getResources().getString(this.profileTask.getToastMessageId()));
-            resetTask();
         } else {
             Log.d(TAG, "handleProfileResult(): success");
             this.showSuccessNotification(this.getResources().getString(R.string.activity_profile_success));
