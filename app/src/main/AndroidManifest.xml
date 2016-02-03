@@ -35,17 +35,14 @@
         </activity>
         <activity
             android:name=".portal.profile.ProfileActivity"
-            android:label="@string/title_activity_profile"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:label="@string/title_activity_profile"/>
         <activity
             android:name=".portal.trip.list.OfferedTripsActivity"
-            android:label="@string/title_activity_offered_trips"
-            android:theme="@style/AppTheme.NoActionBar" >
+            android:label="@string/title_activity_offered_trips">
         </activity>
         <activity
             android:name=".portal.trip.view.ViewTripActivity"
-            android:label="@string/title_activity_view_trip"
-            android:theme="@style/AppTheme.NoActionBar" >
+            android:label="@string/title_activity_view_trip">
         </activity>
     </application>
 

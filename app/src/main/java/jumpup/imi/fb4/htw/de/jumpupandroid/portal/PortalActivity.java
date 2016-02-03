@@ -65,6 +65,8 @@ public abstract class PortalActivity extends JumpUpActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
+        super.onCreateOptionsMenu(menu);
+
         getMenuInflater().inflate(R.menu.menu_portal, menu);
         return true;
     }
