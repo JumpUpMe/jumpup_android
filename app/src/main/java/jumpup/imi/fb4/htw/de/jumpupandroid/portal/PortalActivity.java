@@ -10,7 +10,9 @@ import jumpup.imi.fb4.htw.de.jumpupandroid.MainActivity;
 import jumpup.imi.fb4.htw.de.jumpupandroid.R;
 import jumpup.imi.fb4.htw.de.jumpupandroid.entity.User;
 import jumpup.imi.fb4.htw.de.jumpupandroid.portal.profile.ProfileActivity;
+import jumpup.imi.fb4.htw.de.jumpupandroid.portal.trip.entity.Trip;
 import jumpup.imi.fb4.htw.de.jumpupandroid.portal.trip.list.OfferedTripsActivity;
+import jumpup.imi.fb4.htw.de.jumpupandroid.portal.trip.view.ViewTripActivity;
 import jumpup.imi.fb4.htw.de.jumpupandroid.util.activity.JumpUpActivity;
 
 /**
@@ -40,18 +42,18 @@ public abstract class PortalActivity extends JumpUpActivity {
 
     @Override
     public void onSaveInstanceState(Bundle outState, PersistableBundle outPersistentState) {
-        outState.putParcelable(EXTRA_PARCELABLE, this.user);
+        outState.putParcelable(EXTRA_PARCELABLE_USER, this.user);
 
         super.onSaveInstanceState(outState, outPersistentState);
     }
 
     private void bindUser(Bundle savedInstanceState) {
-        if (getIntent().hasExtra(EXTRA_PARCELABLE)) {
+        if (getIntent().hasExtra(EXTRA_PARCELABLE_USER)) {
             // activity was started via intent
-            this.user = getIntent().getParcelableExtra(EXTRA_PARCELABLE);
-        } else if (null != savedInstanceState && savedInstanceState.containsKey(EXTRA_PARCELABLE)) {
+            this.user = getIntent().getParcelableExtra(EXTRA_PARCELABLE_USER);
+        } else if (null != savedInstanceState && savedInstanceState.containsKey(EXTRA_PARCELABLE_USER)) {
             // activity was restored
-            this.user = savedInstanceState.getParcelable(EXTRA_PARCELABLE);
+            this.user = savedInstanceState.getParcelable(EXTRA_PARCELABLE_USER);
         } else {
             Log.e(getTag(), "bindUser(): can't get user entity, neither from intent extra nor from the saved instance state bundle." +
                     "Will trigger logout to prevent errors.");
@@ -98,35 +100,47 @@ public abstract class PortalActivity extends JumpUpActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    private void navigateToShowMyTrips() {
+    protected void navigateToShowMyTrips() {
         Log.d(getTag(), "navigateToShowMyTrips(): menu item pressed");
 
-        this.navigateToWithParcel(OfferedTripsActivity.class, this.user);
+        this.navigateToWithUserParcel(OfferedTripsActivity.class, this.user);
     }
 
-    private void navigateToShowMyBookings() {
+    protected void navigateToShowMyBookings() {
         Log.d(getTag(), "navigateToShowMyBookings(): menu item pressed");
     }
 
-    private void navigateToOfferTrips() {
+    protected void navigateToOfferTrips() {
         Log.d(getTag(), "navigateToOfferTrips(): menu item pressed");
     }
 
-    private void navigateToLookForTrips() {
+    protected void navigateToLookForTrips() {
         Log.d(getTag(), "navigateToLookForTrips(): menu item pressed");
     }
 
-    private void navigateToProfile() {
+    protected void navigateToProfile() {
         Log.d(getTag(), "navigateToProfile(): menu item pressed");
 
-        this.navigateToWithParcel(ProfileActivity.class, this.user);
+        this.navigateToWithUserParcel(ProfileActivity.class, this.user);
     }
 
-    private void logoutUser() {
+    protected void logoutUser() {
         Log.d(getTag(), "logoutUser(): menu item pressed");
 
         this.navigateToAndClearActivityStack(MainActivity.class);
 
         this.showSuccessNotification(getString(R.string.portal_activities_logout_success));
     }
+
+    protected void navigateToViewTrip(Trip trip) {
+        Log.d(getTag(), "navigateToViewTrip(): navigating to trip with ID " + trip.getIdentity());
+
+        this.navigateToWithUserAndAnotherExtraParcel(
+                ViewTripActivity.class,
+                this.user,
+                ViewTripActivity.EXTRA_PARCELABLE_TRIP,
+                trip
+        );
+    }
+
 }

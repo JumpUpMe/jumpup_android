@@ -64,6 +64,12 @@ public class User extends AbstractEntity {
     public void writeToParcel(Parcel parcel, int i) {
         super.writeToParcel(parcel, i);
 
+          /*
+         * ATTENTION!
+         * When changing the sequence of write operations, make sure to adjust
+         * the sequence of read operations in initializeFromParcel(), too.
+         * Both must be symmetric.
+         */
         parcel.writeString(username);
         parcel.writeString(password);
         parcel.writeString(eMail);
@@ -73,7 +79,7 @@ public class User extends AbstractEntity {
         parcel.writeString(country);
         parcel.writeString(locale);
         parcel.writeInt(isConfirmed ? 1 : 0);
-        parcel.writeLong(dateOfBirth);
+        parcel.writeValue(dateOfBirth); // may be null, therefore use generic writeValue()
         parcel.writeString(placeOfBirth);
         parcel.writeString(gender);
         parcel.writeString(mobileNumber);
@@ -84,6 +90,12 @@ public class User extends AbstractEntity {
     public void initializeFromParcel(Parcel in) {
         super.initializeFromParcel(in);
 
+          /*
+         * ATTENTION!
+         * When changing the sequence of read operations, make sure to adjust
+         * the sequence of write operations in writeToParcel(), too.
+         * Both must be symmetric.
+         */
         this.username = in.readString();
         this.password = in.readString();
         this.eMail = in.readString();
@@ -93,7 +105,7 @@ public class User extends AbstractEntity {
         this.country = in.readString();
         this.locale = in.readString();
         this.isConfirmed = in.readInt() == 1;
-        this.dateOfBirth = in.readLong();
+        this.dateOfBirth = (Long) in.readValue(Long.class.getClassLoader()); // may be null, therefore use generic readValue()
         this.placeOfBirth = in.readString();
         this.gender = in.readString();
         this.mobileNumber = in.readString();

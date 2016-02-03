@@ -56,4 +56,12 @@
     <string name="jumpup_request_error_trip_list_load_failed">We couldn\'t load your offered trips. Please try again later or contact the JumpUp customer care.</string>
     <string name="title_activity_offered_trips">OfferedTripsActivity</string>
     <string name="activity_offered_trips_no_offered_trips">You didn\'t offer any trip yet.</string>
+    <string name="title_activity_view_trip">ViewTripActivity</string>
+    <string name="activity_view_trip_start_location">Start location</string>
+    <string name="activity_view_trip_end_location">End location</string>
+    <string name="activity_view_trip_departure_date">Departe date</string>
+    <string name="activity_view_trip_arrival_date">Arrival date</string>
+    <string name="activity_view_trip_price">Price</string>
+    <string name="activity_view_trip_number_seats">Number of seats</string>
+    <string name="activity_view_trip_edit">Edit</string>
 </resources>

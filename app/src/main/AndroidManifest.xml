@@ -42,6 +42,11 @@
             android:label="@string/title_activity_offered_trips"
             android:theme="@style/AppTheme.NoActionBar" >
         </activity>
+        <activity
+            android:name=".portal.trip.view.ViewTripActivity"
+            android:label="@string/title_activity_view_trip"
+            android:theme="@style/AppTheme.NoActionBar" >
+        </activity>
     </application>
 
 </manifest>

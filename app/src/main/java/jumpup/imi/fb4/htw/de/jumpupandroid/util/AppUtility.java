@@ -18,8 +18,10 @@ import jumpup.imi.fb4.htw.de.jumpupandroid.BuildConfig;
  */
 public class AppUtility {
 
+    public static final String PRICE_FORMAT = "%1$.2f";
     public static final String DATE_FORMAT = "dd.MM.yyyy";
     public static final String DATE_TIME_FORMAT = DATE_FORMAT + " HH:mm";
+    public static final String NUMBER_FORMAT = "%d";
 
     private static SimpleDateFormat dateFormatter;
     private static SimpleDateFormat dateTimeFormatter;
@@ -102,5 +104,22 @@ public class AppUtility {
      */
     public static boolean isSet(Long longValue) {
         return null != longValue && 0 != longValue;
+    }
+
+    public static boolean isSet(Integer numberOfSeats) {
+        return isSet(Long.valueOf(numberOfSeats));
+    }
+
+    /**
+     * Format a raw price and produce a string representation.
+     * @param price double
+     * @return string
+     */
+    public static String formatPrice(double price) {
+        return String.format(PRICE_FORMAT, price);
+    }
+
+    public static String formatNumber(Integer numberOfSeats) {
+        return String.format(NUMBER_FORMAT, numberOfSeats);
     }
 }

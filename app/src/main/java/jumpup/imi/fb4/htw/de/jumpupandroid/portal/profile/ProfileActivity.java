@@ -10,7 +10,6 @@ import android.widget.RadioButton;
 
 import java.util.Observable;
 import java.util.Observer;
-import java.util.logging.Logger;
 
 import jumpup.imi.fb4.htw.de.jumpupandroid.R;
 import jumpup.imi.fb4.htw.de.jumpupandroid.entity.User;
@@ -181,7 +180,7 @@ public class ProfileActivity extends PortalActivity implements Observer {
         } else {
             Log.d(TAG, "handleProfileResult(): success");
             this.showSuccessNotification(this.getResources().getString(R.string.activity_profile_success));
-            navigateToWithParcel(WelcomeActivity.class, this.user);
+            navigateToWithUserParcel(WelcomeActivity.class, this.user);
         }
     }
 

@@ -5,7 +5,6 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.PersistableBundle;
-import android.text.method.PasswordTransformationMethod;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -178,7 +177,7 @@ public class MainActivity extends JumpUpActivity implements Observer {
             this.showErrorNotification(this.getResources().getString(this.loginTask.getToastMessageId()));
         } else {
             this.showSuccessNotification(this.getResources().getString(R.string.fragment_main_login_success));
-            this.navigateToWithParcelAndClearActivityStack(WelcomeActivity.class, this.loginTask.getUser());
+            this.navigateToWithUserParcelAndClearActivityStack(WelcomeActivity.class, this.loginTask.getUser());
         }
     }
 

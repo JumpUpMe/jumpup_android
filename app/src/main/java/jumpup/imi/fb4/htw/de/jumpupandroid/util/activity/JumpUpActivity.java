@@ -19,7 +19,7 @@ import jumpup.imi.fb4.htw.de.jumpupandroid.util.ViewHelper;
  * @since 19.01.2016
  */
 public abstract class JumpUpActivity extends ActionBarActivity {
-    public static final String EXTRA_PARCELABLE = "extra_parcelable";
+    public static final String EXTRA_PARCELABLE_USER = "extra_parcelable_user";
 
     /**
      * Get tag for logger instance.
@@ -73,8 +73,15 @@ public abstract class JumpUpActivity extends ActionBarActivity {
         ViewHelper.addClickListenerToEmptyInputFieldsOnClick(edInput);
     }
 
-    protected void navigateToWithParcel(Class expliciteClass, Parcelable parcelable) {
-        Intent intent = buildParcelIntent(expliciteClass, parcelable);
+    protected void navigateToWithUserParcel(Class expliciteClass, Parcelable parcelable) {
+        Intent intent = buildUserParcelIntent(expliciteClass, parcelable);
+
+        startActivity(intent);
+    }
+
+    protected void navigateToWithUserAndAnotherExtraParcel(Class expliciteClass, Parcelable user, String anotherParcelableKey, Parcelable another) {
+        Intent intent = buildUserParcelIntent(expliciteClass, user);
+        intent.putExtra(anotherParcelableKey, another);
 
         startActivity(intent);
     }
@@ -85,14 +92,14 @@ public abstract class JumpUpActivity extends ActionBarActivity {
     }
 
     @NonNull
-    private Intent buildParcelIntent(Class expliciteClass, Parcelable parcelable) {
+    private Intent buildUserParcelIntent(Class expliciteClass, Parcelable parcelable) {
         Intent intent = getExpliciteIntent(expliciteClass);
-        putExtraParcelable(parcelable, intent);
+        putExtraUserParcelable(parcelable, intent);
         return intent;
     }
 
-    private void putExtraParcelable(Parcelable parcelable, Intent intent) {
-        intent.putExtra(EXTRA_PARCELABLE, parcelable);
+    private void putExtraUserParcelable(Parcelable parcelable, Intent intent) {
+        intent.putExtra(EXTRA_PARCELABLE_USER, parcelable);
     }
 
     @NonNull
@@ -100,8 +107,8 @@ public abstract class JumpUpActivity extends ActionBarActivity {
         return new Intent(this, expliciteClass);
     }
 
-    protected void navigateToWithParcelAndClearActivityStack(Class expliciteClass, Parcelable parcelable) {
-        Intent intent = buildParcelIntent(expliciteClass, parcelable);
+    protected void navigateToWithUserParcelAndClearActivityStack(Class expliciteClass, Parcelable parcelable) {
+        Intent intent = buildUserParcelIntent(expliciteClass, parcelable);
         setClearIntentFlags(intent);
 
         startActivity(intent);

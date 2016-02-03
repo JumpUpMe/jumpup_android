@@ -1,5 +1,8 @@
 package jumpup.imi.fb4.htw.de.jumpupandroid.portal.trip.entity;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import jumpup.imi.fb4.htw.de.jumpupandroid.entity.AbstractEntity;
 import jumpup.imi.fb4.htw.de.jumpupandroid.entity.User;
 
@@ -31,6 +34,17 @@ public class Trip extends AbstractEntity {
     public static final String FIELD_NAME_DURATION_SECONDS = "durationSeconds";
     public static final String FIELD_NAME_VEHICLE = "vehicle";
 
+    // this is used to regenerate your object. All Parcelables must have a CREATOR that implements these two methods
+    public static final Parcelable.Creator<Trip> CREATOR = new Parcelable.Creator<Trip>() {
+        public Trip createFromParcel(Parcel in) {
+            return new Trip(in);
+        }
+
+        public Trip[] newArray(int size) {
+            return new Trip[size];
+        }
+    };
+
     protected String startpoint;
     protected String endpoint;
     protected double latStartpoint;
@@ -48,6 +62,75 @@ public class Trip extends AbstractEntity {
     protected Long cancelationDateTime;
     protected long distanceMeters;
     protected long durationSeconds;
+
+    public Trip()
+    {
+        super();
+    }
+
+    public Trip(Parcel in) {
+        super();
+
+        this.initializeFromParcel(in);
+    }
+
+    @Override
+    public void writeToParcel(Parcel parcel, int i) {
+        super.writeToParcel(parcel, i);
+
+        /*
+         * ATTENTION!
+         * When changing the sequence of write operations, make sure to adjust
+         * the sequence of read operations in initializeFromParcel(), too.
+         * Both must be symmetric.
+         */
+        parcel.writeString(startpoint);
+        parcel.writeString(endpoint);
+        parcel.writeDouble(latStartpoint);
+        parcel.writeDouble(longStartpoint);
+        parcel.writeDouble(latEndpoint);
+        parcel.writeDouble(longEndpoint);
+        parcel.writeLong(startDateTime);
+        parcel.writeLong(endDateTime);
+        parcel.writeDouble(price);
+        parcel.writeString(overViewPath);
+        parcel.writeString(viaWaypoints);
+        parcel.writeInt(numberOfSeats);
+        parcel.writeValue(cancelationDateTime); // may be null, therefore use generic writeValue()
+        parcel.writeLong(distanceMeters);
+        parcel.writeLong(durationSeconds);
+        parcel.writeParcelable(vehicle, 0);
+        parcel.writeParcelable(driver, 0);
+    }
+
+    @Override
+    public void initializeFromParcel(Parcel in) {
+        super.initializeFromParcel(in);
+
+          /*
+         * ATTENTION!
+         * When changing the sequence of read operations, make sure to adjust
+         * the sequence of write operations in writeToParcel(), too.
+         * Both must be symmetric.
+         */
+        this.startpoint = in.readString();
+        this.endpoint = in.readString();
+        this.latStartpoint = in.readDouble();
+        this.longStartpoint = in.readDouble();
+        this.latEndpoint = in.readDouble();
+        this.longEndpoint = in.readDouble();
+        this.startDateTime = in.readLong();
+        this.endDateTime = in.readLong();
+        this.price = in.readDouble();
+        this.overViewPath = in.readString();
+        this.viaWaypoints = in.readString();
+        this.numberOfSeats = in.readInt();
+        this.cancelationDateTime = (Long) in.readValue(Long.class.getClassLoader()); // may be null, therefore use generic readValue()
+        this.distanceMeters = in.readLong();
+        this.durationSeconds = in.readLong();
+        this.vehicle = in.readParcelable(Vehicle.class.getClassLoader());
+        this.driver = in.readParcelable(User.class.getClassLoader());
+    }
 
     /**
      * @return the startpoint

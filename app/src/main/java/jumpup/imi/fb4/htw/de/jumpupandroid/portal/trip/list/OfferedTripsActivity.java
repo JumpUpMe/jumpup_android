@@ -4,7 +4,9 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 
@@ -14,6 +16,7 @@ import java.util.Observer;
 import jumpup.imi.fb4.htw.de.jumpupandroid.R;
 import jumpup.imi.fb4.htw.de.jumpupandroid.portal.PortalActivity;
 import jumpup.imi.fb4.htw.de.jumpupandroid.portal.trip.TripFactory;
+import jumpup.imi.fb4.htw.de.jumpupandroid.portal.trip.entity.Trip;
 
 /**
  * Project: jumpup_android
@@ -59,6 +62,15 @@ public class OfferedTripsActivity  extends PortalActivity implements Observer {
         this.tripsListAdapter = TripFactory.newTripListAdapter(this);
 
         tripsListView.setAdapter(this.tripsListAdapter);
+        tripsListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
+                Trip trip = tripsListAdapter.getItem(position);
+
+                // start detail view activity
+                navigateToViewTrip(trip);
+            }
+        });
     }
 
     private void startTask() {
