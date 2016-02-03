@@ -1,6 +1,6 @@
 package jumpup.imi.fb4.htw.de.jumpupandroid.util;
 
-import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
@@ -18,8 +18,11 @@ import jumpup.imi.fb4.htw.de.jumpupandroid.BuildConfig;
  */
 public class AppUtility {
 
-    public static final String DATE_FORMAT = "dd.MM.yyyy HH:mm";
+    public static final String DATE_FORMAT = "dd.MM.yyyy";
+    public static final String DATE_TIME_FORMAT = DATE_FORMAT + " HH:mm";
+
     private static SimpleDateFormat dateFormatter;
+    private static SimpleDateFormat dateTimeFormatter;
 
     public static boolean isDevelopmentMode()
     {
@@ -35,17 +38,69 @@ public class AppUtility {
         return BuildConfig.DEBUG && BuildConfig.PREFILL_TEST_DATA;
     }
 
-    protected static SimpleDateFormat getDateFormatter()
+    protected static SimpleDateFormat getDateFormatterWithUsersLocale()
     {
-        if (null == dateFormatter) {
+        if (null == dateTimeFormatter) {
             // TODO static caching is used: this might be problematic if the locale is overwritten
-            dateFormatter = new SimpleDateFormat(DATE_FORMAT, Locale.getDefault());
+            dateTimeFormatter = new SimpleDateFormat(DATE_FORMAT, Locale.getDefault());
         }
 
-        return dateFormatter;
+        return dateTimeFormatter;
+    }
+
+    protected static SimpleDateFormat getDateTimeFormatterWithUsersLocale()
+    {
+        if (null == dateTimeFormatter) {
+            // TODO static caching is used: this might be problematic if the locale is overwritten
+            dateTimeFormatter = new SimpleDateFormat(DATE_TIME_FORMAT, Locale.getDefault());
+        }
+
+        return dateTimeFormatter;
+    }
+
+    public static String formatDate(Long date) {
+        return getDateFormatterWithUsersLocale().format(new Date(date));
     }
 
     public static String formatDateTime(Long startDateTime) {
-        return getDateFormatter().format(new Date(startDateTime));
+        return getDateTimeFormatterWithUsersLocale().format(new Date(startDateTime));
+    }
+
+
+    public static String formatDateToUTC(Long date) {
+        SimpleDateFormat dateFormat = new SimpleDateFormat(DATE_FORMAT, Locale.getDefault());
+        dateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
+
+        return dateFormat.format(new Date(date));
+    }
+
+    public static Long getUTCTimestamp(String dateTime) {
+        SimpleDateFormat dateFormat = new SimpleDateFormat(DATE_FORMAT, Locale.getDefault());
+        dateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
+
+        try {
+            return dateFormat.parse(dateTime).getTime();
+        } catch (ParseException e) {
+            return null;
+        }
+    }
+
+    /**
+     * Check whether a string has a value.
+     * This means, it mustn't be null or empty or consist of whitespaces only..
+     * @param field string value
+     * @return true if the string has a value (is not empty and doesn't consist of whitespaces only)
+     */
+    public static boolean isSet(String field) {
+        return null != field && field.trim().length() > 0;
+    }
+
+    /**
+     * Check whether a long has a value such that it isn't null or zero.
+     * @param longValue the long value
+     * @return true if the long has a value
+     */
+    public static boolean isSet(Long longValue) {
+        return null != longValue && 0 != longValue;
     }
 }

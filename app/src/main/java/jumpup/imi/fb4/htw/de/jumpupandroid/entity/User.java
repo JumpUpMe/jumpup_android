@@ -211,6 +211,11 @@ public class User extends AbstractEntity {
         return gender;
     }
 
+    public Gender getGenderType()
+    {
+        return Gender.valueOf(this.getGender());
+    }
+
     public void setGender(String gender)
     {
         this.gender = gender;

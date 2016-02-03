@@ -9,11 +9,13 @@ import android.widget.RadioButton;
 
 import java.util.Observable;
 import java.util.Observer;
+import java.util.logging.Logger;
 
 import jumpup.imi.fb4.htw.de.jumpupandroid.R;
 import jumpup.imi.fb4.htw.de.jumpupandroid.entity.User;
 import jumpup.imi.fb4.htw.de.jumpupandroid.portal.PortalActivity;
 import jumpup.imi.fb4.htw.de.jumpupandroid.portal.welcome.WelcomeActivity;
+import jumpup.imi.fb4.htw.de.jumpupandroid.util.AppUtility;
 
 /**
  * Project: jumpup_android
@@ -45,8 +47,10 @@ public class ProfileActivity extends PortalActivity implements Observer {
 
         this.bindInputElements();
         this.addClickListenersToEmptyInputFieldsOnClick();
+        this.fillInputFieldsByUserIfNotEmpty();
         this.registerButton();
     }
+
 
     private void registerButton() {
         Button btnSave = (Button) this.findViewById(R.id.btnUpdateProfile);
@@ -67,12 +71,11 @@ public class ProfileActivity extends PortalActivity implements Observer {
         this.user.setLocale(this.inputLanguage.getText().toString());
         this.user.setMobileNumber(this.inputMobileNumber.getText().toString());
         this.user.setSkype(this.inputSkype.getText().toString());
-
-        // TODO convert and set date of birth.
+        this.user.setDateOfBirth(AppUtility.getUTCTimestamp(this.inputDateOfBirth.getText().toString()));
     }
 
     private String getSelectedGender() {
-        if (this.inputGenderMale.isSelected()) {
+        if (this.inputGenderMale.isChecked()) {
             return User.Gender.MAN.toString();
         }
 
@@ -89,6 +92,47 @@ public class ProfileActivity extends PortalActivity implements Observer {
         this.inputCountry = (EditText) this.findViewById(R.id.edCountry);
         this.inputSkype = (EditText) this.findViewById(R.id.edSkype);
         this.inputMobileNumber = (EditText) this.findViewById(R.id.edPhone);
+    }
+
+    private void fillInputFieldsByUserIfNotEmpty() {
+        if (AppUtility.isSet(this.user.getGender())) {
+            Log.d(TAG, "fillInputFieldsByUserIfNotEmpty(): Gender is set");
+            if (this.user.getGenderType().equals(User.Gender.MAN)) {
+                Log.d(TAG, "fillInputFieldsByUserIfNotEmpty(): is MAN");
+                this.inputGenderMale.setChecked(true);
+            } else if (this.user.getGenderType().equals(User.Gender.WOMAN)) {
+                Log.d(TAG, "fillInputFieldsByUserIfNotEmpty(): is WOMAN");
+                this.inputGenderFemale.setChecked(true);
+            }
+        }
+
+        if (AppUtility.isSet(this.user.getDateOfBirth())) {
+            this.inputDateOfBirth.setText(AppUtility.formatDateToUTC(this.user.getDateOfBirth()));
+        }
+
+        if (AppUtility.isSet(this.user.getPlaceOfBirth())) {
+            this.inputPlaceOfBirth.setText(this.user.getPlaceOfBirth());
+        }
+
+        if (AppUtility.isSet(this.user.getTown())) {
+            this.inputTown.setText(this.user.getTown());
+        }
+
+        if (AppUtility.isSet(this.user.getLocale())) {
+            this.inputLanguage.setText(this.user.getLocale());
+        }
+
+        if (AppUtility.isSet(this.user.getCountry())) {
+            this.inputCountry.setText(this.user.getCountry());
+        }
+
+        if (AppUtility.isSet(this.user.getSkype())) {
+            this.inputSkype.setText(this.user.getSkype());
+        }
+
+        if (AppUtility.isSet(this.user.getMobileNumber())) {
+            this.inputMobileNumber.setText(this.user.getMobileNumber());
+        }
     }
 
     private void addClickListenersToEmptyInputFieldsOnClick() {
