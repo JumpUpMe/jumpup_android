@@ -105,6 +105,13 @@
             android:id="@+id/btnEditTrip"
             android:layout_gravity="center_horizontal" />
 
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/activity_view_trip_show_on_map"
+            android:id="@+id/btnViewOnMap"
+            android:layout_gravity="center_horizontal" />
+
         <ProgressBar
             style="?android:attr/progressBarStyleLarge"
             android:layout_width="wrap_content"

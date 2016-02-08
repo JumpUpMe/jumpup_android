@@ -65,4 +65,8 @@
     <string name="activity_view_trip_number_seats">Number of seats</string>
     <string name="activity_view_trip_edit">Edit</string>
     <string name="activity_view_trip_edit_success">Your trip was successfully updated.</string>
+    <string name="title_activity_view_trip_on_map">Map</string>
+    <string name="activity_view_trip_show_on_map">Show on map</string>
+    <string name="activity_view_trip_on_map_start_location_label">Your start location</string>
+    <string name="activity_view_trip_on_map_end_location_label">Your destination</string>
 </resources>

@@ -40,6 +40,7 @@ public class ViewTripActivity extends PortalActivity implements Observer {
     private EditTripTask editTripTask;
     private Button btnEditTrip;
     private ProgressBar progressBar;
+    private Button btnShowOnMap;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,7 +54,6 @@ public class ViewTripActivity extends PortalActivity implements Observer {
     }
 
     private void registerButton() {
-
         btnEditTrip.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -65,6 +65,18 @@ public class ViewTripActivity extends PortalActivity implements Observer {
                     startProgress();
                     editTripTask.execute(trip);
                 }
+            }
+        });
+
+        btnShowOnMap.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+               navigateToWithUserAndAnotherExtraParcel(
+                       ViewTripOnMapActivity.class,
+                       user,
+                       ViewTripOnMapActivity.EXTRA_PARCELABLE_TRIP,
+                       trip
+               );
             }
         });
     }
@@ -90,6 +102,7 @@ public class ViewTripActivity extends PortalActivity implements Observer {
         this.inputNumberSeats = (EditText) this.findViewById(R.id.edNumberSeats);
 
         this.btnEditTrip = (Button) this.findViewById(R.id.btnEditTrip);
+        this.btnShowOnMap = (Button) this.findViewById(R.id.btnViewOnMap);
 
         this.progressBar = (ProgressBar) this.findViewById(R.id.progressBar);
     }
