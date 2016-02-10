@@ -20,14 +20,18 @@ import java.util.Set;
 import jumpup.imi.fb4.htw.de.jumpupandroid.R;
 import jumpup.imi.fb4.htw.de.jumpupandroid.portal.PortalActivity;
 import jumpup.imi.fb4.htw.de.jumpupandroid.portal.trip.entity.Trip;
+import jumpup.imi.fb4.htw.de.jumpupandroid.util.map.MapAdapter;
+import jumpup.imi.fb4.htw.de.jumpupandroid.util.map.MapFactory;
+import jumpup.imi.fb4.htw.de.jumpupandroid.util.map.listener.OnTripClickListener;
 import jumpup.imi.fb4.htw.de.jumpupandroid.util.math.CoordinateUtil;
 import jumpup.imi.fb4.htw.de.jumpupandroid.util.math.Coordinates;
 
-public class ViewTripOnMapActivity extends PortalActivity implements OnMapReadyCallback {
+public class ViewTripOnMapActivity extends PortalActivity implements OnMapReadyCallback, OnTripClickListener {
 
     public static final String EXTRA_PARCELABLE_TRIP = "extra_parcelable_trip";
     private static final String TAG = ViewTripOnMapActivity.class.getName();
-    private GoogleMap mMap;
+    private GoogleMap googleMap;
+    private MapAdapter mapAdapter;
     private Trip trip;
 
     @Override
@@ -73,39 +77,16 @@ public class ViewTripOnMapActivity extends PortalActivity implements OnMapReadyC
      */
     @Override
     public void onMapReady(GoogleMap googleMap) {
-        mMap = googleMap;
+        this.googleMap = googleMap;
+        this.mapAdapter = MapFactory.newGoogleMapsAdapter(googleMap);
 
-        showTripOnGoogleMap(googleMap);
-    }
-
-    private void showTripOnGoogleMap(GoogleMap googleMap) {
-        // start location
-        LatLng startLocation = new LatLng(trip.getLatStartpoint(), trip.getLongStartpoint());
-        googleMap.addMarker(new MarkerOptions().position(startLocation).title(getString(R.string.activity_view_trip_on_map_start_location_label)));
-
-        // end location
-        LatLng endLocation = new LatLng(trip.getLatEndpoint(), trip.getLongEndpoint());
-        googleMap.addMarker(new MarkerOptions().position(endLocation).title(getString(R.string.activity_view_trip_on_map_end_location_label)));
-
-        // draw route
-        drawTripPath(googleMap);
-
-        // move camera
-        googleMap.moveCamera(CameraUpdateFactory.newLatLng(startLocation));
-    }
-
-    private void drawTripPath(GoogleMap googleMap) {
-        // parse given overview path string
-        Set<Coordinates> coordinates = CoordinateUtil.parseCoordinateSetBy(trip.getOverViewPath());
-
-        PolylineOptions tripPathOptions = new PolylineOptions();
-        for (Coordinates coordinate: coordinates) {
-            tripPathOptions.add(new LatLng(coordinate.getLatitudeDegrees(), coordinate.getLongitudeDegrees()));
-        }
-
-        tripPathOptions.color(Color.BLUE);
-
-        Polyline tripPath = googleMap.addPolyline(tripPathOptions);
+        this.mapAdapter.drawTrip(trip, MapFactory.
+                newDrawTripMapOptions(
+                        getString(R.string.activity_view_trip_on_map_start_location_label),
+                        getString(R.string.activity_view_trip_on_map_end_location_label),
+                        Color.BLUE),
+                this);
+        this.mapAdapter.moveCameraToCenterOfAllTrips();
     }
 
     @Override
@@ -116,5 +97,10 @@ public class ViewTripOnMapActivity extends PortalActivity implements OnMapReadyC
     @Override
     protected AsyncTask getTask() {
         return null;
+    }
+
+    @Override
+    public void onTripClick(Trip trip) {
+        Log.i(TAG, "onTripClick(): " + trip);
     }
 }
