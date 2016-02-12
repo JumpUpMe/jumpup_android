@@ -1,6 +1,8 @@
-package jumpup.imi.fb4.htw.de.jumpupandroid.util.map;
+package jumpup.imi.fb4.htw.de.jumpupandroid.util.map.adapter;
 
 import jumpup.imi.fb4.htw.de.jumpupandroid.portal.trip.entity.Trip;
+import jumpup.imi.fb4.htw.de.jumpupandroid.portal.trip.entity.TripList;
+import jumpup.imi.fb4.htw.de.jumpupandroid.portal.trip.list.OfferedTripsOnMapActivity;
 import jumpup.imi.fb4.htw.de.jumpupandroid.util.map.listener.OnTripClickListener;
 
 /**
@@ -14,14 +16,20 @@ import jumpup.imi.fb4.htw.de.jumpupandroid.util.map.listener.OnTripClickListener
 public interface MapAdapter {
 
     /**
+     *
+     * @param mapOptions the options to be applied on the underlying map
+     * @return
+     */
+    MapAdapter setMapOptions(MapOptions mapOptions);
+
+    /**
      * Draw the given trip on the underlying map.
      *
      * @param trip the given trip
-     * @param options the options to be applied on the underlying map
      * @param onTripClickListener will be triggered if the user selected the trip on the underlying map
      * @return this - the map adapter itself
      */
-    MapAdapter drawTrip(Trip trip, MapOptions options, OnTripClickListener onTripClickListener);
+    MapAdapter drawTrip(Trip trip, OnTripClickListener onTripClickListener);
 
     /**
      * Move the camera to the center of all drawn trips (drawTrip()).
@@ -29,4 +37,12 @@ public interface MapAdapter {
      * @return this - the map adapter itself
      */
     MapAdapter moveCameraToCenterOfAllTrips();
+
+    /**
+     * Draw all the given trips.
+     * @param trips the trips list
+     * @param onTripClickListener will be triggered if the user selected the trip on the underlying map
+     * @return this - the map adapter itself
+     */
+    MapAdapter drawTrips(TripList trips, OnTripClickListener onTripClickListener);
 }

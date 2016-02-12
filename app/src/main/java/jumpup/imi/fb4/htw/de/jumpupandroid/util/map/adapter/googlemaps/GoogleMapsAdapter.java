@@ -1,6 +1,5 @@
-package jumpup.imi.fb4.htw.de.jumpupandroid.util.map;
+package jumpup.imi.fb4.htw.de.jumpupandroid.util.map.adapter.googlemaps;
 
-import android.graphics.Color;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
@@ -13,10 +12,16 @@ import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import jumpup.imi.fb4.htw.de.jumpupandroid.portal.trip.entity.Trip;
+import jumpup.imi.fb4.htw.de.jumpupandroid.portal.trip.entity.TripList;
+import jumpup.imi.fb4.htw.de.jumpupandroid.util.map.MapFactory;
+import jumpup.imi.fb4.htw.de.jumpupandroid.util.map.adapter.MapAdapter;
+import jumpup.imi.fb4.htw.de.jumpupandroid.util.map.adapter.MapOptions;
 import jumpup.imi.fb4.htw.de.jumpupandroid.util.map.listener.OnTripClickListener;
 import jumpup.imi.fb4.htw.de.jumpupandroid.util.math.CoordinateUtil;
 import jumpup.imi.fb4.htw.de.jumpupandroid.util.math.Coordinates;
@@ -33,7 +38,11 @@ public class GoogleMapsAdapter implements MapAdapter {
     private static final String TAG = GoogleMapsAdapter.class.getName();
 
     private GoogleMap googleMap;
+    private TripInfoWindow infoWindowAdapter;
     private List<Trip> drawnTrips = new ArrayList<>();
+    private MapOptions mapOptions;
+    private Map<String, Trip> markerIdTripMap = new HashMap<>();
+    private Map<String, Trip> polylineIdMap = new HashMap<>();
 
     /**
      * Set the underlying google map.
@@ -42,58 +51,89 @@ public class GoogleMapsAdapter implements MapAdapter {
      */
     public GoogleMapsAdapter setGoogleMap(GoogleMap googleMap) {
         this.googleMap = googleMap;
+        this.infoWindowAdapter = MapFactory.newTripInfoWindowAdapter(this);
+
+        this.googleMap.setInfoWindowAdapter(this.infoWindowAdapter);
 
         return this;
     }
 
     @Override
-    public MapAdapter drawTrip(Trip trip, MapOptions options, final OnTripClickListener onTripClickListener) {
-        drawStartLocation(trip, options);
-        drawEndLocation(trip, options);
-        drawTripPath(trip, options, onTripClickListener);
-
-        drawnTrips.add(trip);
-        addListeners(trip, options, onTripClickListener);
+    public GoogleMapsAdapter setMapOptions(MapOptions options) {
+        this.mapOptions = options;
 
         return this;
     }
 
-    private void addListeners(final Trip trip, final MapOptions options, final OnTripClickListener onTripClickListener) {
+    public MapOptions getMapOptions() {
+        return mapOptions;
+    }
+
+    public Trip getTripByMarkerId(String markerId) {
+        return this.markerIdTripMap.get(markerId);
+    }
+
+    public Trip getTripByPolylineId(String polylineId) {
+        return this.polylineIdMap.get(polylineId);
+    }
+
+    @Override
+    public MapAdapter drawTrip(Trip trip, final OnTripClickListener onTripClickListener) {
+        drawStartLocation(trip);
+        drawEndLocation(trip);
+        drawTripPath(trip, onTripClickListener);
+
+        drawnTrips.add(trip);
+        addListeners(trip, onTripClickListener);
+
+        return this;
+    }
+
+    private void addListeners(final Trip trip, final OnTripClickListener onTripClickListener) {
         googleMap.setOnPolylineClickListener(new GoogleMap.OnPolylineClickListener() {
             @Override
             public void onPolylineClick(Polyline clickedPolyine) {
-                onTripClickListener.onTripClick(trip);
+                onTripClickListener.onTripClick(polylineIdMap.get(clickedPolyine.getId()));
             }
         });
 
         googleMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
             @Override
             public boolean onMarkerClick(Marker marker) {
-                onTripClickListener.onTripClick(trip);
+                Log.i(TAG, "onMarkerClick(): marker clicked.");
 
-                if (options.isShowInfoWindows() && !marker.isInfoWindowShown()) {
-                    marker.setSnippet("Bla"); // TODO: separate between start and end location
+                if (mapOptions.isShowInfoWindows() && !marker.isInfoWindowShown()) {
+                    marker.hideInfoWindow();
                     marker.showInfoWindow();
                 }
+
                 return true;
             }
         });
 
     }
 
-    protected void drawEndLocation(Trip trip, MapOptions options) {
+    protected void drawEndLocation(Trip trip) {
         // end location
         LatLng endLocation = new LatLng(trip.getLatEndpoint(), trip.getLongEndpoint());
-        googleMap.addMarker(new MarkerOptions().position(endLocation).title(options.getDestinationLocationLabel()));
+        Marker marker = addMarker(endLocation, mapOptions.getDestinationLocationLabel());
+
+        this.markerIdTripMap.put(marker.getId(), trip);
     }
 
-    protected void drawStartLocation(Trip trip, MapOptions options) {
+    protected void drawStartLocation(Trip trip) {
         // start location
         LatLng startLocation = new LatLng(trip.getLatStartpoint(), trip.getLongStartpoint());
-        googleMap.addMarker(new MarkerOptions().position(startLocation).title(options.getStartLocationLabel()));
+        Marker marker = addMarker(startLocation, mapOptions.getStartLocationLabel());
+
+        this.markerIdTripMap.put(marker.getId(), trip);
     }
 
-    private void drawTripPath(final Trip trip, MapOptions options, final OnTripClickListener onTripClickListener) {
+    private Marker addMarker(LatLng location, String title) {
+        return googleMap.addMarker(new MarkerOptions().position(location).title(mapOptions.getStartLocationLabel()));
+    }
+
+    private void drawTripPath(final Trip trip, final OnTripClickListener onTripClickListener) {
         // parse given overview path string
         Set<Coordinates> coordinates = CoordinateUtil.parseCoordinateSetBy(trip.getOverViewPath());
 
@@ -102,9 +142,10 @@ public class GoogleMapsAdapter implements MapAdapter {
             tripPathOptions.add(new LatLng(coordinate.getLatitudeDegrees(), coordinate.getLongitudeDegrees()));
         }
 
-        tripPathOptions.color(options.getColor()).clickable(true);
+        tripPathOptions.color(mapOptions.getColor()).clickable(true);
 
         final Polyline polyline = googleMap.addPolyline(tripPathOptions);
+        this.polylineIdMap.put(polyline.getId(), trip);
     }
 
     @Override
@@ -117,18 +158,27 @@ public class GoogleMapsAdapter implements MapAdapter {
         return this;
     }
 
-    @NonNull
-    protected LatLng calculateArithmeticCenterOfAllDrawnTrips() {
-        double centerLat = 0;
-        double centerLong = 0;
-
-        for (Trip trip: drawnTrips) {
-            centerLat += (trip.getLatEndpoint() - trip.getLatStartpoint());
-            centerLong += (trip.getLongEndpoint() - trip.getLongStartpoint());
+    @Override
+    public MapAdapter drawTrips(TripList trips, OnTripClickListener onTripClickListener) {
+        for (Trip trip: trips) {
+            drawTrip(trip, onTripClickListener);
         }
 
-        centerLat /= drawnTrips.size();
-        centerLong /= drawnTrips.size();
+        return this;
+    }
+
+    @NonNull
+    protected LatLng calculateArithmeticCenterOfAllDrawnTrips() {
+        double centerLat = 0.0;
+        double centerLong = 0.0;
+
+        for (Trip trip: drawnTrips) {
+            centerLat += trip.getLatStartpoint();
+            centerLong += trip.getLongStartpoint();
+        }
+
+        centerLat = centerLat / (drawnTrips.size() * 1.0);
+        centerLong = centerLong / (drawnTrips.size() * 1.0);
 
         return new LatLng(centerLat, centerLong);
     }

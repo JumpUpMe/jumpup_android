@@ -27,8 +27,15 @@
 
         <ListView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="387dp"
             android:id="@+id/listOfferedTrips"
+            android:layout_gravity="center_horizontal" />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/activity_offered_trips_button_label_view_on_map"
+            android:id="@+id/btnViewOfferedTripsOnMap"
             android:layout_gravity="center_horizontal" />
 
     </LinearLayout>

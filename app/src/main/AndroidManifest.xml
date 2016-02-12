@@ -67,6 +67,10 @@
             android:name=".portal.trip.view.ViewTripOnMapActivity"
             android:label="@string/title_activity_view_trip_on_map" >
         </activity>
+        <activity
+            android:name=".portal.trip.list.OfferedTripsOnMapActivity"
+            android:label="@string/title_activity_offered_trips_on_map" >
+        </activity>
     </application>
 
 </manifest>

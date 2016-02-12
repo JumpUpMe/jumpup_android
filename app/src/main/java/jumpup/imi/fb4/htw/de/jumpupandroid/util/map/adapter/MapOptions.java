@@ -1,4 +1,7 @@
-package jumpup.imi.fb4.htw.de.jumpupandroid.util.map;
+package jumpup.imi.fb4.htw.de.jumpupandroid.util.map.adapter;
+
+import android.view.View;
+import android.widget.TextView;
 
 /**
  * Project: jumpup_android
@@ -13,6 +16,17 @@ public class MapOptions {
     private String destinationLocationLabel;
     int color;
     boolean showInfoWindows;
+    private View infoWindowView;
+
+    public MapOptions setInfoWindowView(View infoWindowView) {
+        this.infoWindowView = infoWindowView;
+
+        return this;
+    }
+
+    public View getInfoWindowView() {
+        return infoWindowView;
+    }
 
     public MapOptions setStartLocationLabel(String startLocationLabel) {
         this.startLocationLabel = startLocationLabel;
@@ -44,8 +58,10 @@ public class MapOptions {
         return color;
     }
 
-    public void setShowInfoWindows(boolean showInfoWindows) {
+    public MapOptions setShowInfoWindows(boolean showInfoWindows) {
         this.showInfoWindows = showInfoWindows;
+
+        return this;
     }
 
     public boolean isShowInfoWindows() {

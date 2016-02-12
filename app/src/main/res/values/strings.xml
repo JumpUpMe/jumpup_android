@@ -69,4 +69,11 @@
     <string name="activity_view_trip_show_on_map">Show on map</string>
     <string name="activity_view_trip_on_map_start_location_label">Your start location</string>
     <string name="activity_view_trip_on_map_end_location_label">Your destination</string>
+    <string name="activity_view_trip_on_map_start_location_info_window" formatted="false">Departure date: %s
+        \nNumber of seats: %s
+        \nDuration: %s
+        \nDistance: %s
+        \nEstimated arrival: %s</string>
+    <string name="activity_offered_trips_button_label_view_on_map">View on map</string>
+    <string name="title_activity_offered_trips_on_map">Map</string>
 </resources>

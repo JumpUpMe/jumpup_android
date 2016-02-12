@@ -1,5 +1,6 @@
 package jumpup.imi.fb4.htw.de.jumpupandroid.util;
 
+import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -22,7 +23,9 @@ public class AppUtility {
     public static final String DATE_FORMAT = "dd.MM.yyyy";
     public static final String DATE_TIME_FORMAT = DATE_FORMAT + " HH:mm";
     public static final String NUMBER_FORMAT = "%d";
+    public static final String DOUBLE_FORMAT = ".2";
 
+    private static final DecimalFormat DOUBLE_FORMATTER = new DecimalFormat(DOUBLE_FORMAT);
     private static SimpleDateFormat dateFormatter;
     private static SimpleDateFormat dateTimeFormatter;
 
@@ -136,5 +139,25 @@ public class AppUtility {
 
     public static Integer getNumberAsInt(String s) {
         return Integer.parseInt(s);
+    }
+
+    /**
+     * Get the duration in the preferred unit (default: hours).
+     * @param durationSeconds long
+     * @return duration in hours
+     * TODO take care of preference
+     */
+    public static String formatDuration(long durationSeconds) {
+        return DOUBLE_FORMATTER.format(durationSeconds / 60.0 / 60.0);
+    }
+
+    /**
+     * Get the distance in the preferred unit (default: kilometers).
+     * @param distanceMeters long
+     * @return distance in kilometers
+     * TODO take care of preference
+     */
+    public static String formatDistance(long distanceMeters) {
+        return DOUBLE_FORMATTER.format(distanceMeters / 1000.0);
     }
 }

@@ -1,61 +1,56 @@
-package jumpup.imi.fb4.htw.de.jumpupandroid.portal.trip.view;
+package jumpup.imi.fb4.htw.de.jumpupandroid.portal.trip.list;
 
 import android.graphics.Color;
 import android.os.AsyncTask;
-import android.os.PersistableBundle;
 import android.os.Bundle;
 import android.util.Log;
-import android.widget.TextView;
 
+import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 
 import jumpup.imi.fb4.htw.de.jumpupandroid.R;
 import jumpup.imi.fb4.htw.de.jumpupandroid.portal.PortalActivity;
 import jumpup.imi.fb4.htw.de.jumpupandroid.portal.trip.entity.Trip;
-import jumpup.imi.fb4.htw.de.jumpupandroid.util.map.adapter.MapAdapter;
+import jumpup.imi.fb4.htw.de.jumpupandroid.portal.trip.entity.TripList;
 import jumpup.imi.fb4.htw.de.jumpupandroid.util.map.MapFactory;
+import jumpup.imi.fb4.htw.de.jumpupandroid.util.map.adapter.MapAdapter;
 import jumpup.imi.fb4.htw.de.jumpupandroid.util.map.listener.OnTripClickListener;
 
-public class ViewTripOnMapActivity extends PortalActivity implements OnMapReadyCallback, OnTripClickListener {
+public class OfferedTripsOnMapActivity extends PortalActivity implements OnMapReadyCallback, OnTripClickListener {
 
-    public static final String EXTRA_PARCELABLE_TRIP = "extra_parcelable_trip";
-    private static final String TAG = ViewTripOnMapActivity.class.getName();
+    private static final String TAG = OfferedTripsOnMapActivity.class.getName();
+    public static final String EXTRA_PARCELABLE_TRIPS = "trips";
     private GoogleMap googleMap;
+    private TripList trips;
     private MapAdapter mapAdapter;
-    private Trip trip;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_view_trip_on_map);
+        setContentView(R.layout.activity_offered_trips_on_map);
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
 
-        bindTrip(savedInstanceState);
+        bindTrips(savedInstanceState);
     }
 
-    private void bindTrip(Bundle savedInstanceState) {
-        if (getIntent().hasExtra(EXTRA_PARCELABLE_TRIP)) {
+    private void bindTrips(Bundle savedInstanceState) {
+        if (getIntent().hasExtra(EXTRA_PARCELABLE_TRIPS)) {
             // activity was started via intent
-            this.trip = getIntent().getParcelableExtra(EXTRA_PARCELABLE_TRIP);
-        } else if (savedInstanceState.containsKey(EXTRA_PARCELABLE_TRIP)) {
+            this.trips = getIntent().getParcelableExtra(EXTRA_PARCELABLE_TRIPS);
+        } else if (savedInstanceState.containsKey(EXTRA_PARCELABLE_TRIPS)) {
             // activity was restored and trip was saved
-            this.trip = (Trip) savedInstanceState.get(EXTRA_PARCELABLE_TRIP);
+            this.trips = (TripList) savedInstanceState.get(EXTRA_PARCELABLE_TRIPS);
         } else {
-            Log.e(TAG, "bindTrip(): can't get trip instance, neither from intent nor from saved instance state bundle. Will navigate the user to show my trips so that the trips can be loaded again.");
+            Log.e(TAG, "bindTrips(): can't get tripList instance, neither from intent nor from saved instance state bundle. Will navigate the user to show my trips so that the trips can be loaded again.");
             navigateToShowMyTrips();
         }
-    }
-
-    @Override
-    public void onSaveInstanceState(Bundle outState, PersistableBundle outPersistentState) {
-        outState.putParcelable(EXTRA_PARCELABLE_TRIP, this.trip);
-
-        super.onSaveInstanceState(outState, outPersistentState);
     }
 
     /**
@@ -70,15 +65,17 @@ public class ViewTripOnMapActivity extends PortalActivity implements OnMapReadyC
     @Override
     public void onMapReady(GoogleMap googleMap) {
         this.googleMap = googleMap;
-        this.mapAdapter = MapFactory.newGoogleMapsAdapter(googleMap);
 
-        this.mapAdapter.setMapOptions( MapFactory.newDrawTripMapOptions(
+        this.mapAdapter = MapFactory.newGoogleMapsAdapter(googleMap);
+        this.mapAdapter.setMapOptions(MapFactory.newDrawTripMapOptions(
                 getString(R.string.activity_view_trip_on_map_start_location_label),
                 getString(R.string.activity_view_trip_on_map_end_location_label),
                 Color.BLUE,
                 true,
                 getLayoutInflater().inflate(R.layout.activity_view_trip_on_map_marker, null)));
-        this.mapAdapter.drawTrip(trip, this);
+
+        this.mapAdapter.drawTrips(trips, this);
+
         this.mapAdapter.moveCameraToCenterOfAllTrips();
     }
 
@@ -95,5 +92,7 @@ public class ViewTripOnMapActivity extends PortalActivity implements OnMapReadyC
     @Override
     public void onTripClick(Trip trip) {
         Log.i(TAG, "onTripClick(): " + trip);
+
+        navigateToViewTrip(trip);
     }
 }

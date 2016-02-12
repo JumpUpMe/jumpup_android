@@ -7,6 +7,7 @@ import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 
@@ -17,6 +18,7 @@ import jumpup.imi.fb4.htw.de.jumpupandroid.R;
 import jumpup.imi.fb4.htw.de.jumpupandroid.portal.PortalActivity;
 import jumpup.imi.fb4.htw.de.jumpupandroid.portal.trip.TripFactory;
 import jumpup.imi.fb4.htw.de.jumpupandroid.portal.trip.entity.Trip;
+import jumpup.imi.fb4.htw.de.jumpupandroid.portal.trip.entity.TripList;
 
 /**
  * Project: jumpup_android
@@ -33,6 +35,7 @@ public class OfferedTripsActivity  extends PortalActivity implements Observer {
     private ListView tripsListView;
     private TripsListAdapter tripsListAdapter;
     private ProgressBar progressBar;
+    private TripList offeredTrips;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,6 +43,18 @@ public class OfferedTripsActivity  extends PortalActivity implements Observer {
         setContentView(R.layout.activity_offered_trips);
 
         this.initializeListViewAdapter();
+        this.registerButton();
+    }
+
+    private void registerButton() {
+        Button btnViewOnMap = (Button) findViewById(R.id.btnViewOfferedTripsOnMap);
+
+        btnViewOnMap.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                navigateToOfferedTripsMap(offeredTrips);
+            }
+        });
     }
 
     @Override
@@ -106,8 +121,9 @@ public class OfferedTripsActivity  extends PortalActivity implements Observer {
         } else {
             Log.d(TAG, "handleOfferedTripsResult(): success");
 
-            this.tripsListAdapter.clear();
-            this.tripsListAdapter.addAll(this.task.getOfferedTrips());
+           this.tripsListAdapter.clear();
+           offeredTrips = this.task.getOfferedTrips();
+           this.tripsListAdapter.addAll(offeredTrips);
 
            if (this.task.getOfferedTrips().size() == 0) {
                this.showSuccessNotification(this.getResources().getString(R.string.activity_offered_trips_no_offered_trips));

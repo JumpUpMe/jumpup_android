@@ -2,6 +2,7 @@ package jumpup.imi.fb4.htw.de.jumpupandroid.lib;
 
 import jumpup.imi.fb4.htw.de.jumpupandroid.entity.User;
 import jumpup.imi.fb4.htw.de.jumpupandroid.portal.trip.entity.Trip;
+import jumpup.imi.fb4.htw.de.jumpupandroid.portal.trip.entity.TripList;
 
 /**
  * Project: jumpup_android
@@ -61,5 +62,13 @@ public class TestObjects {
         trip.setDurationSeconds(20248);
 
         return trip;
+    }
+
+    public static TripList newTestTripList() {
+        TripList tripList = new TripList();
+
+        tripList.add(newTestTripFromBerlinToCologne());
+
+        return tripList;
     }
 }

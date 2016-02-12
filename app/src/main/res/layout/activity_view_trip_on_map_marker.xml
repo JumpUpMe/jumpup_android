@@ -1,0 +1,22 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/map_marker"
+    tools:context="jumpup.imi.fb4.htw.de.jumpupandroid.portal.trip.view.ViewTripOnMapActivity"
+    android:name="com.google.android.gms.maps.SupportMapFragment">
+
+    <TextView
+    android:layout_width="316dp"
+    android:layout_height="wrap_content"
+    android:textAppearance="?android:attr/textAppearanceLarge"
+    android:text="@string/activity_view_trip_on_map_start_location_info_window"
+    android:id="@+id/txtStartLocationInfoWindow"
+    android:layout_gravity="center_horizontal"
+        android:editable="false"
+        android:enabled="true"
+        android:textColor="#428eff"
+        android:textIsSelectable="false"
+        android:textSize="16dp" />
+
+</RelativeLayout>
