@@ -66,4 +66,16 @@ public class TripList extends ArrayList<Trip> implements Parcelable {
             this.add((Trip) trip);
         }
     }
+
+    /**
+     * Apply the given limit
+     * @param limit the limit to be applied. All indices greater than the limit will be removed.
+     */
+    public TripList applyLimit(int limit) {
+        for (int i = limit; i < this.size(); i++) {
+            this.remove(i);
+        }
+
+        return this;
+    }
 }

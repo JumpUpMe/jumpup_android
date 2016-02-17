@@ -13,6 +13,7 @@ import java.net.URL;
 import jumpup.imi.fb4.htw.de.jumpupandroid.R;
 import jumpup.imi.fb4.htw.de.jumpupandroid.entity.User;
 import jumpup.imi.fb4.htw.de.jumpupandroid.portal.trip.entity.TripList;
+import jumpup.imi.fb4.htw.de.jumpupandroid.util.preferences.PreferencesUtil;
 import jumpup.imi.fb4.htw.de.jumpupandroid.util.webservice.exception.ErrorResponseException;
 import jumpup.imi.fb4.htw.de.jumpupandroid.util.webservice.exception.TechnicalErrorException;
 import jumpup.imi.fb4.htw.de.jumpupandroid.util.webservice.mapper.JsonMapper;
@@ -75,7 +76,7 @@ public class TripListRequestImpl extends JumpUpRequest implements TripListReques
 
                 Log.d(TAG, "loadUsersTrips(): got response: " + response);
 
-                return (TripList) getResponseMapper().mapResponse(response);
+                return ((TripList) (getResponseMapper().mapResponse(response))).applyLimit(PreferencesUtil.readNumberOfTripsPreference());
             } catch (IOException ioException) {
                 Log.e(TAG, "loadUsersTrips(): could not load user's trips. Exception during response buffering: " + ioException.getMessage()
                         + "\nStack trace:\n" + ExceptionUtils.getStackTrace(ioException));

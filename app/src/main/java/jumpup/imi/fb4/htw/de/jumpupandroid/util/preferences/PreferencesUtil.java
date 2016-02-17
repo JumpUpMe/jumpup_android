@@ -1,5 +1,6 @@
 package jumpup.imi.fb4.htw.de.jumpupandroid.util.preferences;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
@@ -65,5 +66,12 @@ public class PreferencesUtil {
                 App.getStringFromResourceId(R.string.preferences_distance_value_metric));
 
         return DistanceUnitTypePreference.getByAndroidPreferenceValue(unitType);
+    }
+
+    public static int readNumberOfTripsPreference() {
+        return Integer.parseInt(getSharedPreferences().getString(
+                App.getStringFromResourceId(R.string.preferences_number_trips_key),
+                App.getStringFromResourceId(R.string.preferences_number_trips_default))
+        );
     }
 }
