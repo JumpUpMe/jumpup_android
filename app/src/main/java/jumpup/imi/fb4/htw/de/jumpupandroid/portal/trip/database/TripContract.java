@@ -50,8 +50,9 @@ public class TripContract {
 
     }
 
-    public static abstract class MetaInfo implements BaseColumns {
+    public static abstract class MetaInfoEntry implements BaseColumns {
         public static final String TABLE_NAME = "MetaInfo";
         public static final String COLUMN_NAME_LAST_SYNCHRONIZATION_DATETIME = "lastSyncDatetime";
+        public static final String COLUMN_NAME_USER_ID = "userId";
     }
 }

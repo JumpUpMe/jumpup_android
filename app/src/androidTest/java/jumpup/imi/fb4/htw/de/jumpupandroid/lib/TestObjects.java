@@ -1,6 +1,7 @@
 package jumpup.imi.fb4.htw.de.jumpupandroid.lib;
 
 import jumpup.imi.fb4.htw.de.jumpupandroid.entity.User;
+import jumpup.imi.fb4.htw.de.jumpupandroid.portal.trip.database.TripMetaInfo;
 import jumpup.imi.fb4.htw.de.jumpupandroid.portal.trip.entity.Trip;
 import jumpup.imi.fb4.htw.de.jumpupandroid.portal.trip.entity.TripList;
 
@@ -70,5 +71,14 @@ public class TestObjects {
         tripList.add(newTestTripFromBerlinToCologne());
 
         return tripList;
+    }
+
+    public static TripMetaInfo newTestTripMetaInfo() {
+        TripMetaInfo tripMetaInfo = new TripMetaInfo();
+
+        tripMetaInfo.setLastSyncDateTime(1456531200L);
+        tripMetaInfo.setUserId(10);
+
+        return tripMetaInfo;
     }
 }

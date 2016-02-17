@@ -5,7 +5,9 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.support.annotation.Nullable;
 
+import jumpup.imi.fb4.htw.de.jumpupandroid.App;
 import jumpup.imi.fb4.htw.de.jumpupandroid.portal.trip.entity.Trip;
 
 /**
@@ -55,9 +57,10 @@ public class TripDbHelper extends SQLiteOpenHelper {
     private static final String SQL_CREATE_DRIVER_TABLE = "CREATE TABLE " + TripContract.DriverEntry.TABLE_NAME + " ("
             + TripContract.DriverEntry._ID + " INTEGER PRIMARY KEY"
             + ");";
-    private static final java.lang.String SQL_CREATE_METAINFO_TABLE =  "CREATE TABLE " + TripContract.MetaInfo.TABLE_NAME + " ("
-            + TripContract.MetaInfo._ID + " INTEGER PRIMARY KEY, "
-            + TripContract.MetaInfo.COLUMN_NAME_LAST_SYNCHRONIZATION_DATETIME + " INTEGER "
+    private static final java.lang.String SQL_CREATE_METAINFO_TABLE =  "CREATE TABLE " + TripContract.MetaInfoEntry.TABLE_NAME + " ("
+            + TripContract.MetaInfoEntry._ID + " INTEGER PRIMARY KEY, "
+            + TripContract.MetaInfoEntry.COLUMN_NAME_LAST_SYNCHRONIZATION_DATETIME + " INTEGER, "
+            + TripContract.MetaInfoEntry.COLUMN_NAME_USER_ID + " INTEGER "
             + ");";
 
     public TripDbHelper(Context context) {
@@ -81,7 +84,7 @@ public class TripDbHelper extends SQLiteOpenHelper {
         sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + TripContract.VehicleEntry.TABLE_NAME);
         sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + TripContract.DriverEntry.TABLE_NAME);
         sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + TripContract.TripEntry.TABLE_NAME);
-        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + TripContract.MetaInfo.TABLE_NAME);
+        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + TripContract.MetaInfoEntry.TABLE_NAME);
         onCreate(sqLiteDatabase);
     }
 
@@ -178,5 +181,72 @@ public class TripDbHelper extends SQLiteOpenHelper {
         trip.setDurationSeconds(Long.valueOf(cSelect.getInt(cSelect.getColumnIndex(TripContract.TripEntry.COLUMN_NAME_DURATION_SECONDS))));
 
         return trip;
+    }
+
+    public static TripMetaInfo getLastMetaInfo(Context context)
+    {
+        TripDbHelper dbHelper = new TripDbHelper(context);
+        SQLiteDatabase db = dbHelper.getReadableDatabase();
+
+        Cursor cQuery = db.query(
+                TripContract.MetaInfoEntry.TABLE_NAME,
+                null, // projection: all
+                null, // columns for where: all
+                null, // values for where: all
+                null, // group by columns
+                null, // filter
+                null // order
+        );
+
+        TripMetaInfo tripMetaInfoFromSelectCursor = createTripMetaInfoFromSelectCursor(cQuery);
+
+        cQuery.close();
+        dbHelper.close();
+
+        return tripMetaInfoFromSelectCursor;
+    }
+
+    @Nullable
+    public static TripMetaInfo createTripMetaInfoFromSelectCursor(Cursor cQuery) {
+        if (!cQuery.moveToFirst()) {
+            // no entry available
+            return null;
+        }
+
+        TripMetaInfo tripMetaInfo = new TripMetaInfo();
+        tripMetaInfo.setLastSyncDateTime(cQuery.getInt(cQuery.getColumnIndex(TripContract.MetaInfoEntry.COLUMN_NAME_LAST_SYNCHRONIZATION_DATETIME)));
+        tripMetaInfo.setUserId(cQuery.getInt(cQuery.getColumnIndex(TripContract.MetaInfoEntry.COLUMN_NAME_USER_ID)));
+
+        return tripMetaInfo;
+    }
+
+    public static void setLastMetaInfo(TripMetaInfo lastMetaInfo, Context c)
+    {
+        TripDbHelper dbHelper = new TripDbHelper(c);
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+
+        db.delete(
+                TripContract.MetaInfoEntry.TABLE_NAME,
+                null, // each column
+                null // each column
+        );
+
+        db.insert(
+                TripContract.MetaInfoEntry.TABLE_NAME,
+                null,
+                createContentValues(lastMetaInfo)
+        );
+
+        db.close();
+        dbHelper.close();
+    }
+
+    public static ContentValues createContentValues(TripMetaInfo lastMetaInfo) {
+        ContentValues values = new ContentValues();
+
+        values.put(TripContract.MetaInfoEntry.COLUMN_NAME_LAST_SYNCHRONIZATION_DATETIME, lastMetaInfo.getLastSyncDateTime());
+        values.put(TripContract.MetaInfoEntry.COLUMN_NAME_USER_ID, lastMetaInfo.getUserId());
+
+        return values;
     }
 }

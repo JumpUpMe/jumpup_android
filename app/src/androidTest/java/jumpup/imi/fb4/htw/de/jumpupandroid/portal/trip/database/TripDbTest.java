@@ -3,12 +3,9 @@ package jumpup.imi.fb4.htw.de.jumpupandroid.portal.trip.database;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.support.test.runner.AndroidJUnit4;
 import android.test.AndroidTestCase;
-import android.test.suitebuilder.annotation.MediumTest;
 
 import org.junit.Test;
-import org.junit.runner.RunWith;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -37,6 +34,7 @@ public class TripDbTest extends AndroidTestCase {
     private Map<String, Boolean> expectedMetaInfoColumns = new HashMap<>();
     private long tripInsertionId;
     private Trip insertTrip;
+    private TripMetaInfo insertMetaInfo;
 
     @Override
     protected void setUp() throws Exception {
@@ -53,7 +51,7 @@ public class TripDbTest extends AndroidTestCase {
         this.expectedTables.put(TripContract.TripEntry.TABLE_NAME, false);
         this.expectedTables.put(TripContract.VehicleEntry.TABLE_NAME, false);
         this.expectedTables.put(TripContract.DriverEntry.TABLE_NAME, false);
-        this.expectedTables.put(TripContract.MetaInfo.TABLE_NAME, false);
+        this.expectedTables.put(TripContract.MetaInfoEntry.TABLE_NAME, false);
     }
 
     private void fillExpectedColumns() {
@@ -87,13 +85,18 @@ public class TripDbTest extends AndroidTestCase {
         this.expectedDriverColumns.put(TripContract.DriverEntry._ID, false);
 
         this.expectedMetaInfoColumns.clear();
-        this.expectedMetaInfoColumns.put(TripContract.MetaInfo._ID, false);
-        this.expectedMetaInfoColumns.put(TripContract.MetaInfo.COLUMN_NAME_LAST_SYNCHRONIZATION_DATETIME, false);
+        this.expectedMetaInfoColumns.put(TripContract.MetaInfoEntry._ID, false);
+        this.expectedMetaInfoColumns.put(TripContract.MetaInfoEntry.COLUMN_NAME_LAST_SYNCHRONIZATION_DATETIME, false);
+        this.expectedMetaInfoColumns.put(TripContract.MetaInfoEntry.COLUMN_NAME_USER_ID, false);
     }
 
     @Override
     protected void tearDown() throws Exception {
         super.tearDown();
+
+        try {
+            this.db.close();
+        } catch (Exception e) {}
 
         this.db = null;
         this.insertTrip = null;
@@ -146,7 +149,7 @@ public class TripDbTest extends AndroidTestCase {
         analyzeTable(TripContract.TripEntry.TABLE_NAME, this.expectedTripColumns);
         analyzeTable(TripContract.VehicleEntry.TABLE_NAME, this.expectedVehicleColumns);
         analyzeTable(TripContract.DriverEntry.TABLE_NAME, this.expectedDriverColumns);
-        analyzeTable(TripContract.MetaInfo.TABLE_NAME, this.expectedMetaInfoColumns);
+        analyzeTable(TripContract.MetaInfoEntry.TABLE_NAME, this.expectedMetaInfoColumns);
     }
 
     private void analyzeTable(String tableName, Map<String, Boolean> expectedColumnsName) {
@@ -163,6 +166,7 @@ public class TripDbTest extends AndroidTestCase {
 
 
         checkColumns(expectedColumnsName);
+        c.close();
     }
 
     private void checkColumns(Map<String, Boolean> expectedTripColumns) {
@@ -209,5 +213,27 @@ public class TripDbTest extends AndroidTestCase {
 
         assertEquals("Error: trip loaded from database should be equal to inserted one",
                 insertTrip, tripFromQuery);
+
+        cSelect.close();
+    }
+
+    @Test
+    public void testMetaInfoConvenienceFunctions() {
+        this.insertMetaInfo = TestObjects.newTestTripMetaInfo();
+
+        givenADatabasetSetOfTheLastMetaInfo();
+
+        thenTheLastMetaInfoShouldHaveBeenUpdated();
+    }
+
+    protected void givenADatabasetSetOfTheLastMetaInfo() {
+        TripDbHelper.setLastMetaInfo(this.insertMetaInfo, mContext);
+    }
+
+    protected void thenTheLastMetaInfoShouldHaveBeenUpdated() {
+        TripMetaInfo fromDb = TripDbHelper.getLastMetaInfo(mContext);
+
+        assertEquals("Error: trip meta info loaded from database should be equal to inserted one",
+                insertMetaInfo, fromDb);
     }
 }
