@@ -41,7 +41,11 @@ public class TripListRequestImpl extends JumpUpRequest implements TripListReques
 
     @Override
     protected String getEndpointUrl() {
-        return ENDPOINT_URL;
+        return ENDPOINT_URL + this.buildPaginationParameters();
+    }
+
+    private String buildPaginationParameters() {
+        return "?limit=" + PreferencesUtil.readNumberOfTripsPreference();
     }
 
     @Override
@@ -76,7 +80,7 @@ public class TripListRequestImpl extends JumpUpRequest implements TripListReques
 
                 Log.d(TAG, "loadUsersTrips(): got response: " + response);
 
-                return ((TripList) (getResponseMapper().mapResponse(response))).applyLimit(PreferencesUtil.readNumberOfTripsPreference());
+                return (TripList) (getResponseMapper().mapResponse(response));
             } catch (IOException ioException) {
                 Log.e(TAG, "loadUsersTrips(): could not load user's trips. Exception during response buffering: " + ioException.getMessage()
                         + "\nStack trace:\n" + ExceptionUtils.getStackTrace(ioException));
