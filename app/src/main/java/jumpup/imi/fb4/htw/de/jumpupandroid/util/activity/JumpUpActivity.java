@@ -1,13 +1,18 @@
 package jumpup.imi.fb4.htw.de.jumpupandroid.util.activity;
 
+import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
+import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.annotation.NonNull;
 import android.support.v7.app.ActionBarActivity;
+import android.util.Log;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import jumpup.imi.fb4.htw.de.jumpupandroid.entity.User;
 import jumpup.imi.fb4.htw.de.jumpupandroid.util.ViewHelper;
 
 /**
@@ -53,8 +58,7 @@ public abstract class JumpUpActivity extends ActionBarActivity {
     }
 
     protected void showSuccessNotification(String string) {
-        Toast toast = Toast.makeText(getApplicationContext(), string, Toast.LENGTH_LONG);
-        toast.show();
+        showSuccessNotification(getApplicationContext(), string);
     }
 
     protected void showErrorNotification(String string) {
@@ -87,13 +91,13 @@ public abstract class JumpUpActivity extends ActionBarActivity {
     }
 
     protected void navigateTo(Class expliciteClass) {
-        Intent intent = getExpliciteIntent(expliciteClass);
+        Intent intent = getExpliciteIntent(this, expliciteClass);
         startActivity(intent);
     }
 
     @NonNull
     private Intent buildUserParcelIntent(Class expliciteClass, Parcelable parcelable) {
-        Intent intent = getExpliciteIntent(expliciteClass);
+        Intent intent = getExpliciteIntent(this, expliciteClass);
         putExtraUserParcelable(parcelable, intent);
         return intent;
     }
@@ -103,8 +107,8 @@ public abstract class JumpUpActivity extends ActionBarActivity {
     }
 
     @NonNull
-    private Intent getExpliciteIntent(Class expliciteClass) {
-        return new Intent(this, expliciteClass);
+    private static Intent getExpliciteIntent(Activity activity, Class expliciteClass) {
+        return new Intent(activity, expliciteClass);
     }
 
     protected void navigateToWithUserParcelAndClearActivityStack(Class expliciteClass, Parcelable parcelable) {
@@ -115,13 +119,53 @@ public abstract class JumpUpActivity extends ActionBarActivity {
     }
 
     protected void navigateToAndClearActivityStack(Class expliciteClass) {
-        Intent intent = getExpliciteIntent(expliciteClass);
-        setClearIntentFlags(intent);
+        Intent intent = buildIntentWithClearFlags(this, expliciteClass);
 
         startActivity(intent);
     }
 
-    private void setClearIntentFlags(Intent intent) {
+    @NonNull
+    public static Intent buildIntentWithClearFlags(Activity activity, Class expliciteClass) {
+        Intent intent = getExpliciteIntent(activity, expliciteClass);
+        setClearIntentFlags(intent);
+
+        return intent;
+    }
+
+    private static void setClearIntentFlags(Intent intent) {
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+    }
+
+    /*
+     * ######################################################
+     * #
+     * # STATICS
+     * #
+     * ######################################################
+     */
+    /**
+     * Util function to get the user from intent or bundle.
+     * @param intent the intent that was created to start the activity
+     * @param savedInstanceState the bundle
+     * @param tag the log tag
+     * @return null if the user couldn't be fetched: you should then trigger some action to reload the user to prevent errors
+     */
+    public static User getUserFromIntentOrBundle(Intent intent, Bundle savedInstanceState, String tag) {
+        if (intent.hasExtra(EXTRA_PARCELABLE_USER)) {
+            // activity was started via intent
+            return intent.getParcelableExtra(EXTRA_PARCELABLE_USER);
+        } else if (null != savedInstanceState && savedInstanceState.containsKey(EXTRA_PARCELABLE_USER)) {
+            // activity was restored
+            return savedInstanceState.getParcelable(EXTRA_PARCELABLE_USER);
+        } else {
+            Log.e(tag, "getUserFromIntentOrBundle(): can't get user entity, neither from intent extra nor from the saved instance state bundle." +
+                    "Will trigger logout to prevent errors.");
+            return null;
+        }
+    }
+
+    public static void showSuccessNotification(Context context, String string) {
+        Toast toast = Toast.makeText(context, string, Toast.LENGTH_LONG);
+        toast.show();
     }
 }

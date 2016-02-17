@@ -28,6 +28,11 @@
         android:title="@string/portal_menu_show_my_bookings"
         app:showAsAction="never" />
     <item
+        android:id="@+id/portal_menu_preferences"
+        android:orderInCategory="100"
+        android:title="@string/portal_menu_preferences"
+        app:showAsAction="never" />
+    <item
         android:id="@+id/portal_menu_logout"
         android:orderInCategory="100"
         android:title="@string/portal_menu_logout"

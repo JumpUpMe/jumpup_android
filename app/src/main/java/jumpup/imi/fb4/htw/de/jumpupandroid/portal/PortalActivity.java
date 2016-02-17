@@ -39,7 +39,11 @@ public abstract class PortalActivity extends JumpUpActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        bindUser(savedInstanceState);
+        this.user = bindUser(savedInstanceState);
+
+        if (null == this.user) {
+            logoutUser();
+        }
     }
 
     @Override
@@ -49,18 +53,8 @@ public abstract class PortalActivity extends JumpUpActivity {
         super.onSaveInstanceState(outState, outPersistentState);
     }
 
-    private void bindUser(Bundle savedInstanceState) {
-        if (getIntent().hasExtra(EXTRA_PARCELABLE_USER)) {
-            // activity was started via intent
-            this.user = getIntent().getParcelableExtra(EXTRA_PARCELABLE_USER);
-        } else if (null != savedInstanceState && savedInstanceState.containsKey(EXTRA_PARCELABLE_USER)) {
-            // activity was restored
-            this.user = savedInstanceState.getParcelable(EXTRA_PARCELABLE_USER);
-        } else {
-            Log.e(getTag(), "bindUser(): can't get user entity, neither from intent extra nor from the saved instance state bundle." +
-                    "Will trigger logout to prevent errors.");
-            logoutUser();
-        }
+    private User bindUser(Bundle savedInstanceState) {
+       return getUserFromIntentOrBundle(getIntent(), savedInstanceState, getTag());
     }
 
     @SuppressWarnings("SameReturnValue")
@@ -95,6 +89,9 @@ public abstract class PortalActivity extends JumpUpActivity {
                 break;
             case R.id.portal_menu_show_my_trips:
                 navigateToShowMyTrips();
+                break;
+            case R.id.portal_menu_preferences:
+                navigateToPreferences();
                 break;
             case R.id.portal_menu_logout:
                 logoutUser();
@@ -155,6 +152,15 @@ public abstract class PortalActivity extends JumpUpActivity {
                 this.user,
                 OfferedTripsOnMapActivity.EXTRA_PARCELABLE_TRIPS,
                 offeredTrips
+        );
+    }
+
+    protected void navigateToPreferences() {
+        Log.d(getTag(), "navigateToPreferences(): menu item pressed");
+
+        this.navigateToWithUserParcel(
+                SettingsActivity.class,
+                this.user
         );
     }
 }

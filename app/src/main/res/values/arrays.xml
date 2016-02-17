@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="preferences_distance_values">
+            <item>@string/preferences_distance_value_metric</item>
+            <item>@string/preferences_distance_value_imperial</item>
+    </string-array>
+
+    <string-array name="preferences_distance_labels">
+        <item>@string/preferences_distance_label_metric</item>
+        <item>@string/preferences_distance_label_imperial</item>
+    </string-array>
+
+    <string-array name="preferences_duration_values">
+            <item>@string/preferences_duration_value_hours</item>
+            <item>@string/preferences_duration_value_minutes</item>
+    </string-array>
+
+    <string-array name="preferences_duration_labels">
+        <item>@string/preferences_duration_label_hours</item>
+        <item>@string/preferences_duration_label_minutes</item>
+    </string-array>
+</resources>

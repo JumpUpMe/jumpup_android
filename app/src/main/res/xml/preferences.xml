@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    >
+    <PreferenceCategory
+        android:title="@string/preferences_category_units_title"
+        android:key="@string/preferences_category_units_key">
+        <ListPreference
+            android:title="@string/preferences_distance_unit_title"
+            android:key="@string/preferences_distance_unit_key"
+            android:defaultValue="@string/preferences_distance_value_metric"
+            android:entryValues="@array/preferences_distance_values"
+            android:entries="@array/preferences_distance_labels"
+        />
+        <ListPreference
+            android:title="@string/preferences_duration_unit_title"
+            android:key="@string/preferences_duration_unit_key"
+            android:defaultValue="@string/preferences_duration_value_hours"
+            android:entryValues="@array/preferences_duration_values"
+            android:entries="@array/preferences_duration_labels"
+            />
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:title="@string/preferences_category_synchronization_title"
+        android:key="@string/preferences_category_synchronization_key">
+        <CheckBoxPreference
+            android:title="@string/preferences_enable_trip_synchronization_title"
+            android:key="@string/preferences_enable_trip_synchronization_key"
+            android:defaultValue="true"
+            />
+        <EditTextPreference
+            android:title="@string/preferences_number_trips_title"
+            android:key="@string/preferences_number_trips_key"
+            android:defaultValue="@string/preferences_number_trips_default"
+            android:inputType="numberSigned"
+            android:singleLine="true"/>
+    </PreferenceCategory>
+
+</PreferenceScreen>
