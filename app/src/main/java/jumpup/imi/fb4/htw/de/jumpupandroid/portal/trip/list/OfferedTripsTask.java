@@ -4,11 +4,12 @@ import android.util.Log;
 
 import java.util.Observer;
 
+import jumpup.imi.fb4.htw.de.jumpupandroid.App;
+import jumpup.imi.fb4.htw.de.jumpupandroid.R;
 import jumpup.imi.fb4.htw.de.jumpupandroid.entity.User;
-import jumpup.imi.fb4.htw.de.jumpupandroid.portal.profile.ProfileFactory;
-import jumpup.imi.fb4.htw.de.jumpupandroid.portal.profile.request.ProfileRequest;
 import jumpup.imi.fb4.htw.de.jumpupandroid.portal.trip.TripFactory;
-import jumpup.imi.fb4.htw.de.jumpupandroid.portal.trip.entity.Trip;
+import jumpup.imi.fb4.htw.de.jumpupandroid.portal.trip.database.TripDbHelper;
+import jumpup.imi.fb4.htw.de.jumpupandroid.portal.trip.database.TripMetaInfo;
 import jumpup.imi.fb4.htw.de.jumpupandroid.portal.trip.entity.TripList;
 import jumpup.imi.fb4.htw.de.jumpupandroid.portal.trip.list.request.TripListRequest;
 import jumpup.imi.fb4.htw.de.jumpupandroid.util.task.ObservableAsyncTask;
@@ -78,10 +79,34 @@ public class OfferedTripsTask extends ObservableAsyncTask<User, Void, Void> {
     }
 
     private void loadUsersOfferedTrips() {
+        TripMetaInfo dbTripMetaInfo = TripDbHelper.getLastMetaInfo(App.getGlobalContext());
+
+        if (null == dbTripMetaInfo || dbTripMetaInfo.needsToBeSynchronized(user)) {
+            Log.d(TAG, "loadUsersOfferedTrips(): will load via webservice");
+            this.loadUsersOfferedTripsFromWebService();
+        } else {
+            Log.d(TAG, "loadUsersOfferedTrips(): will load from cache");
+            this.loadUsersOfferedTripsFromCache();
+        }
+    }
+
+    private void loadUsersOfferedTripsFromCache() {
+        try {
+            this.offeredTrips = TripDbHelper.getTrips(App.getGlobalContext());
+        } catch (Exception e) {
+            this.hasError = true;
+            this.toastMessageId = R.string.jumpup_request_error_trip_list_load_failed;
+        }
+    }
+
+    private void loadUsersOfferedTripsFromWebService() {
         try {
             this.offeredTrips = this.tripListRequest.loadUsersTrips(user);
 
-            Log.d(TAG, "loadUsersOfferedTrips(): load users offered trips task was successful.");
+            Log.d(TAG, "loadUsersOfferedTripsFromWebService(): load users offered trips task was successful.");
+
+            // update cache
+            TripDbHelper.setTrips(App.getGlobalContext(), this.offeredTrips, this.user);
         } catch (TechnicalErrorException e) {
             this.hasError = true;
             this.toastMessageId = e.getUserMessageId();

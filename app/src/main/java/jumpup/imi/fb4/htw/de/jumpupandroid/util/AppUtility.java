@@ -65,12 +65,12 @@ public class AppUtility {
         return dateTimeFormatter;
     }
 
-    public static String formatDate(Long date) {
-        return getDateFormatterWithUsersLocale().format(new Date(date));
+    public static String formatDate(Long timestampSeconds) {
+        return getDateFormatterWithUsersLocale().format(new Date(timestampSeconds * 1000));
     }
 
-    public static String formatDateTime(Long startDateTime) {
-        return getDateTimeFormatterWithUsersLocale().format(new Date(startDateTime));
+    public static String formatDateTime(Long timestampSeconds) {
+        return getDateTimeFormatterWithUsersLocale().format(new Date(timestampSeconds * 1000));
     }
 
 

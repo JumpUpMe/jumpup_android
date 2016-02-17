@@ -76,7 +76,7 @@ public class TestObjects {
     public static TripMetaInfo newTestTripMetaInfo() {
         TripMetaInfo tripMetaInfo = new TripMetaInfo();
 
-        tripMetaInfo.setLastSyncDateTime(1456531200L);
+        tripMetaInfo.setLastSyncTimestampSeconds(1456531200L);
         tripMetaInfo.setUserId(10);
 
         return tripMetaInfo;

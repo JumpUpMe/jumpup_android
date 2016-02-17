@@ -12,6 +12,7 @@ import java.util.Map;
 
 import jumpup.imi.fb4.htw.de.jumpupandroid.lib.TestObjects;
 import jumpup.imi.fb4.htw.de.jumpupandroid.portal.trip.entity.Trip;
+import jumpup.imi.fb4.htw.de.jumpupandroid.portal.trip.entity.TripList;
 
 /**
  * Project: jumpup_android
@@ -35,6 +36,7 @@ public class TripDbTest extends AndroidTestCase {
     private long tripInsertionId;
     private Trip insertTrip;
     private TripMetaInfo insertMetaInfo;
+    private TripList insertTripList;
 
     @Override
     protected void setUp() throws Exception {
@@ -235,5 +237,17 @@ public class TripDbTest extends AndroidTestCase {
 
         assertEquals("Error: trip meta info loaded from database should be equal to inserted one",
                 insertMetaInfo, fromDb);
+    }
+
+    @Test
+    public void testSetAndGetTripsConvenienceFunctions() {
+        this.insertTripList = TestObjects.newTestTripList();
+
+        TripDbHelper.setTrips(mContext, insertTripList, TestObjects.newTestUser());
+
+        TripList tripListFromDb = TripDbHelper.getTrips(mContext);
+
+        assertEquals("Error: trip list loaded from database should be equal to inserted one",
+                insertTripList, tripListFromDb);
     }
 }

@@ -7,8 +7,9 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.support.annotation.Nullable;
 
-import jumpup.imi.fb4.htw.de.jumpupandroid.App;
+import jumpup.imi.fb4.htw.de.jumpupandroid.entity.User;
 import jumpup.imi.fb4.htw.de.jumpupandroid.portal.trip.entity.Trip;
+import jumpup.imi.fb4.htw.de.jumpupandroid.portal.trip.entity.TripList;
 
 /**
  * Project: jumpup_android
@@ -214,7 +215,7 @@ public class TripDbHelper extends SQLiteOpenHelper {
         }
 
         TripMetaInfo tripMetaInfo = new TripMetaInfo();
-        tripMetaInfo.setLastSyncDateTime(cQuery.getInt(cQuery.getColumnIndex(TripContract.MetaInfoEntry.COLUMN_NAME_LAST_SYNCHRONIZATION_DATETIME)));
+        tripMetaInfo.setLastSyncTimestampSeconds(cQuery.getInt(cQuery.getColumnIndex(TripContract.MetaInfoEntry.COLUMN_NAME_LAST_SYNCHRONIZATION_DATETIME)));
         tripMetaInfo.setUserId(cQuery.getInt(cQuery.getColumnIndex(TripContract.MetaInfoEntry.COLUMN_NAME_USER_ID)));
 
         return tripMetaInfo;
@@ -225,11 +226,7 @@ public class TripDbHelper extends SQLiteOpenHelper {
         TripDbHelper dbHelper = new TripDbHelper(c);
         SQLiteDatabase db = dbHelper.getWritableDatabase();
 
-        db.delete(
-                TripContract.MetaInfoEntry.TABLE_NAME,
-                null, // each column
-                null // each column
-        );
+        truncate(db, TripContract.MetaInfoEntry.TABLE_NAME);
 
         db.insert(
                 TripContract.MetaInfoEntry.TABLE_NAME,
@@ -241,12 +238,78 @@ public class TripDbHelper extends SQLiteOpenHelper {
         dbHelper.close();
     }
 
+    protected static void truncate(SQLiteDatabase db, String tableName) {
+        db.delete(
+                tableName,
+                null, // each column
+                null // each column
+        );
+    }
+
     public static ContentValues createContentValues(TripMetaInfo lastMetaInfo) {
         ContentValues values = new ContentValues();
 
-        values.put(TripContract.MetaInfoEntry.COLUMN_NAME_LAST_SYNCHRONIZATION_DATETIME, lastMetaInfo.getLastSyncDateTime());
+        values.put(TripContract.MetaInfoEntry.COLUMN_NAME_LAST_SYNCHRONIZATION_DATETIME, lastMetaInfo.getLastSyncTimestampSeconds());
         values.put(TripContract.MetaInfoEntry.COLUMN_NAME_USER_ID, lastMetaInfo.getUserId());
 
         return values;
+    }
+
+    /**
+     * Convenience function to get the trips stored in the database.
+     *
+     * @param context context
+     * @return TripList of the user whose trips were stored using setTrips()
+     */
+    public static TripList getTrips(Context context) {
+        TripList tripList = new TripList();
+
+        TripDbHelper dbHelper = new TripDbHelper(context);
+        SQLiteDatabase db = dbHelper.getReadableDatabase();
+
+        Cursor cSelect = db.query(
+                TripContract.TripEntry.TABLE_NAME,
+                null, // projection: all
+                null, // columns for where: all
+                null, // values for where: all
+                null, // group by columns
+                null, // filter
+                null // order
+        );
+
+        while (cSelect.moveToNext()) {
+            Trip trip = createTripFromSelectCursor(cSelect);
+            tripList.add(trip);
+        }
+
+        cSelect.close();
+        dbHelper.close();
+
+        return tripList;
+    }
+
+    /**
+     * Convenience function to set the trips of the given user in the database / cache.
+     *
+     * This will immediatly update the meta info, too.
+     *
+     * @param context context
+     * @param tripList the user's trip list
+     * @param user the user (driver)
+     */
+    public static void setTrips(Context context, TripList tripList, User user) {
+        TripDbHelper dbHelper = new TripDbHelper(context);
+
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+        truncate(db, TripContract.TripEntry.TABLE_NAME);
+
+        for(Trip tripToBeInserted : tripList) {
+            db.insert(TripContract.TripEntry.TABLE_NAME, null, createContentValues(tripToBeInserted));
+        }
+
+        setLastMetaInfo(TripMetaInfo.forUserAndTimestamp(user), context);
+
+        db.close();
+        dbHelper.close();
     }
 }

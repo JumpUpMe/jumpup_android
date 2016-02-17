@@ -1,5 +1,7 @@
 package jumpup.imi.fb4.htw.de.jumpupandroid.portal.trip.database;
 
+import jumpup.imi.fb4.htw.de.jumpupandroid.entity.User;
+
 /**
  * Project: jumpup_android
  * <p/>
@@ -12,15 +14,17 @@ package jumpup.imi.fb4.htw.de.jumpupandroid.portal.trip.database;
  * @since 17.02.2016
  */
 public class TripMetaInfo {
-    protected long lastSyncDateTime;
+    private static final long SYNC_DELTA_MILLISECONDS = 60 * 60 * 1000; // 60 minutes
+
+    protected long lastSyncTimestampSeconds;
     protected long userId;
 
-    public void setLastSyncDateTime(long lastSyncDateTime) {
-        this.lastSyncDateTime = lastSyncDateTime;
+    public void setLastSyncTimestampSeconds(long lastSyncTimestampSeconds) {
+        this.lastSyncTimestampSeconds = lastSyncTimestampSeconds;
     }
 
-    public long getLastSyncDateTime() {
-        return lastSyncDateTime;
+    public long getLastSyncTimestampSeconds() {
+        return lastSyncTimestampSeconds;
     }
 
     public void setUserId(long userId) {
@@ -38,14 +42,14 @@ public class TripMetaInfo {
 
         TripMetaInfo that = (TripMetaInfo) o;
 
-        if (getLastSyncDateTime() != that.getLastSyncDateTime()) return false;
+        if (getLastSyncTimestampSeconds() != that.getLastSyncTimestampSeconds()) return false;
         return getUserId() == that.getUserId();
 
     }
 
     @Override
     public int hashCode() {
-        int result = (int) (getLastSyncDateTime() ^ (getLastSyncDateTime() >>> 32));
+        int result = (int) (getLastSyncTimestampSeconds() ^ (getLastSyncTimestampSeconds() >>> 32));
         result = 31 * result + (int) (getUserId() ^ (getUserId() >>> 32));
         return result;
     }
@@ -53,9 +57,31 @@ public class TripMetaInfo {
     @Override
     public String toString() {
         final StringBuilder sb = new StringBuilder("TripMetaInfo{");
-        sb.append("lastSyncDateTime=").append(lastSyncDateTime);
+        sb.append("lastSyncTimestampSeconds=").append(lastSyncTimestampSeconds);
         sb.append(", userId=").append(userId);
         sb.append('}');
         return sb.toString();
+    }
+
+    /**
+     * Check whether the given user's trip list needs to be synchronized.
+     * @param user
+     * @return
+     */
+    public boolean needsToBeSynchronized(User user) {
+        if (user.getIdentity().equals(getUserId()) || Math.abs(System.currentTimeMillis() / 1000 - getLastSyncTimestampSeconds()) > SYNC_DELTA_MILLISECONDS) {
+            return true;
+        }
+
+        return false;
+    }
+
+    public static TripMetaInfo forUserAndTimestamp(User user) {
+        TripMetaInfo tripMetaInfo = new TripMetaInfo();
+
+        tripMetaInfo.setUserId(user.getIdentity());
+        tripMetaInfo.setLastSyncTimestampSeconds(System.currentTimeMillis() / 1000);
+
+        return tripMetaInfo;
     }
 }

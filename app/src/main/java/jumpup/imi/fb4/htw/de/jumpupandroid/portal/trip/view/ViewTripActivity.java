@@ -117,11 +117,11 @@ public class ViewTripActivity extends PortalActivity implements Observer {
         }
 
         if (AppUtility.isSet(this.trip.getStartDateTime())) {
-            this.inputDepartureDateTime.setText(AppUtility.formatDate(this.trip.getStartDateTime()));
+            this.inputDepartureDateTime.setText(AppUtility.formatDateTime(this.trip.getStartDateTime()));
         }
 
         if (AppUtility.isSet(this.trip.getEndDateTime())) {
-            this.inputArrivalDateTime.setText(AppUtility.formatDate(this.trip.getEndDateTime()));
+            this.inputArrivalDateTime.setText(AppUtility.formatDateTime(this.trip.getEndDateTime()));
         }
 
         this.inputPrice.setText(AppUtility.formatPrice(this.trip.getPrice()));
