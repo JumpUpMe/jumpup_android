@@ -101,4 +101,8 @@
     <string name="preference_headers_1_summary">General preferences of the JumpUp app</string>
     <string name="portal_menu_preferences">Settings</string>
     <string name="activity_settings_title">Settings</string>
+    <string name="preferences_duration_value_hours_label">hours</string>
+    <string name="preferences_duration_value_minutes_label">minutes</string>
+    <string name="preferences_distance_value_metric_label">kilometers</string>
+    <string name="preferences_distance_value_imperial_label">miles</string>
 </resources>

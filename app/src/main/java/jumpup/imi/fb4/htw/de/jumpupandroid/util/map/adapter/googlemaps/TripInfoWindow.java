@@ -10,6 +10,7 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 
+import jumpup.imi.fb4.htw.de.jumpupandroid.App;
 import jumpup.imi.fb4.htw.de.jumpupandroid.R;
 import jumpup.imi.fb4.htw.de.jumpupandroid.portal.trip.entity.Trip;
 import jumpup.imi.fb4.htw.de.jumpupandroid.util.AppUtility;
@@ -65,11 +66,11 @@ public class TripInfoWindow implements GoogleMap.InfoWindowAdapter {
 
         if (null != trip) {
             return String.format(
-                    textView.getText().toString(),
+                    App.getStringFromResourceId(R.string.activity_view_trip_on_map_start_location_info_window),
                     AppUtility.formatDateTime(trip.getStartDateTime()),
                     Integer.toString(trip.getNumberOfSeats()),
-                    AppUtility.formatDuration(trip.getDurationSeconds()),
-                    AppUtility.formatDistance(trip.getDistanceMeters()),
+                    AppUtility.formatDuration(trip.getDurationSeconds(), true),
+                    AppUtility.formatDistance(trip.getDistanceMeters(), true),
                     AppUtility.formatDateTime(trip.getEndDateTime()));
         }
 

@@ -8,6 +8,8 @@ import java.util.Locale;
 import java.util.TimeZone;
 
 import jumpup.imi.fb4.htw.de.jumpupandroid.BuildConfig;
+import jumpup.imi.fb4.htw.de.jumpupandroid.util.preferences.values.DurationUnitTypePreference;
+import jumpup.imi.fb4.htw.de.jumpupandroid.util.preferences.PreferencesUtil;
 
 /**
  * Project: jumpup_android
@@ -144,20 +146,40 @@ public class AppUtility {
     /**
      * Get the duration in the preferred unit (default: hours).
      * @param durationSeconds long
-     * @return duration in hours
-     * TODO take care of preference
+     * @param appendUnitLabel boolean set to true to append a label indicating which unit is used (e.g. hours or minutes)
+     * @return duration in the users prefered duration unit
      */
-    public static String formatDuration(long durationSeconds) {
-        return DOUBLE_FORMATTER.format(durationSeconds / 60.0 / 60.0);
+    public static String formatDuration(long durationSeconds, boolean appendUnitLabel) {
+        String format = DOUBLE_FORMATTER.format(takeCareOfDurationPreference(durationSeconds));
+
+        if (appendUnitLabel) {
+            format += " " + PreferencesUtil.readDurationUnitTypPreference().getUnitLabel();
+        }
+
+        return format;
+    }
+
+    protected static double takeCareOfDurationPreference(long durationSeconds) {
+        return PreferencesUtil.readDurationUnitTypPreference().convertFromSeconds(durationSeconds);
     }
 
     /**
      * Get the distance in the preferred unit (default: kilometers).
      * @param distanceMeters long
-     * @return distance in kilometers
-     * TODO take care of preference
+     * @param appendUnitLabel boolean set to true to append a label indicating which unit is used (e.g. kilometers or miles)
+     * @return distance in the user's prefered distance unit
      */
-    public static String formatDistance(long distanceMeters) {
-        return DOUBLE_FORMATTER.format(distanceMeters / 1000.0);
+    public static String formatDistance(long distanceMeters, boolean appendUnitLabel) {
+        String format = DOUBLE_FORMATTER.format(takeCareOfDistancePreference(distanceMeters));
+
+        if (appendUnitLabel) {
+            format += " " + PreferencesUtil.readDistanceUnitTypPreference().getUnitLabel();
+        }
+
+        return format;
+    }
+
+    private static double takeCareOfDistancePreference(long distanceMeters) {
+        return PreferencesUtil.readDistanceUnitTypPreference().convertFromMeters(distanceMeters);
     }
 }

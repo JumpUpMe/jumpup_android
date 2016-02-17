@@ -9,10 +9,12 @@ import android.util.Log;
 
 import java.util.List;
 
+import jumpup.imi.fb4.htw.de.jumpupandroid.App;
 import jumpup.imi.fb4.htw.de.jumpupandroid.MainActivity;
 import jumpup.imi.fb4.htw.de.jumpupandroid.R;
 import jumpup.imi.fb4.htw.de.jumpupandroid.entity.User;
 import jumpup.imi.fb4.htw.de.jumpupandroid.util.activity.JumpUpActivity;
+import jumpup.imi.fb4.htw.de.jumpupandroid.util.preferences.PreferencesUtil;
 
 /**
  * Project: jumpup_android
@@ -71,7 +73,7 @@ public class SettingsActivity extends PreferenceActivity {
             super.onCreate(savedInstanceState);
 
             // make sure that default preferences are set correctly
-            PreferenceManager.setDefaultValues(getActivity(), R.xml.preferences, false);
+            PreferencesUtil.setDefaultPreferences(R.xml.preferences, false);
 
             // Load the preferences from the XML file
             addPreferencesFromResource(R.xml.preferences);
