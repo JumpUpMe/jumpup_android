@@ -468,25 +468,24 @@ public class Trip extends AbstractEntity {
 
     @Override
     public String toString() {
-        final StringBuilder sb = new StringBuilder("Trip{");
-        sb.append("startpoint='").append(startpoint).append('\'');
-        sb.append(", endpoint='").append(endpoint).append('\'');
-        sb.append(", latStartpoint=").append(latStartpoint);
-        sb.append(", longStartpoint=").append(longStartpoint);
-        sb.append(", latEndpoint=").append(latEndpoint);
-        sb.append(", longEndpoint=").append(longEndpoint);
-        sb.append(", startDateTime=").append(startDateTime);
-        sb.append(", endDateTime=").append(endDateTime);
-        sb.append(", price=").append(price);
-        sb.append(", overViewPath='").append(overViewPath).append('\'');
-        sb.append(", viaWaypoints='").append(viaWaypoints).append('\'');
-        sb.append(", numberOfSeats=").append(numberOfSeats);
-        sb.append(", vehicle=").append(vehicle);
-        sb.append(", driver=").append(driver);
-        sb.append(", cancelationDateTime=").append(cancelationDateTime);
-        sb.append(", distanceMeters=").append(distanceMeters);
-        sb.append(", durationSeconds=").append(durationSeconds);
-        sb.append('}');
-        return sb.toString();
+        return "Trip{" +
+                "startpoint='" + startpoint + '\'' +
+                ", endpoint='" + endpoint + '\'' +
+                ", latStartpoint=" + latStartpoint +
+                ", longStartpoint=" + longStartpoint +
+                ", latEndpoint=" + latEndpoint +
+                ", longEndpoint=" + longEndpoint +
+                ", startDateTime=" + startDateTime +
+                ", endDateTime=" + endDateTime +
+                ", price=" + price +
+                ", overViewPath='" + overViewPath + '\'' +
+                ", viaWaypoints='" + viaWaypoints + '\'' +
+                ", numberOfSeats=" + numberOfSeats +
+                ", vehicle=" + vehicle +
+                ", driver=" + driver +
+                ", cancelationDateTime=" + cancelationDateTime +
+                ", distanceMeters=" + distanceMeters +
+                ", durationSeconds=" + durationSeconds +
+                "} " + super.toString();
     }
 }

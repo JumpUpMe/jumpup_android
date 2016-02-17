@@ -1,5 +1,6 @@
 package jumpup.imi.fb4.htw.de.jumpupandroid.portal.trip.database;
 
+import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.support.test.runner.AndroidJUnit4;
@@ -11,6 +12,9 @@ import org.junit.runner.RunWith;
 
 import java.util.HashMap;
 import java.util.Map;
+
+import jumpup.imi.fb4.htw.de.jumpupandroid.lib.TestObjects;
+import jumpup.imi.fb4.htw.de.jumpupandroid.portal.trip.entity.Trip;
 
 /**
  * Project: jumpup_android
@@ -31,6 +35,8 @@ public class TripDbTest extends AndroidTestCase {
     private Map<String, Boolean> expectedVehicleColumns = new HashMap<>();
     private Map<String, Boolean> expectedDriverColumns = new HashMap<>();
     private Map<String, Boolean> expectedMetaInfoColumns = new HashMap<>();
+    private long tripInsertionId;
+    private Trip insertTrip;
 
     @Override
     protected void setUp() throws Exception {
@@ -90,13 +96,14 @@ public class TripDbTest extends AndroidTestCase {
         super.tearDown();
 
         this.db = null;
+        this.insertTrip = null;
     }
 
     private void cleanDatabase() {
         mContext.deleteDatabase(TripDbHelper.DATABASE_NAME);
     }
 
-
+    @Test
     public void testCreate() {
         givenAWriteableDb();
 
@@ -164,5 +171,43 @@ public class TripDbTest extends AndroidTestCase {
                     "Error: column '" + expectedColumnName + "' isn't contained in the table ",
                     expectedTripColumns.get(expectedColumnName));
         }
+    }
+
+    @Test
+    public void testTripTable() {
+        this.insertTrip = TestObjects.newTestTripFromBerlinToCologne();
+
+        givenATripInsertion();
+
+        thenTheDataShouldHaveBeenInserted();
+    }
+
+    private void givenATripInsertion() {
+        this.db = new TripDbHelper(mContext).getWritableDatabase();
+
+        ContentValues testValues = TripDbHelper.createContentValues(insertTrip);
+
+        this.tripInsertionId = db.insert(TripContract.TripEntry.TABLE_NAME, null, testValues);
+    }
+
+    private void thenTheDataShouldHaveBeenInserted() {
+        assertTrue("Error: the row wasn't inserted", tripInsertionId != -1);
+
+        Cursor cSelect = db.query(
+                TripContract.TripEntry.TABLE_NAME,
+                null, // projection: all
+                null, // columns for where: all
+                null, // values for where: all
+                null, // group by columns
+                null, // filter
+                null // order
+        );
+
+        assertTrue("Error: no rows returned from trip query", cSelect.moveToFirst());
+
+        Trip tripFromQuery = TripDbHelper.createTripFromSelectCursor(cSelect);
+
+        assertEquals("Error: trip loaded from database should be equal to inserted one",
+                insertTrip, tripFromQuery);
     }
 }
