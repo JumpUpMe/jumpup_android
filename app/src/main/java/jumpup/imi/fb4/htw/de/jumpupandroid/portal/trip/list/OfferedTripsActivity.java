@@ -36,23 +36,35 @@ public class OfferedTripsActivity  extends PortalActivity implements Observer {
     private TripsListAdapter tripsListAdapter;
     private ProgressBar progressBar;
     private TripList offeredTrips;
+    private Button btnRefresh;
+    private Button btnViewOnMap;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_offered_trips);
 
+        this.progressBar = (ProgressBar) this.findViewById(R.id.progressBar);
         this.initializeListViewAdapter();
         this.registerButton();
     }
 
     private void registerButton() {
-        Button btnViewOnMap = (Button) findViewById(R.id.btnViewOfferedTripsOnMap);
+        this.btnViewOnMap = (Button) findViewById(R.id.btnViewOfferedTripsOnMap);
 
         btnViewOnMap.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 navigateToOfferedTripsMap(offeredTrips);
+            }
+        });
+
+        this.btnRefresh = (Button) findViewById(R.id.btnRefresh);
+
+        btnRefresh.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startTask(true);
             }
         });
     }
@@ -61,14 +73,21 @@ public class OfferedTripsActivity  extends PortalActivity implements Observer {
     protected void onStart() {
         super.onStart();
 
-        this.displayProgressBar();
-        this.startTask();
+        this.startTask(false);
     }
 
-    private void displayProgressBar() {
-        this.progressBar = new ProgressBar(this);
+    private void startProgress() {
+        btnRefresh.setEnabled(false);
+        btnViewOnMap.setEnabled(false);
         progressBar.setIndeterminate(true);
-        tripsListView.setEmptyView(progressBar);
+        progressBar.setVisibility(View.VISIBLE);
+    }
+
+    private void stopProgress() {
+        btnRefresh.setEnabled(true);
+        btnViewOnMap.setEnabled(true);
+        progressBar.setIndeterminate(false);
+        progressBar.setVisibility(View.INVISIBLE);
     }
 
     private void initializeListViewAdapter() {
@@ -88,9 +107,11 @@ public class OfferedTripsActivity  extends PortalActivity implements Observer {
         });
     }
 
-    private void startTask() {
+    private void startTask(boolean forceReload) {
         if (getTask() == null || getTask().getStatus().equals(AsyncTask.Status.FINISHED)) {
+            this.startProgress();
             resetTask();
+            this.task.setForceReload(forceReload);
             this.task.execute(this.user);
         }
     }
@@ -115,6 +136,7 @@ public class OfferedTripsActivity  extends PortalActivity implements Observer {
     }
 
     private void handleOfferedTripsResult() {
+       stopProgress();
        if (this.task.isHasError()) {
             Log.d(TAG, "handleOfferedTripsResult(): error");
             this.showErrorNotification(this.getResources().getString(this.task.getToastMessageId()));

@@ -25,11 +25,19 @@
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:textStyle="bold" />
 
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/activity_offered_trips_button_label_refresh"
+            android:id="@+id/btnRefresh"
+            android:layout_gravity="center_horizontal" />
+
         <ListView
             android:layout_width="match_parent"
-            android:layout_height="387dp"
+            android:layout_height="348dp"
             android:id="@+id/listOfferedTrips"
-            android:layout_gravity="center_horizontal" />
+            android:layout_gravity="center_horizontal"
+            android:scrollIndicators="left" />
 
         <Button
             android:layout_width="wrap_content"
@@ -38,5 +46,12 @@
             android:id="@+id/btnViewOfferedTripsOnMap"
             android:layout_gravity="center_horizontal" />
 
+        <ProgressBar
+            style="?android:attr/progressBarStyleLarge"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/progressBar"
+            android:layout_gravity="center_horizontal"
+            android:visibility="invisible" />
     </LinearLayout>
 </RelativeLayout>

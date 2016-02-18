@@ -36,6 +36,7 @@ public class OfferedTripsTask extends ObservableAsyncTask<User, Void, Void> {
     private String validationFailureField;
     private String[] validationFailureErrorMessages;
     private TripList offeredTrips;
+    private boolean forceReload = false;
 
     public OfferedTripsTask(Observer observer) {
         super(observer);
@@ -81,7 +82,7 @@ public class OfferedTripsTask extends ObservableAsyncTask<User, Void, Void> {
     private void loadUsersOfferedTrips() {
         TripMetaInfo dbTripMetaInfo = TripDbHelper.getLastMetaInfo(App.getGlobalContext());
 
-        if (null == dbTripMetaInfo || dbTripMetaInfo.needsToBeSynchronized(user)) {
+        if (forceReload || null == dbTripMetaInfo || dbTripMetaInfo.needsToBeSynchronized(user)) {
             Log.d(TAG, "loadUsersOfferedTrips(): will load via webservice");
             this.loadUsersOfferedTripsFromWebService();
         } else {
@@ -133,5 +134,13 @@ public class OfferedTripsTask extends ObservableAsyncTask<User, Void, Void> {
 
     public TripList getOfferedTrips() {
         return offeredTrips;
+    }
+
+    /**
+     * Set wether to force the loading of trips from the web service.
+     * @param forceReload boolean
+     */
+    public void setForceReload(boolean forceReload) {
+        this.forceReload = forceReload;
     }
 }

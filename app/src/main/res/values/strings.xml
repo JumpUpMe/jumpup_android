@@ -105,4 +105,5 @@
     <string name="preferences_duration_value_minutes_label">minutes</string>
     <string name="preferences_distance_value_metric_label">kilometers</string>
     <string name="preferences_distance_value_imperial_label">miles</string>
+    <string name="activity_offered_trips_button_label_refresh">Refresh</string>
 </resources>

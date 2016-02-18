@@ -1,5 +1,7 @@
 package jumpup.imi.fb4.htw.de.jumpupandroid.portal.trip.database;
 
+import android.util.Log;
+
 import jumpup.imi.fb4.htw.de.jumpupandroid.entity.User;
 
 /**
@@ -14,7 +16,8 @@ import jumpup.imi.fb4.htw.de.jumpupandroid.entity.User;
  * @since 17.02.2016
  */
 public class TripMetaInfo {
-    private static final long SYNC_DELTA_MILLISECONDS = 60 * 60 * 1000; // 60 minutes
+    private static final long SYNC_DELTA_SECONDS = 60 * 60; // 60 minutes
+    private static final String TAG = TripMetaInfo.class.getName();
 
     protected long lastSyncTimestampSeconds;
     protected long userId;
@@ -69,10 +72,15 @@ public class TripMetaInfo {
      * @return
      */
     public boolean needsToBeSynchronized(User user) {
-        if (user.getIdentity().equals(getUserId()) || Math.abs(System.currentTimeMillis() / 1000 - getLastSyncTimestampSeconds()) > SYNC_DELTA_MILLISECONDS) {
+        long syncDiff = Math.abs(System.currentTimeMillis() / 1000 - getLastSyncTimestampSeconds());
+
+        Log.d(TAG, "needsToBeSynchronized(): syncDiff (seconds) is " + syncDiff);
+        if (!user.getIdentity().equals(getUserId()) || syncDiff > SYNC_DELTA_SECONDS) {
+            Log.d(TAG, "needsToBeSynchronized(): return true");
             return true;
         }
 
+        Log.d(TAG, "needsToBeSynchronized(): return false");
         return false;
     }
 
