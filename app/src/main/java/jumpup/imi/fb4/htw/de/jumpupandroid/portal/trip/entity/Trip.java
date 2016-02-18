@@ -478,8 +478,8 @@ public class Trip extends AbstractEntity {
                 ", startDateTime=" + startDateTime +
                 ", endDateTime=" + endDateTime +
                 ", price=" + price +
-                ", overViewPath='" + overViewPath + '\'' +
-                ", viaWaypoints='" + viaWaypoints + '\'' +
+                ", overViewPath='...'" +
+                ", viaWaypoints='...'" +
                 ", numberOfSeats=" + numberOfSeats +
                 ", vehicle=" + vehicle +
                 ", driver=" + driver +

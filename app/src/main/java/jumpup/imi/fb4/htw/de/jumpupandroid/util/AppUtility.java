@@ -73,27 +73,26 @@ public class AppUtility {
         return getDateTimeFormatterWithUsersLocale().format(new Date(timestampSeconds * 1000));
     }
 
-
-    public static String formatDateToUTC(Long date) {
+    public static String formatDateToUTC(Long timestampSeconds) {
         SimpleDateFormat dateFormat = new SimpleDateFormat(DATE_FORMAT, Locale.getDefault());
         dateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
 
-        return dateFormat.format(new Date(date));
+        return dateFormat.format(new Date(timestampSeconds * 1000));
     }
 
     /**
-     * Take a dateTime string such as dd.MM.yyyy and convert it to a UTC timestamp (Long).
+     * Take a dateTime string such as dd.MM.yyyy and convert it to a UTC timestamp (seconds).
      *
      * JumpUp Web services should always get UTC timestamps.
      * @param dateTime string, e.g. dd.MM.yyyy
-     * @return long UTC timestamp
+     * @return long UTC timestamp in seconds
      */
     public static Long getUTCTimestamp(String dateTime) {
         SimpleDateFormat dateFormat = new SimpleDateFormat(DATE_FORMAT, Locale.getDefault());
         dateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
 
         try {
-            return dateFormat.parse(dateTime).getTime();
+            return dateFormat.parse(dateTime).getTime() / 1000;
         } catch (ParseException e) {
             return null;
         }

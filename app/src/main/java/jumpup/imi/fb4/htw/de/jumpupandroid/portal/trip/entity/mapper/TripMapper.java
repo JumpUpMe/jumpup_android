@@ -143,8 +143,6 @@ public class TripMapper extends JsonMapper<Trip> {
         marshalledTrip.put(Trip.FIELD_NAME_START_DATETIME, entity.getStartDateTime());
         marshalledTrip.put(Trip.FIELD_NAME_END_DATETIME, entity.getEndDateTime());
         marshalledTrip.put(Trip.FIELD_NAME_PRICE, entity.getPrice());
-        marshalledTrip.put(Trip.FIELD_NAME_OVERVIEW_PATH, entity.getOverViewPath());
-        marshalledTrip.put(Trip.FIELD_NAME_VIA_WAYPOINTS, entity.getViaWaypoints());
         marshalledTrip.put(Trip.FIELD_NAME_NUMBER_OF_SEATS, entity.getNumberOfSeats());
         // TODO put vehicle when present
         putAllowNull(Trip.FIELD_NAME_VEHICLE, entity.getVehicle(), marshalledTrip);
@@ -152,6 +150,8 @@ public class TripMapper extends JsonMapper<Trip> {
         putAllowNull(Trip.FIELD_NAME_CANCELATION_DATETIME, entity.getCancelationDateTime(), marshalledTrip);
         marshalledTrip.put(Trip.FIELD_NAME_DISTANCE_METERS, entity.getDistanceMeters());
         marshalledTrip.put(Trip.FIELD_NAME_DURATION_SECONDS, entity.getDurationSeconds());
+        marshalledTrip.put(Trip.FIELD_NAME_OVERVIEW_PATH, entity.getOverViewPath());
+        marshalledTrip.put(Trip.FIELD_NAME_VIA_WAYPOINTS, entity.getViaWaypoints());
 
         return marshalledTrip.toString();
     }
