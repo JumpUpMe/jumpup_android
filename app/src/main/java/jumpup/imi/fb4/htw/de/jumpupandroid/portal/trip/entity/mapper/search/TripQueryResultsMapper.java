@@ -104,6 +104,7 @@ public class TripQueryResultsMapper extends JsonMapper<TripQueryResults> {
 
     @Override
     public String marshalEntity(TripQueryResults entity) throws JSONException {
-        return null;
+        throw new UnsupportedOperationException("TripQueryResults is not supposed to be marshalled into a string representation");
+
     }
 }

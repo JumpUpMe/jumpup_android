@@ -1,5 +1,8 @@
 package jumpup.imi.fb4.htw.de.jumpupandroid.lib;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import jumpup.imi.fb4.htw.de.jumpupandroid.entity.TripSearchCriteria;
 import jumpup.imi.fb4.htw.de.jumpupandroid.entity.User;
 import jumpup.imi.fb4.htw.de.jumpupandroid.portal.trip.entity.Trip;
@@ -7,6 +10,7 @@ import jumpup.imi.fb4.htw.de.jumpupandroid.portal.trip.entity.TripForPassenger;
 import jumpup.imi.fb4.htw.de.jumpupandroid.portal.trip.entity.TripList;
 import jumpup.imi.fb4.htw.de.jumpupandroid.portal.trip.entity.Vehicle;
 import jumpup.imi.fb4.htw.de.jumpupandroid.portal.trip.entity.search.SingleTripQueryResult;
+import jumpup.imi.fb4.htw.de.jumpupandroid.portal.trip.entity.search.TripQueryResults;
 
 /**
  * Project: jumpup_android
@@ -215,5 +219,16 @@ public class TestObjects {
         trip.setDistanceFromPassengersDestination(26.40829837253887);
 
         return trip;
+    }
+
+    public static TripQueryResults newTestTripQueryResultDirectTripFound() {
+        TripQueryResults results = new TripQueryResults();
+
+        List<SingleTripQueryResult> singleTripQueryResultList = new ArrayList<>();
+        singleTripQueryResultList.add(newTestSingleTripQueryResult());
+
+        results.setTrips(singleTripQueryResultList);
+
+        return results;
     }
 }
