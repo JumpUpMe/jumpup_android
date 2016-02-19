@@ -12,6 +12,7 @@ import java.net.URL;
 
 import jumpup.imi.fb4.htw.de.jumpupandroid.R;
 import jumpup.imi.fb4.htw.de.jumpupandroid.entity.TripSearchCriteria;
+import jumpup.imi.fb4.htw.de.jumpupandroid.portal.trip.entity.mapper.search.TripSearchCriteriaMapper;
 import jumpup.imi.fb4.htw.de.jumpupandroid.portal.trip.entity.search.TripQueryResults;
 import jumpup.imi.fb4.htw.de.jumpupandroid.util.webservice.exception.ErrorResponseException;
 import jumpup.imi.fb4.htw.de.jumpupandroid.util.webservice.exception.TechnicalErrorException;
@@ -50,7 +51,11 @@ public class TripSearchRequestImpl extends JumpUpRequest implements TripSearchRe
 
     @Override
     protected JsonMapper getResponseMapper() {
-        return MapperFactory.newTripListMapper();
+        return MapperFactory.newTripQueryResultsMapper();
+    }
+
+    protected TripSearchCriteriaMapper getTripSearchCriteriaMapper() {
+        return MapperFactory.newTripSearchCriteriaMapper();
     }
 
     @Override
@@ -66,7 +71,7 @@ public class TripSearchRequestImpl extends JumpUpRequest implements TripSearchRe
             URL searchForTrips = new URL(this.getUrl());
 
             try {
-                urlConnection = buildPostConnection(searchForTrips, getResponseMapper().marshalEntity(tripSearchCriteria));
+                urlConnection = buildPostConnection(searchForTrips, getTripSearchCriteriaMapper().marshalEntity(tripSearchCriteria));
                 urlConnection.connect();
 
                 String response = responseReader.read(urlConnection);

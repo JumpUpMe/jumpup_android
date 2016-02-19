@@ -14,6 +14,8 @@ import jumpup.imi.fb4.htw.de.jumpupandroid.portal.trip.list.request.TripListRequ
 import jumpup.imi.fb4.htw.de.jumpupandroid.portal.trip.list.request.TripListRequestImpl;
 import jumpup.imi.fb4.htw.de.jumpupandroid.portal.trip.search.SearchTripsActivity;
 import jumpup.imi.fb4.htw.de.jumpupandroid.portal.trip.search.SearchTripsTask;
+import jumpup.imi.fb4.htw.de.jumpupandroid.portal.trip.search.request.TripSearchRequest;
+import jumpup.imi.fb4.htw.de.jumpupandroid.portal.trip.search.request.TripSearchRequestImpl;
 import jumpup.imi.fb4.htw.de.jumpupandroid.portal.trip.view.ViewTripActivity;
 
 /**
@@ -56,5 +58,9 @@ public class TripFactory {
         task.getObservable().addObserver(observer);
 
         return task;
+    }
+
+    public static TripSearchRequest newTripSearchRequest() {
+        return new TripSearchRequestImpl();
     }
 }

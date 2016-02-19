@@ -9,6 +9,18 @@ package jumpup.imi.fb4.htw.de.jumpupandroid.entity;
  * @since 19.02.2016
  */
 public class TripSearchCriteria extends AbstractEntity {
+    public static final String FIELD_NAME_START_POINT = "startPoint";
+    public static final String FIELD_NAME_LAT_START_POINT = "latStartPoint";
+    public static final String FIELD_NAME_LONG_START_POINT = "longStartPoint";
+    public static final String FIELD_NAME_LAT_ENDPOINT = "latEndPoint";
+    public static final String FIELD_NAME_LONG_ENDPOINT = "longEndPoint";
+    public static final String FIELD_NAME_END_POINT = "endPoint";
+    public static final String FIELD_NAME_DATE_FROM = "dateFrom";
+    public static final String FIELD_NAME_DATE_TO = "dateTo";
+    public static final String FIELD_NAME_PRICE_FROM = "priceFrom";
+    public static final String FIELD_NAME_PRICE_TO = "priceTo";
+    public static final String FIELD_NAME_MAX_DISTANCE = "maxDistance";
+
     protected String startPoint;
     protected Double latStartPoint;
     protected Double longStartPoint;
