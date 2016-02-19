@@ -15,4 +15,16 @@ public class TestData {
     public static String USERNAME = "androiddeveloper";
     public static String PASSWORD = "$test1234";
 
+    /*
+     * Search trips
+     */
+    public static String SEARCH_TRIPS_START_LOCATION = "Gießen, Deutschland";
+    public static String SEARCH_TRIPS_END_LOCATION = "Trier, Deutschland";
+    public static String SEARCH_TRIPS_DATE_FROM = "01.02.2016 10:00";
+    public static String SEARCH_TRIPS_DATE_TO = "01.04.2016 10:00";
+    public static String SEARCH_TRIPS_PRICE_FROM = "0";
+    public static String SEARCH_TRIPS_PRICE_TO = "100";
+    public static String SEARCH_TRIPS_DISTANCE = "30";
+
+
 }

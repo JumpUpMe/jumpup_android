@@ -117,4 +117,8 @@
     <string name="activity_search_trips_geocoding_error">We couldn\'t determine the location you entered. Please fix it and try again.</string>
     <string name="activity_search_trips_title">Search trips</string>
     <string name="jumpup_request_error_trip_search_failed">The search for trips failed. Please try again or contact the customer care team.</string>
+    <string name="activity_search_trips_no_result">We didn\'t find any trip matching your criteria. Please try to be less restrictive.</string>
+    <string name="activity_search_trips_overlapping_partial_trips_found">We didn\'t find any direct trips, but found trips of different drivers that cross each other. You can book parts of the trips and combine them to get to your destination.</string>
+    <string name="activity_search_trips_direct_trips_found">We found direct trips that you can book.</string>
+    <string name="activity_search_trips_max_distance">Max distance</string>
 </resources>

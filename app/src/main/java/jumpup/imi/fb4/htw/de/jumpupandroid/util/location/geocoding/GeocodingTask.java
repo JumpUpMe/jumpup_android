@@ -36,7 +36,7 @@ public class GeocodingTask extends ObservableAsyncTask<String, Void, Void> {
     @Override
     protected Void doInBackground(String... locationStrings) {
         if (!this.validate(locationStrings)) {
-            Log.e(TAG, "doInBackground(): invalid parameters given. Make sure to hand in a single user instance.");
+            Log.e(TAG, "doInBackground(): invalid parameters given. Make sure to hand in a single string instance.");
         } else {
             this.searchGeoLocation();
         }
@@ -55,6 +55,8 @@ public class GeocodingTask extends ObservableAsyncTask<String, Void, Void> {
 
     private void searchGeoLocation() {
         this.resolvedAdresses = geocodingAdapter.resolveLocationName(this.locationString);
+
+        Log.d(TAG, "searchGeoLocation(): geocoding results for input " + locationString + ": \n" + this.resolvedAdresses);
 
         if (0 != this.resolvedAdresses.size()) {
             this.hasError = false;

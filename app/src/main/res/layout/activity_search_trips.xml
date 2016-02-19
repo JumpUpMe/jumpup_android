@@ -14,69 +14,33 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:text="@string/activity_search_trips_start_location"
-            android:id="@+id/textView2" />
-
         <EditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/edStartLocation"
             android:layout_gravity="right"
-            android:enabled="false" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:text="@string/activity_search_trips_end_location"
-            android:id="@+id/textView3" />
+            android:text="@string/activity_search_trips_start_location" />
 
         <EditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/edEndLocation"
             android:layout_gravity="right"
-            android:enabled="false" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:text="@string/activity_search_trips_date_from"
-            android:id="@+id/textView4" />
+            android:text="@string/activity_search_trips_end_location" />
 
         <EditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/edDateFrom"
             android:layout_gravity="right"
-            android:inputType="datetime" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:text="@string/activity_search_trips_date_to"
-            android:id="@+id/textView5"
-            />
+            android:text="@string/activity_search_trips_date_from"/>
 
         <EditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/edDateTo"
-            android:inputType="datetime"
+            android:text="@string/activity_search_trips_date_to"
             android:layout_gravity="center_horizontal" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:text="@string/activity_search_trips_price_from"
-            android:id="@+id/textView6" />
 
         <EditText
             android:layout_width="match_parent"
@@ -84,14 +48,8 @@
             android:inputType="numberDecimal"
             android:ems="10"
             android:id="@+id/edPriceFrom"
+            android:text="@string/activity_search_trips_price_from"
             android:layout_gravity="center_horizontal" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:text="@string/activity_search_trips_price_to"
-            android:id="@+id/textView7" />
 
         <EditText
             android:layout_width="match_parent"
@@ -99,20 +57,15 @@
             android:inputType="numberSigned"
             android:ems="10"
             android:id="@+id/edPriceTo"
+            android:text="@string/activity_search_trips_price_to"
             android:layout_gravity="right" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="New Text"
-            android:id="@+id/textView8"
-            android:layout_gravity="center_horizontal" />
 
         <EditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/edMaxDistance"
             android:inputType="numberDecimal"
+            android:text="@string/activity_search_trips_max_distance"
             android:layout_gravity="center_horizontal" />
 
         <Button

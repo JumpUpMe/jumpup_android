@@ -17,6 +17,11 @@ import jumpup.imi.fb4.htw.de.jumpupandroid.entity.TripSearchCriteria;
 import jumpup.imi.fb4.htw.de.jumpupandroid.portal.PortalActivity;
 import jumpup.imi.fb4.htw.de.jumpupandroid.portal.trip.TripFactory;
 import jumpup.imi.fb4.htw.de.jumpupandroid.portal.trip.edit.EditTripTask;
+import jumpup.imi.fb4.htw.de.jumpupandroid.portal.trip.entity.search.OverlappingPartialTripQueryResult;
+import jumpup.imi.fb4.htw.de.jumpupandroid.portal.trip.entity.search.TripQueryNoResults;
+import jumpup.imi.fb4.htw.de.jumpupandroid.portal.trip.entity.search.TripQueryResults;
+import jumpup.imi.fb4.htw.de.jumpupandroid.util.AppUtility;
+import jumpup.imi.fb4.htw.de.jumpupandroid.util.development.TestData;
 import jumpup.imi.fb4.htw.de.jumpupandroid.util.location.geocoding.GeocodingFactory;
 import jumpup.imi.fb4.htw.de.jumpupandroid.util.location.geocoding.GeocodingTask;
 
@@ -51,7 +56,23 @@ public class SearchTripsActivity extends PortalActivity implements Observer {
 
         this.bindInputElements();
 
+        if (AppUtility.isDevelopmentMode()) {
+            this.fillDevelopmentTestData();
+        } else {
+            this.addClickListenersToEmptyInputFieldsOnClick();
+        }
+
         this.registerButton();
+    }
+
+    private void fillDevelopmentTestData() {
+        this.inputStartLocation.setText(TestData.SEARCH_TRIPS_START_LOCATION);
+        this.inputEndLocation.setText(TestData.SEARCH_TRIPS_END_LOCATION);
+        this.inputDateFrom.setText(TestData.SEARCH_TRIPS_DATE_FROM);
+        this.inputDateTo.setText(TestData.SEARCH_TRIPS_DATE_TO);
+        this.inputPriceFrom.setText(TestData.SEARCH_TRIPS_PRICE_FROM);
+        this.inputPriceTo.setText(TestData.SEARCH_TRIPS_PRICE_TO);
+        this.inputMaxDistance.setText(TestData.SEARCH_TRIPS_DISTANCE);
     }
 
     private void bindInputElements() {
@@ -68,6 +89,17 @@ public class SearchTripsActivity extends PortalActivity implements Observer {
 
         this.progressBar = (ProgressBar) this.findViewById(R.id.progressBar);
     }
+
+    private void addClickListenersToEmptyInputFieldsOnClick() {
+        addClickListenerToEmptyInputFieldsOnClick(inputStartLocation);
+        addClickListenerToEmptyInputFieldsOnClick(inputEndLocation);
+        addClickListenerToEmptyInputFieldsOnClick(inputDateFrom);
+        addClickListenerToEmptyInputFieldsOnClick(inputDateTo);
+        addClickListenerToEmptyInputFieldsOnClick(inputPriceFrom);
+        addClickListenerToEmptyInputFieldsOnClick(inputPriceTo);
+        addClickListenerToEmptyInputFieldsOnClick(inputMaxDistance);
+    }
+
 
     private void registerButton() {
         this.btnLookForTrips = (Button) this.findViewById(R.id.btnSearchTrips);
@@ -136,7 +168,7 @@ public class SearchTripsActivity extends PortalActivity implements Observer {
     @Override
     protected AsyncTask getTask() {
         // determine which task is currently active since it needs to be stopped
-        if (geocodingTask.getStatus().equals(AsyncTask.Status.RUNNING)) {
+        if (null != geocodingTask && geocodingTask.getStatus().equals(AsyncTask.Status.RUNNING)) {
             return geocodingTask;
         }
 
@@ -173,15 +205,26 @@ public class SearchTripsActivity extends PortalActivity implements Observer {
     }
 
     private void handleGeocodingResult() {
-        if (geocodingTask.isHasError()) {
-            stopProgress();
-            showErrorNotification(getString(R.string.activity_search_trips_geocoding_error));
-        } else {
-            if (geocodingTask.getInputLocationString().equals(this.inputStartLocation.toString())) {
+        if (geocodingTask.getInputLocationString().equals(this.inputStartLocation.getText().toString())) {
+            if (geocodingTask.isHasError()) {
+                String[] validationMessages = {getString(R.string.activity_search_trips_geocoding_error)};
+
+                showValidationFailureNotification("startLocation", validationMessages);
+
+                stopProgress();
+            } else {
                 // we determined the start location
                 enhanceTripSearchCriteriaByStartLocationGeocoding();
                 // now we need to determine the end location as well
                 startGeocodingForEndLocation();
+            }
+        } else {
+            if (geocodingTask.isHasError()) {
+                String[] validationMessages = {getString(R.string.activity_search_trips_geocoding_error)};
+
+                showValidationFailureNotification("endLocation", validationMessages);
+
+                stopProgress();
             } else {
                 // we determined the end location
                 enhanceTripSearchCriteriaByEndLocationGeocoding();
@@ -218,10 +261,42 @@ public class SearchTripsActivity extends PortalActivity implements Observer {
             this.showErrorNotification(this.getResources().getString(this.searchTripsTask.getToastMessageId()));
         } else {
             Log.d(TAG, "handleSearchTripsResult(): success");
-            this.showSuccessNotification(this.getResources().getString(R.string.activity_view_trip_edit_success));
-            navigateToShowMyTrips();
+            this.handleSearchResultType();
         }
     }
+
+    private void handleSearchResultType() {
+        TripQueryResults tripQueryResults = this.searchTripsTask.getTripQueryResults();
+
+        if (tripQueryResults instanceof TripQueryNoResults) {
+            handleNoSearchResultsType();
+        } else if (tripQueryResults instanceof OverlappingPartialTripQueryResult) {
+            handleOverlappingPartialTripResultsType();
+        } else {
+            handleDirectTripsResultType();
+        }
+    }
+
+    private void handleNoSearchResultsType() {
+        Log.i(TAG, "handleNoSearchResultsType()");
+
+        stopProgress();
+        this.showErrorNotification(this.getString(R.string.activity_search_trips_no_result));
+    }
+
+    private void handleOverlappingPartialTripResultsType() {
+        Log.i(TAG, "handleOverlappingPartialTripResultsType()");
+
+        this.showSuccessNotification(this.getString(R.string.activity_search_trips_overlapping_partial_trips_found));
+    }
+
+
+    private void handleDirectTripsResultType() {
+        Log.i(TAG, "handleDirectTripsResultType()");
+
+        this.showSuccessNotification(this.getString(R.string.activity_search_trips_direct_trips_found));
+    }
+
 
     private void showValidationFailure() {
         this.showValidationFailureNotification(this.searchTripsTask.getValidationFailureField(), this.searchTripsTask.getValidationFailureErrorMessages());
