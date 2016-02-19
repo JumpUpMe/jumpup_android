@@ -5,6 +5,7 @@ import android.os.Parcelable;
 
 import jumpup.imi.fb4.htw.de.jumpupandroid.entity.AbstractEntity;
 import jumpup.imi.fb4.htw.de.jumpupandroid.entity.User;
+import jumpup.imi.fb4.htw.de.jumpupandroid.util.AppUtility;
 
 /**
  * Project: jumpup_android
@@ -62,13 +63,6 @@ public class Trip extends AbstractEntity {
     protected Long cancelationDateTime;
     protected long distanceMeters;
     protected long durationSeconds;
-
-    /**
-     * Fields for Trip search responses. They shouldn't be serialized when sending to web service.
-     */
-    protected String bookingUrl;
-    protected double distanceFromPassengersLocation;
-    protected double distanceFromPassengersDestination;
 
     public Trip()
     {
@@ -401,44 +395,20 @@ public class Trip extends AbstractEntity {
         this.durationSeconds = durationSeconds;
     }
 
-    /**
-     * @return the distanceFromPassengersLocation
-     */
-    public double getDistanceFromPassengersLocation()
-    {
-        return distanceFromPassengersLocation;
-    }
-
-    /**
-     * @param d the distanceFromPassengersLocation to set
-     */
-    public void setDistanceFromPassengersLocation(
-            double d)
-    {
-        this.distanceFromPassengersLocation = d;
-    }
-
-    /**
-     * @return the distanceFromPassengersDestination
-     */
-    public double getDistanceFromPassengersDestination()
-    {
-        return distanceFromPassengersDestination;
-    }
-
-    /**
-     * @param d the distanceFromPassengersDestination to set
-     */
-    public void setDistanceFromPassengersDestination(
-            double d)
-    {
-        this.distanceFromPassengersDestination = d;
-    }
-
     @Override
     public int describeContents() {
         // TODO
         return 0;
+    }
+
+    public void setStartDateTime(String s) {
+        // TODO clarify whether to store datetimes as int or formatted datetime string
+        this.setStartDateTime(AppUtility.getUTCTimestamp(s));
+    }
+
+    public void setEndDateTime(String s) {
+        // TODO clarify whether to store datetimes as int or formatted datetime string
+        this.setEndDateTime(AppUtility.getUTCTimestamp(s));
     }
 
     @Override
@@ -509,24 +479,25 @@ public class Trip extends AbstractEntity {
 
     @Override
     public String toString() {
-        return "Trip{" +
-                "startpoint='" + startpoint + '\'' +
-                ", endpoint='" + endpoint + '\'' +
-                ", latStartpoint=" + latStartpoint +
-                ", longStartpoint=" + longStartpoint +
-                ", latEndpoint=" + latEndpoint +
-                ", longEndpoint=" + longEndpoint +
-                ", startDateTime=" + startDateTime +
-                ", endDateTime=" + endDateTime +
-                ", price=" + price +
-                ", overViewPath='...'" +
-                ", viaWaypoints='...'" +
-                ", numberOfSeats=" + numberOfSeats +
-                ", vehicle=" + vehicle +
-                ", driver=" + driver +
-                ", cancelationDateTime=" + cancelationDateTime +
-                ", distanceMeters=" + distanceMeters +
-                ", durationSeconds=" + durationSeconds +
-                "} " + super.toString();
+        final StringBuilder sb = new StringBuilder("Trip{");
+        sb.append("startpoint='").append(startpoint).append('\'');
+        sb.append(", endpoint='").append(endpoint).append('\'');
+        sb.append(", latStartpoint=").append(latStartpoint);
+        sb.append(", longStartpoint=").append(longStartpoint);
+        sb.append(", latEndpoint=").append(latEndpoint);
+        sb.append(", longEndpoint=").append(longEndpoint);
+        sb.append(", startDateTime=").append(startDateTime);
+        sb.append(", endDateTime=").append(endDateTime);
+        sb.append(", price=").append(price);
+        sb.append(", overViewPath='").append(overViewPath).append('\'');
+        sb.append(", viaWaypoints='").append(viaWaypoints).append('\'');
+        sb.append(", numberOfSeats=").append(numberOfSeats);
+        sb.append(", vehicle=").append(vehicle);
+        sb.append(", driver=").append(driver);
+        sb.append(", cancelationDateTime=").append(cancelationDateTime);
+        sb.append(", distanceMeters=").append(distanceMeters);
+        sb.append(", durationSeconds=").append(durationSeconds);
+        sb.append('}');
+        return sb.toString();
     }
 }

@@ -39,7 +39,7 @@ public abstract class JsonMapper<EntityType> {
     abstract public String marshalEntity(EntityType entity) throws JSONException;
 
     protected Long parseIdentity(JSONObject jsonResponse) throws JSONException {
-        return jsonResponse.getLong(AbstractEntity.FIELD_NAME_IDENTITY);
+        return jsonResponse.optLong(AbstractEntity.FIELD_NAME_IDENTITY);
     }
 
     @SuppressWarnings("WeakerAccess")

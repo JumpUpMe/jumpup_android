@@ -1,8 +1,12 @@
 package jumpup.imi.fb4.htw.de.jumpupandroid.lib;
 
+import jumpup.imi.fb4.htw.de.jumpupandroid.entity.TripSearchCriteria;
 import jumpup.imi.fb4.htw.de.jumpupandroid.entity.User;
 import jumpup.imi.fb4.htw.de.jumpupandroid.portal.trip.entity.Trip;
+import jumpup.imi.fb4.htw.de.jumpupandroid.portal.trip.entity.TripForPassenger;
 import jumpup.imi.fb4.htw.de.jumpupandroid.portal.trip.entity.TripList;
+import jumpup.imi.fb4.htw.de.jumpupandroid.portal.trip.entity.Vehicle;
+import jumpup.imi.fb4.htw.de.jumpupandroid.portal.trip.entity.search.SingleTripQueryResult;
 
 /**
  * Project: jumpup_android
@@ -126,5 +130,90 @@ public class TestObjects {
         trips.add(newTestTripFromBerlinToBonn2());
 
         return trips;
+    }
+
+    public static TripSearchCriteria newTestTripSearchCriteria() {
+        TripSearchCriteria tripSearchCriteria = new TripSearchCriteria();
+
+        tripSearchCriteria.setDateFrom("18.02.2016 17:02");
+        tripSearchCriteria.setDateTo("27.02.2016 22:02");
+        tripSearchCriteria.setEndPoint("Trier, Deutschland");
+        tripSearchCriteria.setLatEndPoint(49.74999200000001);
+        tripSearchCriteria.setLatStartPoint(50.5840512);
+        tripSearchCriteria.setLongEndPoint(6.637143299999934);
+        tripSearchCriteria.setLongStartPoint(8.678403099999969);
+        tripSearchCriteria.setMaxDistance(30);
+        tripSearchCriteria.setPriceFrom(0.0f);
+        tripSearchCriteria.setPriceTo(100.0f);
+        tripSearchCriteria.setStartPoint("Gießen, Deutschland");
+
+        return tripSearchCriteria;
+    }
+
+    public static SingleTripQueryResult.Driver newTestDriver() {
+        SingleTripQueryResult.Driver driver =  new SingleTripQueryResult().getDriver();
+
+        fillTestDriver(driver);
+
+        return driver;
+    }
+
+    protected static void fillTestDriver(SingleTripQueryResult.Driver driver) {
+        driver.setUsername("admin");
+        driver.setEmail("admin@groupelite.de");
+        driver.setPrename("Admin");
+        driver.setLastname("Admin");
+        driver.setTown("Berlin");
+        driver.setCountry("Germany");
+        driver.setGender("MAN");
+        driver.setMobileNumber("+49 124124 124");
+        driver.setSkype("cof1990");
+
+        driver.setUrl("http://localhost:8080/jumpup/portal/profile/personal_show.xhtml?u=8");
+    }
+
+    public static Vehicle newTestVehicle() {
+        Vehicle v = new Vehicle();
+
+        return v;
+    }
+
+    public static SingleTripQueryResult newTestSingleTripQueryResult() {
+        SingleTripQueryResult result = new SingleTripQueryResult();
+
+        fillTestDriver(result.getDriver());
+        result.setVehicle(newTestVehicle());
+        result.setTrip(newPassengerTestTripFromBerlinToTrier());
+
+        return result;
+    }
+
+    private static Trip newPassengerTestTripFromBerlinToTrier() {
+        TripForPassenger trip = new TripForPassenger();
+
+        trip.setIdentity(35L);
+        trip.setCreationTimestamp(0L);
+        trip.setUpdateTimestamp(0L);
+        trip.setStartpoint("Berlin, Deutschland");
+        trip.setEndpoint("Trier, Deutschland");
+        trip.setLatStartpoint(52.5200119);
+        trip.setLongStartpoint(13.404946500000051);
+        trip.setLatEndpoint(49.749993);
+        trip.setLongEndpoint(6.6371388000000024);
+        trip.setStartDateTime("25.02.2016 12:02");
+        trip.setEndDateTime("25.02.2016 20:02");
+        trip.setPrice(90.0);
+        trip.setNumberOfSeats(2);
+        trip.setVehicle(null);
+        trip.setDriver(null);
+        trip.setCancelationDateTime(null);
+        trip.setOverViewPath("");
+        trip.setViaWaypoints("");
+
+        trip.setBookingUrl("http://localhost:8080/jumpup/portal/trip/booking.xhtml?t=35&s=Gie%C3%9Fen%2C+Deutschland&e=Trier%2C+Deutschland&sL=50.5840512&sLo=8.678403099999969&eL=49.74999200000001&eLo=6.637143299999934&h=8658");
+        trip.setDistanceFromPassengersLocation(27.163660162983625);
+        trip.setDistanceFromPassengersDestination(26.40829837253887);
+
+        return trip;
     }
 }

@@ -3,7 +3,7 @@ package jumpup.imi.fb4.htw.de.jumpupandroid.util.webservice.mapper;
 import jumpup.imi.fb4.htw.de.jumpupandroid.entity.mapper.UserMapper;
 import jumpup.imi.fb4.htw.de.jumpupandroid.portal.trip.entity.mapper.TripListMapper;
 import jumpup.imi.fb4.htw.de.jumpupandroid.portal.trip.entity.mapper.TripMapper;
-import jumpup.imi.fb4.htw.de.jumpupandroid.portal.trip.entity.mapper.TripQueryResultsMapper;
+import jumpup.imi.fb4.htw.de.jumpupandroid.portal.trip.entity.mapper.search.TripQueryResultsMapper;
 import jumpup.imi.fb4.htw.de.jumpupandroid.portal.trip.entity.mapper.VehicleMapper;
 import jumpup.imi.fb4.htw.de.jumpupandroid.portal.trip.entity.mapper.search.DriverMapper;
 import jumpup.imi.fb4.htw.de.jumpupandroid.portal.trip.entity.mapper.search.SingleTripQueryResultMapper;

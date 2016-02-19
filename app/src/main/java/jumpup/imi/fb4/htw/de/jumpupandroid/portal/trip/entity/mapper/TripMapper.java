@@ -5,7 +5,10 @@ import org.json.JSONObject;
 
 import jumpup.imi.fb4.htw.de.jumpupandroid.entity.User;
 import jumpup.imi.fb4.htw.de.jumpupandroid.portal.trip.entity.Trip;
+import jumpup.imi.fb4.htw.de.jumpupandroid.portal.trip.entity.TripForPassenger;
 import jumpup.imi.fb4.htw.de.jumpupandroid.portal.trip.entity.Vehicle;
+import jumpup.imi.fb4.htw.de.jumpupandroid.portal.trip.search.request.TripSearchRequest;
+import jumpup.imi.fb4.htw.de.jumpupandroid.util.AppUtility;
 import jumpup.imi.fb4.htw.de.jumpupandroid.util.webservice.mapper.JsonMapper;
 
 /**
@@ -21,11 +24,24 @@ public class TripMapper extends JsonMapper<Trip> {
 
     @Override
     public Trip mapResponse(String response) throws JSONException {
-        Trip trip = new Trip();
+        Trip trip = determineTrip(response);
 
         this.parseResponseAndFillTrip(trip, response);
 
         return trip;
+    }
+
+    private Trip determineTrip(String response) throws JSONException {
+        JSONObject jsonResponse = new JSONObject(response);
+
+        if (0 != jsonResponse.optString(TripForPassenger.FIELD_NAME_BOOKING_URL).trim().length()
+                || 0 != jsonResponse.optString(TripForPassenger.FIELD_NAME_DISTANCE_FROM_PASSENGERS_DESTINATION).trim().length()
+                || 0 != jsonResponse.optString(TripForPassenger.FIELD_NAME_DISTANCE_FROM_PASSENGERS_START).trim().length()
+                ) {
+            return new TripForPassenger();
+        }
+
+        return new Trip();
     }
 
     private void parseResponseAndFillTrip(Trip trip, String response) throws JSONException {
@@ -50,14 +66,39 @@ public class TripMapper extends JsonMapper<Trip> {
         trip.setCancelationDateTime(parseCancelationDateTime(jsonResponse));
         trip.setDistanceMeters(parseDistanceMeters(jsonResponse));
         trip.setDurationSeconds(parseDurationSeconds(jsonResponse));
+
+        // since the trip entity returend from the search trips response looks different
+        parseFieldsForSearchTripsResponse(trip, jsonResponse);
+    }
+
+    private void parseFieldsForSearchTripsResponse(Trip trip, JSONObject jsonResponse) throws JSONException {
+        if (trip instanceof TripForPassenger) {
+            TripForPassenger tripForPassenger = (TripForPassenger) trip;
+
+            tripForPassenger.setBookingUrl(parseBookingUrl(jsonResponse));
+            tripForPassenger.setDistanceFromPassengersLocation(parseDistanceFromPassengersLoc(jsonResponse));
+            tripForPassenger.setDistanceFromPassengersDestination(parseDistanceFromPassengersDestination(jsonResponse));
+        }
+    }
+
+    private double parseDistanceFromPassengersDestination(JSONObject jsonResponse) throws JSONException {
+        return jsonResponse.getDouble(TripForPassenger.FIELD_NAME_DISTANCE_FROM_PASSENGERS_DESTINATION);
+    }
+
+    private double parseDistanceFromPassengersLoc(JSONObject jsonResponse) throws JSONException {
+        return jsonResponse.getDouble(TripForPassenger.FIELD_NAME_DISTANCE_FROM_PASSENGERS_START);
+    }
+
+    private String parseBookingUrl(JSONObject jsonResponse) throws JSONException {
+        return jsonResponse.getString(TripForPassenger.FIELD_NAME_BOOKING_URL);
     }
 
     private long parseDurationSeconds(JSONObject jsonResponse) throws JSONException {
-        return jsonResponse.getLong(Trip.FIELD_NAME_DURATION_SECONDS);
+        return jsonResponse.optLong(Trip.FIELD_NAME_DURATION_SECONDS);
     }
 
     private long parseDistanceMeters(JSONObject jsonResponse) throws JSONException {
-        return jsonResponse.getLong(Trip.FIELD_NAME_DISTANCE_METERS);
+        return jsonResponse.optLong(Trip.FIELD_NAME_DISTANCE_METERS);
     }
 
     private Long parseCancelationDateTime(JSONObject jsonResponse) throws JSONException {
@@ -87,11 +128,11 @@ public class TripMapper extends JsonMapper<Trip> {
     }
 
     private String parseViaWaypoints(JSONObject jsonResponse) throws JSONException {
-        return jsonResponse.getString(Trip.FIELD_NAME_VIA_WAYPOINTS);
+        return jsonResponse.optString(Trip.FIELD_NAME_VIA_WAYPOINTS);
     }
 
     private String parseOverviewPath(JSONObject jsonResponse) throws JSONException {
-        return jsonResponse.getString(Trip.FIELD_NAME_OVERVIEW_PATH);
+        return jsonResponse.optString(Trip.FIELD_NAME_OVERVIEW_PATH);
     }
 
     private double parsePrice(JSONObject jsonResponse) throws JSONException {
@@ -99,11 +140,23 @@ public class TripMapper extends JsonMapper<Trip> {
     }
 
     private Long parseEndDatetime(JSONObject jsonResponse) throws JSONException {
-        return jsonResponse.getLong(Trip.FIELD_NAME_END_DATETIME);
+        try {
+            // GET trips returns the date as long (timestamp in seconds)
+            return jsonResponse.getLong(Trip.FIELD_NAME_END_DATETIME);
+        } catch (JSONException e) {
+            // SearchTrips returns the date as string, so we need to store the UTC timestamp of it
+            return AppUtility.getUTCTimestamp(jsonResponse.getString(Trip.FIELD_NAME_END_DATETIME));
+        }
     }
 
     private Long parseStartDatetime(JSONObject jsonResponse) throws JSONException {
-        return jsonResponse.getLong(Trip.FIELD_NAME_START_DATETIME);
+        try {
+            // GET trips returns the date as long (timestamp in seconds)
+            return jsonResponse.getLong(Trip.FIELD_NAME_START_DATETIME);
+        } catch (JSONException e) {
+            // SearchTrips returns the date as string, so we need to store the UTC timestamp of it
+            return AppUtility.getUTCTimestamp(jsonResponse.getString(Trip.FIELD_NAME_START_DATETIME));
+        }
     }
 
     private double parseLongEndpoint(JSONObject jsonResponse) throws JSONException {

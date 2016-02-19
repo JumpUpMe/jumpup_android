@@ -1,4 +1,4 @@
-package jumpup.imi.fb4.htw.de.jumpupandroid.portal.trip.entity.mapper;
+package jumpup.imi.fb4.htw.de.jumpupandroid.portal.trip.entity.mapper.search;
 
 import org.json.JSONArray;
 import org.json.JSONException;
