@@ -63,6 +63,13 @@ public class Trip extends AbstractEntity {
     protected long distanceMeters;
     protected long durationSeconds;
 
+    /**
+     * Fields for Trip search responses. They shouldn't be serialized when sending to web service.
+     */
+    protected String bookingUrl;
+    protected double distanceFromPassengersLocation;
+    protected double distanceFromPassengersDestination;
+
     public Trip()
     {
         super();
@@ -392,6 +399,40 @@ public class Trip extends AbstractEntity {
     public void setDurationSeconds(long durationSeconds)
     {
         this.durationSeconds = durationSeconds;
+    }
+
+    /**
+     * @return the distanceFromPassengersLocation
+     */
+    public double getDistanceFromPassengersLocation()
+    {
+        return distanceFromPassengersLocation;
+    }
+
+    /**
+     * @param d the distanceFromPassengersLocation to set
+     */
+    public void setDistanceFromPassengersLocation(
+            double d)
+    {
+        this.distanceFromPassengersLocation = d;
+    }
+
+    /**
+     * @return the distanceFromPassengersDestination
+     */
+    public double getDistanceFromPassengersDestination()
+    {
+        return distanceFromPassengersDestination;
+    }
+
+    /**
+     * @param d the distanceFromPassengersDestination to set
+     */
+    public void setDistanceFromPassengersDestination(
+            double d)
+    {
+        this.distanceFromPassengersDestination = d;
     }
 
     @Override

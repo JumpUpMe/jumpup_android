@@ -62,13 +62,6 @@ public class SearchTripsTask extends ObservableAsyncTask<TripSearchCriteria, Voi
         return null;
     }
 
-    /**
-     * Add geolocation information (coordinates for the user's inputs).
-     */
-    private void addGeoLocationInformation() {
-
-    }
-
     private void searchForTrips() {
 
     }
