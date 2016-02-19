@@ -14,6 +14,7 @@ import jumpup.imi.fb4.htw.de.jumpupandroid.portal.trip.entity.Trip;
 import jumpup.imi.fb4.htw.de.jumpupandroid.portal.trip.entity.TripList;
 import jumpup.imi.fb4.htw.de.jumpupandroid.portal.trip.list.OfferedTripsActivity;
 import jumpup.imi.fb4.htw.de.jumpupandroid.portal.trip.list.OfferedTripsOnMapActivity;
+import jumpup.imi.fb4.htw.de.jumpupandroid.portal.trip.search.SearchTripsActivity;
 import jumpup.imi.fb4.htw.de.jumpupandroid.portal.trip.view.ViewTripActivity;
 import jumpup.imi.fb4.htw.de.jumpupandroid.util.activity.JumpUpActivity;
 
@@ -117,6 +118,8 @@ public abstract class PortalActivity extends JumpUpActivity {
 
     protected void navigateToLookForTrips() {
         Log.d(getTag(), "navigateToLookForTrips(): menu item pressed");
+
+        this.navigateToWithUserParcel(SearchTripsActivity.class, this.user);
     }
 
     protected void navigateToProfile() {

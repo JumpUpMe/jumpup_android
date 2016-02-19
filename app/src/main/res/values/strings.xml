@@ -106,4 +106,14 @@
     <string name="preferences_distance_value_metric_label">kilometers</string>
     <string name="preferences_distance_value_imperial_label">miles</string>
     <string name="activity_offered_trips_button_label_refresh">Refresh</string>
+    <string name="title_activity_search_trips">SearchTrips</string>
+    <string name="activity_search_trips_date_from">Date from</string>
+    <string name="activity_search_trips_date_to">Date to</string>
+    <string name="activity_search_trips_price_from">Price from</string>
+    <string name="activity_search_trips_price_to">Price to</string>
+    <string name="activity_search_trips_button_label">Search trips</string>
+    <string name="activity_search_trips_start_location">Start location</string>
+    <string name="activity_search_trips_end_location">Destination location</string>
+    <string name="activity_search_trips_geocoding_error">We couldn\'t determine the location you entered. Please fix it and try again.</string>
+    <string name="activity_search_trips_title">Search trips</string>
 </resources>

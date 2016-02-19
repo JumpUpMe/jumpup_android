@@ -76,6 +76,10 @@
             android:name=".portal.trip.list.OfferedTripsOnMapActivity"
             android:label="@string/activity_offered_trips_on_map_trips" >
         </activity>
+        <activity
+            android:name=".portal.trip.search.SearchTripsActivity"
+            android:label="@string/activity_search_trips_title">
+        </activity>
     </application>
 
 </manifest>
