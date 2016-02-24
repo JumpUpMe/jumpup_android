@@ -9,6 +9,7 @@ import jumpup.imi.fb4.htw.de.jumpupandroid.portal.trip.entity.Trip;
 import jumpup.imi.fb4.htw.de.jumpupandroid.portal.trip.entity.TripForPassenger;
 import jumpup.imi.fb4.htw.de.jumpupandroid.portal.trip.entity.TripList;
 import jumpup.imi.fb4.htw.de.jumpupandroid.portal.trip.entity.Vehicle;
+import jumpup.imi.fb4.htw.de.jumpupandroid.portal.trip.entity.search.Driver;
 import jumpup.imi.fb4.htw.de.jumpupandroid.portal.trip.entity.search.SingleTripQueryResult;
 import jumpup.imi.fb4.htw.de.jumpupandroid.portal.trip.entity.search.TripQueryResults;
 
@@ -154,15 +155,15 @@ public class TestObjects {
         return tripSearchCriteria;
     }
 
-    public static SingleTripQueryResult.Driver newTestDriver() {
-        SingleTripQueryResult.Driver driver =  new SingleTripQueryResult().getDriver();
+    public static Driver newTestDriver() {
+        Driver driver =  new Driver();
 
         fillTestDriver(driver);
 
         return driver;
     }
 
-    protected static void fillTestDriver(SingleTripQueryResult.Driver driver) {
+    protected static void fillTestDriver(Driver driver) {
         driver.setUsername("admin");
         driver.setEmail("admin@groupelite.de");
         driver.setPrename("Admin");

@@ -121,4 +121,6 @@
     <string name="activity_search_trips_overlapping_partial_trips_found">We didn\'t find any direct trips, but found trips of different drivers that cross each other. You can book parts of the trips and combine them to get to your destination.</string>
     <string name="activity_search_trips_direct_trips_found">We found direct trips that you can book.</string>
     <string name="activity_search_trips_max_distance">Max distance</string>
+    <string name="title_activity_found_direct_trips">FoundDirectTripsActivity</string>
+    <string name="activity_found_direct_trips_title">Found direct trips</string>
 </resources>

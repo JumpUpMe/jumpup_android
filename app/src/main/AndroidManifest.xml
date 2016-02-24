@@ -78,7 +78,11 @@
         </activity>
         <activity
             android:name=".portal.trip.search.SearchTripsActivity"
-            android:label="@string/activity_search_trips_title">
+            android:label="@string/activity_search_trips_title" >
+        </activity>
+        <activity
+            android:name=".portal.trip.search.FoundDirectTripsActivity"
+            android:label="@string/activity_found_direct_trips_title">
         </activity>
     </application>
 

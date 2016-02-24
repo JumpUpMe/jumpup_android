@@ -1,5 +1,6 @@
 package jumpup.imi.fb4.htw.de.jumpupandroid.portal.trip;
 
+import android.content.Context;
 import android.os.AsyncTask;
 
 import java.util.Observer;
@@ -12,8 +13,10 @@ import jumpup.imi.fb4.htw.de.jumpupandroid.portal.trip.list.OfferedTripsTask;
 import jumpup.imi.fb4.htw.de.jumpupandroid.portal.trip.list.TripsListAdapter;
 import jumpup.imi.fb4.htw.de.jumpupandroid.portal.trip.list.request.TripListRequest;
 import jumpup.imi.fb4.htw.de.jumpupandroid.portal.trip.list.request.TripListRequestImpl;
+import jumpup.imi.fb4.htw.de.jumpupandroid.portal.trip.search.FoundDirectTripsActivity;
 import jumpup.imi.fb4.htw.de.jumpupandroid.portal.trip.search.SearchTripsActivity;
 import jumpup.imi.fb4.htw.de.jumpupandroid.portal.trip.search.SearchTripsTask;
+import jumpup.imi.fb4.htw.de.jumpupandroid.portal.trip.search.TripsSingleTripQueryResultAdapter;
 import jumpup.imi.fb4.htw.de.jumpupandroid.portal.trip.search.request.TripSearchRequest;
 import jumpup.imi.fb4.htw.de.jumpupandroid.portal.trip.search.request.TripSearchRequestImpl;
 import jumpup.imi.fb4.htw.de.jumpupandroid.portal.trip.view.ViewTripActivity;
@@ -37,8 +40,8 @@ public class TripFactory {
         return offeredTripsTask;
     }
 
-    public static TripsListAdapter newTripListAdapter(OfferedTripsActivity offeredTripsActivity) {
-        return new TripsListAdapter(offeredTripsActivity);
+    public static TripsListAdapter newTripListAdapter(Context context) {
+        return new TripsListAdapter(context);
     }
 
     public static EditTripRequest newEditTripRequest() {
@@ -62,5 +65,9 @@ public class TripFactory {
 
     public static TripSearchRequest newTripSearchRequest() {
         return new TripSearchRequestImpl();
+    }
+
+    public static TripsSingleTripQueryResultAdapter newTripQueryResultsAdapter(Context context) {
+        return new TripsSingleTripQueryResultAdapter(context);
     }
 }

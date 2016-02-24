@@ -9,6 +9,7 @@ import org.junit.Test;
 import jumpup.imi.fb4.htw.de.jumpupandroid.entity.TripSearchCriteria;
 import jumpup.imi.fb4.htw.de.jumpupandroid.lib.EntityMapperTest;
 import jumpup.imi.fb4.htw.de.jumpupandroid.lib.TestObjects;
+import jumpup.imi.fb4.htw.de.jumpupandroid.portal.trip.entity.search.Driver;
 import jumpup.imi.fb4.htw.de.jumpupandroid.portal.trip.entity.search.SingleTripQueryResult;
 import jumpup.imi.fb4.htw.de.jumpupandroid.util.webservice.mapper.JsonMapper;
 import jumpup.imi.fb4.htw.de.jumpupandroid.util.webservice.mapper.MapperFactory;
@@ -21,7 +22,7 @@ import jumpup.imi.fb4.htw.de.jumpupandroid.util.webservice.mapper.MapperFactory;
  * @author Sascha Feldmann <a href="mailto:sascha.feldmann@gmx.de">sascha.feldmann@gmx.de</a>
  * @since 19.02.2016
  */
-public class DriverMapperTest extends EntityMapperTest<SingleTripQueryResult.Driver> {
+public class DriverMapperTest extends EntityMapperTest<Driver> {
     private static final String TEST_RESPONSE_SUCCESS = "{\n" +
             "   \"username\":\"admin\",\n" +
             "   \"email\":\"admin@groupelite.de\",\n" +
@@ -37,7 +38,7 @@ public class DriverMapperTest extends EntityMapperTest<SingleTripQueryResult.Dri
             "   ],\n" +
             "   \"url\":\"http://localhost:8080/jumpup/portal/profile/personal_show.xhtml?u=8\"\n" +
             "}";
-    private static final SingleTripQueryResult.Driver EXPECTED_DRIVER = TestObjects.newTestDriver();
+    private static final Driver EXPECTED_DRIVER = TestObjects.newTestDriver();
     private static final String EXPECTED_JSON = "{\n" +
             "   \"username\":\"admin\",\n" +
             "   \"email\":\"admin@groupelite.de\",\n" +
@@ -63,12 +64,12 @@ public class DriverMapperTest extends EntityMapperTest<SingleTripQueryResult.Dri
     }
 
     @Override
-    protected SingleTripQueryResult.Driver givenTheExpectedEntity() {
+    protected Driver givenTheExpectedEntity() {
         return EXPECTED_DRIVER;
     }
 
     @Override
-    protected JsonMapper<SingleTripQueryResult.Driver> getMapper() {
+    protected JsonMapper<Driver> getMapper() {
         return driverMapper;
     }
 

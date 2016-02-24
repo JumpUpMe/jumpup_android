@@ -54,6 +54,8 @@ public class GeocodingTask extends ObservableAsyncTask<String, Void, Void> {
     }
 
     private void searchGeoLocation() {
+        Log.d(TAG, "searchGeoLocation(): delegating to geocoder adapter.");
+
         this.resolvedAdresses = geocodingAdapter.resolveLocationName(this.locationString);
 
         Log.d(TAG, "searchGeoLocation(): geocoding results for input " + locationString + ": \n" + this.resolvedAdresses);

@@ -5,6 +5,14 @@
  */
 package jumpup.imi.fb4.htw.de.jumpupandroid.util.math;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
+import java.util.HashSet;
+import java.util.Set;
+
+import jumpup.imi.fb4.htw.de.jumpupandroid.portal.trip.entity.Trip;
+
 /**
  * <p>Simple model of coordinates.</p>
  *
@@ -12,11 +20,50 @@ package jumpup.imi.fb4.htw.de.jumpupandroid.util.math;
  * @since 24.01.2015
  *
  */
-public class Coordinates
+public class Coordinates implements Parcelable
 {
     protected double latitude;
     protected double longitude;
-    
+
+    // this is used to regenerate the object. All Parcelables must have a CREATOR that implements these two methods
+    public static final Parcelable.Creator<Coordinates> CREATOR = new Parcelable.Creator<Coordinates>() {
+        public Coordinates createFromParcel(Parcel in) {
+            return new Coordinates(in);
+        }
+
+        public Coordinates[] newArray(int size) {
+            return new Coordinates[size];
+        }
+    };
+
+    public Coordinates(Parcel in) {
+        super();
+
+        this.initializeFromParcel(in);
+    }
+
+    private void initializeFromParcel(Parcel in) {
+        latitude = in.readDouble();
+        longitude = in.readDouble();
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel parcel, int i) {
+        /*
+         * ATTENTION!
+         * When changing the sequence of write operations, make sure to adjust
+         * the sequence of read operations in initializeFromParcel(), too.
+         * Both must be symmetric.
+         */
+        parcel.writeDouble(latitude);
+        parcel.writeDouble(longitude);
+    }
+
     /**
      * 
      * @param latitudeDegrees

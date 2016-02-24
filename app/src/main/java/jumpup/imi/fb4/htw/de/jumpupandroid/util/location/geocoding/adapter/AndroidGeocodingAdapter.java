@@ -28,6 +28,12 @@ public class AndroidGeocodingAdapter implements GeocodingAdapter {
     @Override
     public List<Address> resolveLocationName(String locationName) {
         try {
+            if (!Geocoder.isPresent()) {
+                Log.e(TAG, "The android geocoder isn't present. Please check why!");
+            } else {
+                Log.i(TAG, "Geocoder is present.");
+            }
+
             return geocoder.getFromLocationName(locationName, MAX_RESULTS);
         } catch (IOException e) {
             Log.e(TAG, "resolveLocationName(): exception during geocoding. Stack trace:\n " + ExceptionUtils.getStackTrace(e));

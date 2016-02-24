@@ -5,6 +5,12 @@
  */
 package jumpup.imi.fb4.htw.de.jumpupandroid.portal.trip.entity.search;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import jumpup.imi.fb4.htw.de.jumpupandroid.util.math.Vertex;
@@ -45,6 +51,47 @@ public class OverlappingPartialTripQueryResult extends TripQueryResults
     
     protected Set<Vertex> intersections;
     protected String message;
+
+    public OverlappingPartialTripQueryResult(Parcel in) {
+        super();
+
+        this.initializeFromParcel(in);
+    }
+
+    protected void initializeFromParcel(Parcel in) {
+        super.initializeFromParcel(in);
+
+        intersections = toIntersectionsSet(in.readParcelableArray(Vertex.class.getClassLoader()));
+        message = in.readString();
+    }
+
+    private Set<Vertex> toIntersectionsSet(Parcelable[] parcelables) {
+        Set<Vertex> intersections = new HashSet<>();
+
+        for (Parcelable vertex: parcelables) {
+            intersections.add((Vertex) vertex);
+        }
+
+        return intersections;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel parcel, int i) {
+        /*
+         * ATTENTION!
+         * When changing the sequence of write operations, make sure to adjust
+         * the sequence of read operations in initializeFromParcel(), too.
+         * Both must be symmetric.
+         */
+        super.writeToParcel(parcel, i);
+        parcel.writeParcelableArray(intersections.toArray(new Vertex[trips.size()]), 0);
+        parcel.writeString(message.toString());
+    }
     
     public OverlappingPartialTripQueryResult()
     {

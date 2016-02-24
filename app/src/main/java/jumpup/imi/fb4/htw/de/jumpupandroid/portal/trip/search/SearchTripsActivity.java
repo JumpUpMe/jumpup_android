@@ -126,13 +126,17 @@ public class SearchTripsActivity extends PortalActivity implements Observer {
     }
 
     private void startGeocodingForEndLocation() {
-        if (getTask() == null || !getTask().getStatus().equals(AsyncTask.Status.RUNNING)) {
-            // do geocoding
-            resetGeocodingTask();
-            startProgress();
-
-            geocodingTask.execute(tripSearchCriteria.getEndPoint());
+        if (getTask() != null && getTask().getStatus().equals(AsyncTask.Status.RUNNING)) {
+            getTask().cancel(true);
         }
+
+        Log.i(TAG, "startGeocodingForEndLocation()");
+
+        // do geocoding
+        resetGeocodingTask();
+        startProgress();
+
+        geocodingTask.execute(tripSearchCriteria.getEndPoint());
     }
 
     protected void startSearchForTripTask() {
@@ -271,9 +275,9 @@ public class SearchTripsActivity extends PortalActivity implements Observer {
         if (tripQueryResults instanceof TripQueryNoResults) {
             handleNoSearchResultsType();
         } else if (tripQueryResults instanceof OverlappingPartialTripQueryResult) {
-            handleOverlappingPartialTripResultsType();
+            handleOverlappingPartialTripResultsType(tripQueryResults);
         } else {
-            handleDirectTripsResultType();
+            handleDirectTripsResultType(tripQueryResults);
         }
     }
 
@@ -284,17 +288,24 @@ public class SearchTripsActivity extends PortalActivity implements Observer {
         this.showErrorNotification(this.getString(R.string.activity_search_trips_no_result));
     }
 
-    private void handleOverlappingPartialTripResultsType() {
+    private void handleOverlappingPartialTripResultsType(TripQueryResults tripQueryResults) {
         Log.i(TAG, "handleOverlappingPartialTripResultsType()");
 
         this.showSuccessNotification(this.getString(R.string.activity_search_trips_overlapping_partial_trips_found));
     }
 
 
-    private void handleDirectTripsResultType() {
+    private void handleDirectTripsResultType(TripQueryResults tripQueryResults) {
         Log.i(TAG, "handleDirectTripsResultType()");
 
         this.showSuccessNotification(this.getString(R.string.activity_search_trips_direct_trips_found));
+
+        navigateToWithUserAndAnotherExtraParcel(
+                FoundDirectTripsActivity.class,
+                this.user,
+                FoundDirectTripsActivity.EXTRA_PARCELABLE_TRIP_QUERY_RESULTS,
+                tripQueryResults
+        );
     }
 
 

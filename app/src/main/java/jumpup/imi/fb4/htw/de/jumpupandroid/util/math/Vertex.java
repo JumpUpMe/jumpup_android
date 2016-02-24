@@ -5,10 +5,16 @@
  */
 package jumpup.imi.fb4.htw.de.jumpupandroid.util.math;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import jumpup.imi.fb4.htw.de.jumpupandroid.portal.trip.entity.Trip;
+import jumpup.imi.fb4.htw.de.jumpupandroid.portal.trip.entity.search.SingleTripQueryResult;
 
 /**
  * <p>
@@ -18,7 +24,7 @@ import jumpup.imi.fb4.htw.de.jumpupandroid.portal.trip.entity.Trip;
  * @since 08.08.2015
  *
  */
-public class Vertex
+public class Vertex implements Parcelable
 {
     /**
      * Tolerance factor: number of digits behind comma in a coordinate that will be floored.
@@ -30,9 +36,60 @@ public class Vertex
      */    
     public static final int TOLERANCE_FACTOR = 1000;
     
-    protected final Coordinates coordinates;
+    protected Coordinates coordinates;
     protected Set<Trip> trips;
     protected double id = -1.0;
+
+    // this is used to regenerate the object. All Parcelables must have a CREATOR that implements these two methods
+    public static final Parcelable.Creator<Vertex> CREATOR = new Parcelable.Creator<Vertex>() {
+        public Vertex createFromParcel(Parcel in) {
+            return new Vertex(in);
+        }
+
+        public Vertex[] newArray(int size) {
+            return new Vertex[size];
+        }
+    };
+
+    public Vertex(Parcel in) {
+        super();
+
+        this.initializeFromParcel(in);
+    }
+
+    private void initializeFromParcel(Parcel in) {
+        coordinates = in.readParcelable(coordinates.getClass().getClassLoader());
+        trips = toSingleTripQueryList(in.readParcelableArray(Trip.class.getClassLoader()));
+        id = in.readDouble();
+    }
+
+    private Set<Trip> toSingleTripQueryList(Parcelable[] parcelables) {
+        Set<Trip> queryResults = new HashSet<>();
+
+        for (Parcelable trip: parcelables) {
+            queryResults.add((Trip) trip);
+        }
+
+        return queryResults;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel parcel, int i) {
+        /*
+         * ATTENTION!
+         * When changing the sequence of write operations, make sure to adjust
+         * the sequence of read operations in initializeFromParcel(), too.
+         * Both must be symmetric.
+         */
+        parcel.writeParcelable(coordinates, 0);
+        parcel.writeParcelableArray(trips.toArray(new Trip[trips.size()]), 0);
+        parcel.writeDouble(id);
+    }
 
     /**
      * Create a vertex that is part of multiple trips.

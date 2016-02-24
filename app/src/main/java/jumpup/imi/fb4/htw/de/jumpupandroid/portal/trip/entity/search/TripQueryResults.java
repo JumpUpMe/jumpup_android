@@ -5,6 +5,9 @@
  */
 package jumpup.imi.fb4.htw.de.jumpupandroid.portal.trip.entity.search;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,10 +19,59 @@ import java.util.List;
  * @since 26.01.2015
  *
  */
-public class TripQueryResults
+public class TripQueryResults implements Parcelable
 {
     public static final String FIELD_NAME_TYPE = "type";
     public static final String FIELD_NAME_TRIPS = "trips";
+
+    // this is used to regenerate the object. All Parcelables must have a CREATOR that implements these two methods
+    public static final Parcelable.Creator<TripQueryResults> CREATOR = new Parcelable.Creator<TripQueryResults>() {
+        public TripQueryResults createFromParcel(Parcel in) {
+            return new TripQueryResults(in);
+        }
+
+        public TripQueryResults[] newArray(int size) {
+            return new TripQueryResults[size];
+        }
+    };
+
+    public TripQueryResults(Parcel in) {
+        super();
+
+        this.initializeFromParcel(in);
+    }
+
+    protected void initializeFromParcel(Parcel in) {
+        trips = toSingleTripQueryList(in.readParcelableArray(SingleTripQueryResult.class.getClassLoader()));
+        type = Type.valueOf(in.readString());
+    }
+
+    private List<SingleTripQueryResult> toSingleTripQueryList(Parcelable[] parcelables) {
+        List<SingleTripQueryResult> queryResults = new ArrayList<>();
+
+        for (Parcelable trip: parcelables) {
+            queryResults.add((SingleTripQueryResult) trip);
+        }
+
+        return queryResults;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel parcel, int i) {
+        /*
+         * ATTENTION!
+         * When changing the sequence of write operations, make sure to adjust
+         * the sequence of read operations in initializeFromParcel(), too.
+         * Both must be symmetric.
+         */
+        parcel.writeParcelableArray(trips.toArray(new SingleTripQueryResult[trips.size()]), 0);
+        parcel.writeString(type.toString());
+    }
 
     /**
      * 
