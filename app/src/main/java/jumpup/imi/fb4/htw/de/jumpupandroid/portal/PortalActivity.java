@@ -1,10 +1,13 @@
 package jumpup.imi.fb4.htw.de.jumpupandroid.portal;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.PersistableBundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+
+import java.util.HashMap;
 
 import jumpup.imi.fb4.htw.de.jumpupandroid.MainActivity;
 import jumpup.imi.fb4.htw.de.jumpupandroid.R;
@@ -145,6 +148,16 @@ public abstract class PortalActivity extends JumpUpActivity {
                 ViewTripActivity.EXTRA_PARCELABLE_TRIP,
                 trip
         );
+    }
+
+
+    protected void navigateToViewTrip(Trip trip, boolean isReadOnly) {
+        Intent intent = buildUserParcelIntent(ViewTripActivity.class, user);
+
+        intent.putExtra(ViewTripActivity.EXTRA_PARCELABLE_TRIP, trip);
+        intent.putExtra(ViewTripActivity.EXTRA_PARCELABLE_READONLY, isReadOnly);
+
+        startActivity(intent);
     }
 
     protected void navigateToOfferedTripsMap(TripList offeredTrips) {

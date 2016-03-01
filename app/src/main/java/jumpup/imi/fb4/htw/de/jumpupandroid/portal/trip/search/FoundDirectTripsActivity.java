@@ -11,6 +11,7 @@ import android.widget.ListView;
 import jumpup.imi.fb4.htw.de.jumpupandroid.R;
 import jumpup.imi.fb4.htw.de.jumpupandroid.portal.PortalActivity;
 import jumpup.imi.fb4.htw.de.jumpupandroid.portal.trip.TripFactory;
+import jumpup.imi.fb4.htw.de.jumpupandroid.portal.trip.entity.Trip;
 import jumpup.imi.fb4.htw.de.jumpupandroid.portal.trip.entity.search.SingleTripQueryResult;
 import jumpup.imi.fb4.htw.de.jumpupandroid.portal.trip.entity.search.TripQueryResults;
 
@@ -62,7 +63,7 @@ public class FoundDirectTripsActivity extends PortalActivity {
                 SingleTripQueryResult singleTripQueryResult = singleTripsQueryResultListAdapter.getItem(position);
 
                 // start detail view activity
-                navigateToViewTrip(singleTripQueryResult.getTrip());
+                navigateToViewTrip(singleTripQueryResult.getTrip(), true);
             }
         });
     }
@@ -74,6 +75,8 @@ public class FoundDirectTripsActivity extends PortalActivity {
             @Override
             public void onClick(View view) {
                 Log.i(TAG, "btnViewOnMap.onClick: button clicked");
+
+                // TODO
             }
         });
     }

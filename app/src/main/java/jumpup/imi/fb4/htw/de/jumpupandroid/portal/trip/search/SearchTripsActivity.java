@@ -297,6 +297,9 @@ public class SearchTripsActivity extends PortalActivity implements Observer {
         Log.i(TAG, "handleOverlappingPartialTripResultsType()");
 
         this.showSuccessNotification(this.getString(R.string.activity_search_trips_overlapping_partial_trips_found));
+
+        // TODO implement view for multiple partial trips
+        stopProgress();
     }
 
 

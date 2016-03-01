@@ -29,6 +29,8 @@ public class ViewTripActivity extends PortalActivity implements Observer {
 
     private static final String TAG = ViewTripActivity.class.getName();
     public static final String EXTRA_PARCELABLE_TRIP = "trip";
+    // Readonly for trips of other users
+    public static final String EXTRA_PARCELABLE_READONLY = "readonly";
 
     private Trip trip;
     private EditText inputStartLocation;
@@ -41,6 +43,7 @@ public class ViewTripActivity extends PortalActivity implements Observer {
     private Button btnEditTrip;
     private ProgressBar progressBar;
     private Button btnShowOnMap;
+    private boolean isReadOnly;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,7 +53,24 @@ public class ViewTripActivity extends PortalActivity implements Observer {
         this.bindTrip(savedInstanceState);
         this.bindInputElements();
         this.fillInputFieldsByTrip();
+        this.handleReadonly(savedInstanceState);
         this.registerButton();
+    }
+
+    private void handleReadonly(Bundle savedInstanceState) {
+        if (getIntent().hasExtra(EXTRA_PARCELABLE_READONLY)
+                && getIntent().getBooleanExtra(EXTRA_PARCELABLE_READONLY, false)) {
+            this.isReadOnly = true;
+        } else if (savedInstanceState.containsKey(EXTRA_PARCELABLE_READONLY)
+                && savedInstanceState.getBoolean(EXTRA_PARCELABLE_READONLY)) {
+            this.isReadOnly = true;
+        } else {
+            this.isReadOnly = false;
+        }
+
+        if (isReadOnly) {
+            btnEditTrip.setVisibility(View.INVISIBLE);
+        }
     }
 
     private void registerButton() {
@@ -155,6 +175,7 @@ public class ViewTripActivity extends PortalActivity implements Observer {
     @Override
     public void onSaveInstanceState(Bundle outState, PersistableBundle outPersistentState) {
         outState.putParcelable(EXTRA_PARCELABLE_TRIP, this.trip);
+        outState.putBoolean(EXTRA_PARCELABLE_READONLY, this.isReadOnly);
 
         super.onSaveInstanceState(outState, outPersistentState);
     }

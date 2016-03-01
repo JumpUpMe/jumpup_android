@@ -12,7 +12,10 @@ import android.util.Log;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import java.util.HashMap;
+
 import jumpup.imi.fb4.htw.de.jumpupandroid.entity.User;
+import jumpup.imi.fb4.htw.de.jumpupandroid.portal.trip.view.ViewTripActivity;
 import jumpup.imi.fb4.htw.de.jumpupandroid.util.ViewHelper;
 
 /**
@@ -96,7 +99,7 @@ public abstract class JumpUpActivity extends ActionBarActivity {
     }
 
     @NonNull
-    private Intent buildUserParcelIntent(Class expliciteClass, Parcelable parcelable) {
+    protected Intent buildUserParcelIntent(Class expliciteClass, Parcelable parcelable) {
         Intent intent = getExpliciteIntent(this, expliciteClass);
         putExtraUserParcelable(parcelable, intent);
         return intent;
@@ -168,4 +171,5 @@ public abstract class JumpUpActivity extends ActionBarActivity {
         Toast toast = Toast.makeText(context, string, Toast.LENGTH_LONG);
         toast.show();
     }
+
 }
