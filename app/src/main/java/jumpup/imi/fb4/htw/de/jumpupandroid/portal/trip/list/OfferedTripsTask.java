@@ -93,7 +93,7 @@ public class OfferedTripsTask extends ObservableAsyncTask<User, Void, Void> {
 
     private void loadUsersOfferedTripsFromCache() {
         try {
-            this.offeredTrips = TripDbHelper.getTrips(App.getGlobalContext());
+            this.offeredTrips = TripDbHelper.loadTripList(App.getGlobalContext());
         } catch (Exception e) {
             this.hasError = true;
             this.toastMessageId = R.string.jumpup_request_error_trip_list_load_failed;
@@ -107,7 +107,7 @@ public class OfferedTripsTask extends ObservableAsyncTask<User, Void, Void> {
             Log.d(TAG, "loadUsersOfferedTripsFromWebService(): load users offered trips task was successful.");
 
             // update cache
-            TripDbHelper.setTrips(App.getGlobalContext(), this.offeredTrips, this.user);
+            TripDbHelper.storeTripList(App.getGlobalContext(), this.offeredTrips, this.user);
         } catch (TechnicalErrorException e) {
             this.hasError = true;
             this.toastMessageId = e.getUserMessageId();

@@ -1,7 +1,10 @@
 package jumpup.imi.fb4.htw.de.jumpupandroid.lib;
 
+import android.location.Address;
+
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import jumpup.imi.fb4.htw.de.jumpupandroid.entity.TripSearchCriteria;
 import jumpup.imi.fb4.htw.de.jumpupandroid.entity.User;
@@ -231,5 +234,14 @@ public class TestObjects {
         results.setTrips(singleTripQueryResultList);
 
         return results;
+    }
+
+    public static Address newTestAddress() {
+        Address address = new Address(Locale.getDefault());
+
+        address.setLatitude(37.4224764);
+        address.setLongitude(-122.0842499);
+
+        return address;
     }
 }

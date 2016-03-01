@@ -123,4 +123,5 @@
     <string name="activity_search_trips_max_distance">Max distance</string>
     <string name="title_activity_found_direct_trips">FoundDirectTripsActivity</string>
     <string name="activity_found_direct_trips_title">Found direct trips</string>
+    <string name="google_geocoding_request_error">Error while executing Geocoding request to Google.</string>
 </resources>

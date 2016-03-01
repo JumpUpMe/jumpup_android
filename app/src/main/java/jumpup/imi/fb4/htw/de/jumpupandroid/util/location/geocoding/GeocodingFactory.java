@@ -7,6 +7,8 @@ import java.util.Observer;
 import jumpup.imi.fb4.htw.de.jumpupandroid.App;
 import jumpup.imi.fb4.htw.de.jumpupandroid.portal.trip.search.SearchTripsActivity;
 import jumpup.imi.fb4.htw.de.jumpupandroid.util.location.geocoding.adapter.AndroidGeocodingAdapter;
+import jumpup.imi.fb4.htw.de.jumpupandroid.util.location.geocoding.adapter.google.GoogleGeocodingRequest;
+import jumpup.imi.fb4.htw.de.jumpupandroid.util.location.geocoding.adapter.google.GoogleGeocodingWebServiceAdapter;
 
 /**
  * Project: jumpup_android
@@ -26,10 +28,18 @@ public class GeocodingFactory {
         return new AndroidGeocodingAdapter();
     }
 
+    public static GoogleGeocodingWebServiceAdapter newGoogleGeocodingWebServiceAdapter () {
+        return new GoogleGeocodingWebServiceAdapter();
+    }
+
     public static GeocodingTask newGeocodingTask(Observer observer) {
         GeocodingTask task = new GeocodingTask();
         task.getObservable().addObserver(observer);
 
         return task;
+    }
+
+    public static GoogleGeocodingRequest newGoogleGeocodingRequest() {
+        return new GoogleGeocodingRequest();
     }
 }

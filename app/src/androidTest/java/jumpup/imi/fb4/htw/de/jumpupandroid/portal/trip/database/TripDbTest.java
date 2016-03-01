@@ -243,9 +243,9 @@ public class TripDbTest extends AndroidTestCase {
     public void testSetAndGetTripsConvenienceFunctions() {
         this.insertTripList = TestObjects.newTestTripList();
 
-        TripDbHelper.setTrips(mContext, insertTripList, TestObjects.newTestUser());
+        TripDbHelper.storeTripList(mContext, insertTripList, TestObjects.newTestUser());
 
-        TripList tripListFromDb = TripDbHelper.getTrips(mContext);
+        TripList tripListFromDb = TripDbHelper.loadTripList(mContext);
 
         assertEquals("Error: trip list loaded from database should be equal to inserted one",
                 insertTripList, tripListFromDb);

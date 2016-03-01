@@ -259,9 +259,9 @@ public class TripDbHelper extends SQLiteOpenHelper {
      * Convenience function to get the trips stored in the database.
      *
      * @param context context
-     * @return TripList of the user whose trips were stored using setTrips()
+     * @return TripList of the user whose trips were stored using storeTripList()
      */
-    public static TripList getTrips(Context context) {
+    public static TripList loadTripList(Context context) {
         TripList tripList = new TripList();
 
         TripDbHelper dbHelper = new TripDbHelper(context);
@@ -297,7 +297,7 @@ public class TripDbHelper extends SQLiteOpenHelper {
      * @param tripList the user's trip list
      * @param user the user (driver)
      */
-    public static void setTrips(Context context, TripList tripList, User user) {
+    public static void storeTripList(Context context, TripList tripList, User user) {
         TripDbHelper dbHelper = new TripDbHelper(context);
 
         SQLiteDatabase db = dbHelper.getWritableDatabase();

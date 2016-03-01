@@ -5,6 +5,7 @@ import android.util.Log;
 
 import java.util.List;
 
+import jumpup.imi.fb4.htw.de.jumpupandroid.BuildConfig;
 import jumpup.imi.fb4.htw.de.jumpupandroid.util.location.geocoding.adapter.GeocodingAdapter;
 import jumpup.imi.fb4.htw.de.jumpupandroid.util.task.ObservableAsyncTask;
 
@@ -24,7 +25,7 @@ import jumpup.imi.fb4.htw.de.jumpupandroid.util.task.ObservableAsyncTask;
 public class GeocodingTask extends ObservableAsyncTask<String, Void, Void> {
     private static final String TAG = GeocodingTask.class.getName();
     private String locationString;
-    private GeocodingAdapter geocodingAdapter = GeocodingFactory.newAndroidGeocodingAdapter();
+    private GeocodingAdapter geocodingAdapter = BuildConfig.GEOCODING_ADAPTER;
     private List<Address> resolvedAdresses;
     private boolean hasError = true;
 

@@ -1,5 +1,7 @@
 package jumpup.imi.fb4.htw.de.jumpupandroid.util.webservice.mapper;
 
+import android.location.Address;
+
 import jumpup.imi.fb4.htw.de.jumpupandroid.entity.mapper.UserMapper;
 import jumpup.imi.fb4.htw.de.jumpupandroid.portal.trip.entity.mapper.TripListMapper;
 import jumpup.imi.fb4.htw.de.jumpupandroid.portal.trip.entity.mapper.TripMapper;
@@ -9,6 +11,8 @@ import jumpup.imi.fb4.htw.de.jumpupandroid.portal.trip.entity.mapper.search.Driv
 import jumpup.imi.fb4.htw.de.jumpupandroid.portal.trip.entity.mapper.search.SingleTripQueryResultMapper;
 import jumpup.imi.fb4.htw.de.jumpupandroid.portal.trip.entity.mapper.search.TripSearchCriteriaMapper;
 import jumpup.imi.fb4.htw.de.jumpupandroid.registration.entity.mapper.RegistrationMapper;
+import jumpup.imi.fb4.htw.de.jumpupandroid.util.location.geocoding.adapter.google.GoogleGeocodingResponseAddressListMapper;
+import jumpup.imi.fb4.htw.de.jumpupandroid.util.location.geocoding.adapter.google.GoogleGeocodingResponseAddressMapper;
 import jumpup.imi.fb4.htw.de.jumpupandroid.util.webservice.response.ErrorResponse;
 
 /**
@@ -60,5 +64,17 @@ public class MapperFactory {
 
     public static TripSearchCriteriaMapper newTripSearchCriteriaMapper() {
         return new TripSearchCriteriaMapper();
+    }
+
+    public static JsonMapper<Address> newAddressJsonMapper() {
+        return new GoogleGeocodingResponseAddressMapper();
+    }
+
+    public static GoogleGeocodingResponseAddressListMapper newGoogleGeocodingResponseAddressListMapper() {
+        return new GoogleGeocodingResponseAddressListMapper();
+    }
+
+    public static GoogleGeocodingResponseAddressMapper newGoogleGeocodingResponseAddressMapper() {
+        return new GoogleGeocodingResponseAddressMapper();
     }
 }

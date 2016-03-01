@@ -16,14 +16,23 @@ android {
         debug {
             it.buildConfigField 'String', 'JUMPUP_REST_BASE_URL', '"http://10.0.2.2:8080/jumpup/rest"'
             it.buildConfigField 'Boolean', 'PREFILL_TEST_DATA', 'true'
+            it.buildConfigField 'jumpup.imi.fb4.htw.de.jumpupandroid.util.location.geocoding.adapter.GeocodingAdapter',
+                    'GEOCODING_ADAPTER',
+                    'jumpup.imi.fb4.htw.de.jumpupandroid.util.location.geocoding.GeocodingFactory.newGoogleGeocodingWebServiceAdapter()'
         }
         staging {
             it.buildConfigField 'String', 'JUMPUP_REST_BASE_URL', '"http://groupelite.de:8080/jumpup/rest"'
             it.buildConfigField 'Boolean', 'PREFILL_TEST_DATA', 'false'
+            it.buildConfigField 'jumpup.imi.fb4.htw.de.jumpupandroid.util.location.geocoding.adapter.GeocodingAdapter',
+                    'GEOCODING_ADAPTER',
+                    'jumpup.imi.fb4.htw.de.jumpupandroid.util.location.geocoding.GeocodingFactory.newAndroidGeocodingAdapter()'
         }
         release {
             it.buildConfigField 'String', 'JUMPUP_REST_BASE_URL', '"http://groupelite.de:8080/jumpup/rest"'
             it.buildConfigField 'Boolean', 'PREFILL_TEST_DATA', 'false'
+            it.buildConfigField 'jumpup.imi.fb4.htw.de.jumpupandroid.util.location.geocoding.adapter.GeocodingAdapter',
+                    'GEOCODING_ADAPTER',
+                    'jumpup.imi.fb4.htw.de.jumpupandroid.util.location.geocoding.GeocodingFactory.newAndroidGeocodingAdapter()'
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
