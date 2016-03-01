@@ -69,7 +69,7 @@ public class Driver implements Serializable, Parcelable {
     }
 
     private void initializeFromParcel(Parcel in) {
-        this.id = in.readInt();
+        this.id = (Integer) in.readValue(Integer.class.getClassLoader());
         this.username = in.readString();
         this.email = in.readString();
         this.prename = in.readString();
@@ -107,7 +107,7 @@ public class Driver implements Serializable, Parcelable {
          * the sequence of read operations in initializeFromParcel(), too.
          * Both must be symmetric.
          */
-        parcel.writeInt(id);
+        parcel.writeValue(id);
         parcel.writeString(username);
         parcel.writeString(email);
         parcel.writeString(prename);

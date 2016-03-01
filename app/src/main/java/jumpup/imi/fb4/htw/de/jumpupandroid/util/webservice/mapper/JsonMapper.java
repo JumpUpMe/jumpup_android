@@ -10,6 +10,7 @@ import java.util.ArrayList;
 
 import jumpup.imi.fb4.htw.de.jumpupandroid.entity.AbstractEntity;
 import jumpup.imi.fb4.htw.de.jumpupandroid.entity.mapper.UserMapper;
+import jumpup.imi.fb4.htw.de.jumpupandroid.util.webservice.exception.TechnicalErrorException;
 
 /**
  * Project: jumpup_android

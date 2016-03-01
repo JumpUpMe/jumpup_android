@@ -90,14 +90,14 @@ public abstract class AbstractEntity implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel parcel, int i) {
-        parcel.writeLong(this.identity);
-        parcel.writeLong(this.creationTimestamp);
-        parcel.writeLong(this.updateTimestamp);
+        parcel.writeValue(this.identity);
+        parcel.writeValue(this.creationTimestamp);
+        parcel.writeValue(this.updateTimestamp);
     }
 
     public void initializeFromParcel(Parcel in) {
-        this.identity = in.readLong();
-        this.creationTimestamp = in.readLong();
-        this.updateTimestamp = in.readLong();
+        this.identity = (Long) in.readValue(Long.class.getClassLoader());
+        this.creationTimestamp = (Long) in.readValue(Long.class.getClassLoader());
+        this.updateTimestamp = (Long) in.readValue(Long.class.getClassLoader());
     }
 }

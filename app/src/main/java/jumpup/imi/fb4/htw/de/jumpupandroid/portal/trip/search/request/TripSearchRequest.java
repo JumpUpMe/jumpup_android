@@ -1,6 +1,7 @@
 package jumpup.imi.fb4.htw.de.jumpupandroid.portal.trip.search.request;
 
 import jumpup.imi.fb4.htw.de.jumpupandroid.entity.TripSearchCriteria;
+import jumpup.imi.fb4.htw.de.jumpupandroid.entity.User;
 import jumpup.imi.fb4.htw.de.jumpupandroid.portal.trip.entity.search.TripQueryResults;
 import jumpup.imi.fb4.htw.de.jumpupandroid.util.webservice.exception.ErrorResponseException;
 import jumpup.imi.fb4.htw.de.jumpupandroid.util.webservice.exception.TechnicalErrorException;
@@ -20,10 +21,12 @@ public interface TripSearchRequest {
      * If a technical error occurs, throw an TechnicalErrorException.
      * On an error response (status code != 200), throw an ErrorResponseException.
      *
+     *
+     * @param user the actual user (passenger) who is searching
      * @param tripSearchCriteria the trip to be stored
      * @return abstract TripQueryResults which can be a SingleTripQueryResult or a OverlappingPartialTripQueryResult
      * @throws TechnicalErrorException on a technical error (e.g. from the network layer)
      * @throws ErrorResponseException on an web service error response
      */
-    TripQueryResults searchTrips(TripSearchCriteria tripSearchCriteria) throws TechnicalErrorException, ErrorResponseException;
+    TripQueryResults searchTrips(User user, TripSearchCriteria tripSearchCriteria) throws TechnicalErrorException, ErrorResponseException;
 }

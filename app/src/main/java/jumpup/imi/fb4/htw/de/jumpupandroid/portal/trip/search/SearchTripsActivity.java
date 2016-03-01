@@ -140,14 +140,16 @@ public class SearchTripsActivity extends PortalActivity implements Observer {
     }
 
     protected void startSearchForTripTask() {
-        resetSearchForTripsTask();
-
-        if (getTask() == null || !getTask().getStatus().equals(AsyncTask.Status.RUNNING)) {
-            // no task is running in parallel, so start new one
-            resetSearchForTripsTask();
-            startProgress();
-            searchTripsTask.execute(tripSearchCriteria);
+        if (getTask() != null && getTask().getStatus().equals(AsyncTask.Status.RUNNING)) {
+            getTask().cancel(true);
         }
+
+        Log.i(TAG, "startSearchForTripTask()");
+
+        // no task is running in parallel, so start new one
+        resetSearchForTripsTask();
+        startProgress();
+        searchTripsTask.execute(tripSearchCriteria);
     }
 
     private TripSearchCriteria fillTripSearchCriteriaByInputs() {
@@ -181,6 +183,7 @@ public class SearchTripsActivity extends PortalActivity implements Observer {
 
     private void resetSearchForTripsTask() {
         searchTripsTask = TripFactory.newSearchTripsTask(this);
+        searchTripsTask.setUser(user);
     }
 
     private void resetGeocodingTask() {
@@ -205,6 +208,8 @@ public class SearchTripsActivity extends PortalActivity implements Observer {
 
         if (o instanceof GeocodingTask) {
             this.handleGeocodingResult();
+        } else if (o instanceof SearchTripsTask) {
+            this.handleSearchTripsResult();
         }
     }
 

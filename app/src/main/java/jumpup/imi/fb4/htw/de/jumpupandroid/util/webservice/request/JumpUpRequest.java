@@ -32,7 +32,7 @@ public abstract class JumpUpRequest {
     public static final int MESSAGE_ID_REQUEST_ERROR_URL = R.string.jumpup_request_error_malformed_url;
     private static final String BASE_URL = BuildConfig.JUMPUP_REST_BASE_URL;
     private static final String TAG = JumpUpRequest.class.getName();
-    public AbstractEntity user;
+    public User user;
     protected ResponseReader responseReader = newResponseReader();
     private String builtUrl;
     private String username;
@@ -193,5 +193,9 @@ public abstract class JumpUpRequest {
         this.setPassword(userEntity.getPassword());
 
         this.user = userEntity;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 }

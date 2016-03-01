@@ -12,6 +12,7 @@ import java.net.URL;
 
 import jumpup.imi.fb4.htw.de.jumpupandroid.R;
 import jumpup.imi.fb4.htw.de.jumpupandroid.entity.TripSearchCriteria;
+import jumpup.imi.fb4.htw.de.jumpupandroid.entity.User;
 import jumpup.imi.fb4.htw.de.jumpupandroid.portal.trip.entity.mapper.search.TripSearchCriteriaMapper;
 import jumpup.imi.fb4.htw.de.jumpupandroid.portal.trip.entity.search.TripQueryResults;
 import jumpup.imi.fb4.htw.de.jumpupandroid.util.webservice.exception.ErrorResponseException;
@@ -64,7 +65,8 @@ public class TripSearchRequestImpl extends JumpUpRequest implements TripSearchRe
     }
 
     @Override
-    public TripQueryResults searchTrips(TripSearchCriteria tripSearchCriteria) throws TechnicalErrorException, ErrorResponseException {
+    public TripQueryResults searchTrips(User user, TripSearchCriteria tripSearchCriteria) throws TechnicalErrorException, ErrorResponseException {
+        setCredentialsFromUser(user);
         HttpURLConnection urlConnection = null;
 
         try {

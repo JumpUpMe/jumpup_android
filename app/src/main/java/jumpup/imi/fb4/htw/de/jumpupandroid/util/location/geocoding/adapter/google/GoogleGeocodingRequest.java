@@ -3,13 +3,16 @@ package jumpup.imi.fb4.htw.de.jumpupandroid.util.location.geocoding.adapter.goog
 import android.location.Address;
 import android.util.Log;
 
+import org.apache.commons.lang3.CharSet;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.json.JSONException;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.net.URLEncoder;
 import java.util.List;
 
 import jumpup.imi.fb4.htw.de.jumpupandroid.App;
@@ -53,9 +56,12 @@ public class GoogleGeocodingRequest {
         return responseReader;
     }
 
-    private URL buildUrl(String address) throws MalformedURLException {
-        return new URL(
-                String.format(ENDPOINT_URL, FORMAT, address, API_KEY)
+    private URL buildUrl(String address) throws MalformedURLException, UnsupportedEncodingException {
+        return new URL(String.format(
+                ENDPOINT_URL,
+                FORMAT,
+                URLEncoder.encode(address, "UTF-8"),
+                API_KEY)
         );
     }
 
@@ -66,13 +72,14 @@ public class GoogleGeocodingRequest {
      * @param address the input address string, e.g. "Musterstraße 10, Berlin" that you need geocoding information for. Typically a user input.
      * @return List of addresses
      */
-    public List<Address> execute(String address) throws Exception {
+    public List<Address> execute(String address) throws TechnicalErrorException {
         HttpURLConnection urlConnection = null;
 
         try {
             URL geocodingUrl = buildUrl(address);
 
             try {
+                Log.i(TAG, "execute(): will connect to URL " + geocodingUrl);
                 urlConnection = (HttpURLConnection) geocodingUrl.openConnection();
                 urlConnection.connect();
 
@@ -90,12 +97,12 @@ public class GoogleGeocodingRequest {
                 Log.e(TAG, "execute(): Google geocoding request failed: " + e.getMessage());
 
                 throw this.newTechnicalErrorException(e, R.string.google_geocoding_request_error);
-            } catch (JSONException e) {
+            } catch (JSONException | IllegalStateException e) {
                 Log.e(TAG, "execute(): Google geocoding JSON evaluation failed: " + e.getMessage());
 
                 throw this.newTechnicalErrorException(e, R.string.google_geocoding_request_error);
             }
-        } catch (MalformedURLException e) {
+        } catch (MalformedURLException | UnsupportedEncodingException e) {
             Log.e(TAG, "execute(): Google geocoding request. MalformedUrlException: "
                     + e.getMessage() + "\nStack trace:\n" + ExceptionUtils.getStackTrace(e));
 
@@ -110,7 +117,7 @@ public class GoogleGeocodingRequest {
         }
     }
 
-    private Exception newTechnicalErrorException(Exception e, int messageIdRequestErrorNumber) {
+    private TechnicalErrorException newTechnicalErrorException(Exception e, int messageIdRequestErrorNumber) {
         return new TechnicalErrorException(e.getMessage(), messageIdRequestErrorNumber);
     }
 }

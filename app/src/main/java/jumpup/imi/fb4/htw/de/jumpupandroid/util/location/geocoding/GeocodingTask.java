@@ -3,11 +3,15 @@ package jumpup.imi.fb4.htw.de.jumpupandroid.util.location.geocoding;
 import android.location.Address;
 import android.util.Log;
 
+import org.apache.commons.lang3.exception.ExceptionUtils;
+
+import java.util.ArrayList;
 import java.util.List;
 
 import jumpup.imi.fb4.htw.de.jumpupandroid.BuildConfig;
 import jumpup.imi.fb4.htw.de.jumpupandroid.util.location.geocoding.adapter.GeocodingAdapter;
 import jumpup.imi.fb4.htw.de.jumpupandroid.util.task.ObservableAsyncTask;
+import jumpup.imi.fb4.htw.de.jumpupandroid.util.webservice.exception.TechnicalErrorException;
 
 /**
  * Project: jumpup_android
@@ -57,7 +61,12 @@ public class GeocodingTask extends ObservableAsyncTask<String, Void, Void> {
     private void searchGeoLocation() {
         Log.d(TAG, "searchGeoLocation(): delegating to geocoder adapter.");
 
-        this.resolvedAdresses = geocodingAdapter.resolveLocationName(this.locationString);
+        try {
+            this.resolvedAdresses = geocodingAdapter.resolveLocationName(this.locationString);
+        } catch (TechnicalErrorException e) {
+            Log.e(TAG, "searchGeoLocation(): exception:\n" + ExceptionUtils.getStackTrace(e));
+            this.resolvedAdresses = new ArrayList<>();
+        }
 
         Log.d(TAG, "searchGeoLocation(): geocoding results for input " + locationString + ": \n" + this.resolvedAdresses);
 

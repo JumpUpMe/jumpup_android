@@ -3,12 +3,15 @@ package jumpup.imi.fb4.htw.de.jumpupandroid.portal.trip.search;
 import android.util.Log;
 
 import jumpup.imi.fb4.htw.de.jumpupandroid.entity.TripSearchCriteria;
+import jumpup.imi.fb4.htw.de.jumpupandroid.entity.User;
 import jumpup.imi.fb4.htw.de.jumpupandroid.portal.trip.TripFactory;
 import jumpup.imi.fb4.htw.de.jumpupandroid.portal.trip.entity.search.TripQueryResults;
 import jumpup.imi.fb4.htw.de.jumpupandroid.portal.trip.search.request.TripSearchRequest;
+import jumpup.imi.fb4.htw.de.jumpupandroid.portal.trip.search.request.TripSearchRequestImpl;
 import jumpup.imi.fb4.htw.de.jumpupandroid.util.task.ObservableAsyncTask;
 import jumpup.imi.fb4.htw.de.jumpupandroid.util.webservice.exception.ErrorResponseException;
 import jumpup.imi.fb4.htw.de.jumpupandroid.util.webservice.exception.TechnicalErrorException;
+import jumpup.imi.fb4.htw.de.jumpupandroid.util.webservice.request.JumpUpRequest;
 
 /**
  * Project: jumpup_android
@@ -25,12 +28,17 @@ public class SearchTripsTask extends ObservableAsyncTask<TripSearchCriteria, Voi
     private TripSearchCriteria tripSearchCriteria;
     private TripSearchRequest tripSearchRequest = TripFactory.newTripSearchRequest();
 
+    private User user;
     private boolean hasError = false;
     private int toastMessageId;
     private boolean hasValidationError = false;
     private String validationFailureField;
     private String[] validationFailureErrorMessages;
     private TripQueryResults tripQueryResults;
+
+    public void setUser(User user) {
+        this.user = user;
+    }
 
     public boolean isHasError() {
         return hasError;
@@ -73,7 +81,7 @@ public class SearchTripsTask extends ObservableAsyncTask<TripSearchCriteria, Voi
     }
 
     private boolean validate(TripSearchCriteria[] tripSearchCriterias) {
-        if (tripSearchCriterias == null || tripSearchCriterias.length != 1) {
+        if (null == user || tripSearchCriterias == null || tripSearchCriterias.length != 1) {
             return false;
         }
 
@@ -83,7 +91,7 @@ public class SearchTripsTask extends ObservableAsyncTask<TripSearchCriteria, Voi
 
     private void searchForTrips() {
         try {
-            this.tripQueryResults = this.tripSearchRequest.searchTrips(tripSearchCriteria);
+            this.tripQueryResults = this.tripSearchRequest.searchTrips(user, tripSearchCriteria);
 
             Log.i(TAG, "searchForTrips(): search for trips was successful.");
         } catch (TechnicalErrorException e) {
